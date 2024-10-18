@@ -25,12 +25,13 @@ public class UserList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: User.
+     * @return: Result if User was successfully added to list of users.
      */
-    public void add(User user){
+    public Boolean add(User user){
         if(userList.contains(user)){
-            throw new IllegalArgumentException("User already present in list of users.");
+            return Boolean.FALSE; // User already present in list of users.
         }else{
-            userList.add(user);
+            return userList.add(user);
         }
     }
 
@@ -39,13 +40,24 @@ public class UserList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: Event.
+     * @return: Result if User was successfully removed from list of users.
      */
-    public void remove(User user){
+    public Boolean remove(User user){
         if(userList.contains(user)){
-            userList.remove(user);
+            return userList.remove(user);
         }else{
-            throw new IllegalArgumentException("Event is not present in list of users..");
+            return Boolean.FALSE; // Event is not present in list of users.;
         }
+    }
+
+    /**
+     * Return the number of users in the user list.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: number of users integer.
+     */
+    public Integer size(){
+        return userList.size();
     }
 }
 

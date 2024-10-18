@@ -13,6 +13,10 @@ public class Event {
     private String eventName;
     private Date eventDate;
     private Date drawDate;
+    private final UserList attendees;
+    private final UserList waitingEntrants;
+    private Integer maxEntrants;
+    private Integer sampleSize;
 
 
     /**
@@ -23,11 +27,14 @@ public class Event {
      * @param eventDate : date of the event.
      * @param drawDate  : date when the participants of an event are drawn.
      */
-    public Event(User owner,String eventName, Date eventDate, Date drawDate) {
+    public Event(User owner,String eventName, Date eventDate, Date drawDate, int sampleSize) {
         this.owner = owner;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.drawDate = drawDate;
+        this.attendees = new UserList();
+        this.waitingEntrants = new UserList();
+        this.sampleSize = sampleSize;
     }
 
     /**
@@ -101,4 +108,98 @@ public class Event {
     public void setDrawDate(Date drawDate) {
         this.drawDate = drawDate;
     }
+
+    /**
+     * Getter method for an Event's maximum number of entrants.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: maximum number of entrants integer.
+     */
+    public Integer getMaxEntrants() {
+        return maxEntrants;
+    }
+
+    /**
+     * Setter method for an Event's maximum number of entrants.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param maxEntrants: maximum number of entrants integer.
+     */
+    public void setMaxEntrants(Integer maxEntrants) {
+        this.maxEntrants = maxEntrants;
+    }
+
+    /**
+     * Getter method for an Event's sample size of attendees.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: sample size of attendees integer.
+     */
+    public Integer getSampleSize() {
+        return sampleSize;
+    }
+
+    /**
+     * Setter method for an Event's sample size of attendees.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param sampleSize: sample size of attendees integer.
+     */
+    public void setSampleSize(Integer sampleSize) {
+        this.sampleSize = sampleSize;
+    }
+
+    /**
+     * Add a user to an Events's list of waiting entrants.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param user : User.
+     * @return : Result of successful addition to Event's list of waiting entrants.
+     */
+    public Boolean addToWaitingEntrants(User user){
+        if(waitingEntrants.size() < this.maxEntrants){
+            return waitingEntrants.add(user);
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Remove a user from an Events's list of waiting entrants.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: User.
+     * @return : Result of successful removal from Event's list of waiting entrants.
+     */
+    public Boolean removeFromWaitingEntrants(User user){
+        return waitingEntrants.remove(user);
+    }
+
+    /**
+     * Add a user to an Events's list of attendees.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: User.
+     * @return : Result of successful addition to Event's list of attendees.
+     */
+    public Boolean addAttendee(User user){
+        if(attendees.size() < this.sampleSize){
+            return attendees.add(user);
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Remove a user from an Events's list of attendees.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: User.
+     * @return : Result of successful removal from Event's list of attendees.
+     */
+    public Boolean removeAttendee(User user){
+        return attendees.remove(user);
+    }
+
+
 }

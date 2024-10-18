@@ -47,4 +47,15 @@ public class EventList {
             throw new IllegalArgumentException("Event is not present in list of events.");
         }
     }
+
+    /**
+     * Return the number of events in the event list.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: number of events integer.
+     */
+    public Integer size(){
+        return eventList.size();
+    }
+
 }
