@@ -25,12 +25,13 @@ public class EventList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: Event.
+     * @Return: Result of successful addition of Event to list of events.
      */
-    public void add(Event event){
+    public Boolean add(Event event){
         if(eventList.contains(event)){
-            throw new IllegalArgumentException("Event already present in list of events.");
+            return Boolean.FALSE; // Event already present in list of events.
         }else{
-            eventList.add(event);
+            return eventList.add(event);
         }
     }
 
@@ -39,12 +40,13 @@ public class EventList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: Event.
+     * @Return: Result of successful removal of Event from list of events.
      */
-    public void remove(Event event){
+    public Boolean remove(Event event){
         if(eventList.contains(event)){
-            eventList.remove(event);
+            return eventList.remove(event);
         }else{
-            throw new IllegalArgumentException("Event is not present in list of events.");
+            return Boolean.FALSE; // Event is not present in list of events.
         }
     }
 
