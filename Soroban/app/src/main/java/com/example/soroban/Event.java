@@ -3,14 +3,17 @@ package com.example.soroban;
 import java.util.Date;
 
 /**
+ * Stores any relevant information that is related to an event.
  * @Author: Matthieu Larochelle
- * @Version: 1.0
+ * @Version: 1.1
  */
 
 public class Event {
+    private final User owner;
     private String eventName;
     private Date eventDate;
     private Date drawDate;
+
 
     /**
      * Constructor method for an Event.
@@ -20,12 +23,23 @@ public class Event {
      * @param eventDate : date of the event.
      * @param drawDate  : date when the participants of an event are drawn.
      */
-    public Event(String eventName, Date eventDate, Date drawDate) {
+    public Event(User owner,String eventName, Date eventDate, Date drawDate) {
+        this.owner = owner;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.drawDate = drawDate;
     }
 
+    /**
+     * Getter method for an Event's owner.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: owner User object.
+     */
+
+    public User getOwner(){
+        return owner;
+    }
 
     /**
      * Getter method for an Event's name.
