@@ -3,12 +3,13 @@ package com.example.soroban;
 import android.provider.Settings;
 import android.view.View;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 /**
  * Stores any relevant information that is associated to a user.
  * @Author: Matthieu Larochelle
- * @Version: 1.0
+ * @Version: 1.1
  */
 
 public class User {
@@ -17,6 +18,8 @@ public class User {
     private String email;
     private int phoneNumber;
     private ArrayList<View> views;
+    private EventList waitList;
+    private EventList registeredEvents;
 
     /**
      * Constructor method for User.
@@ -25,6 +28,8 @@ public class User {
      */
     public User() {
         this.deviceId = Settings.Secure.ANDROID_ID;
+        this.waitList = new EventList();
+        this.registeredEvents = new EventList();
     }
 
     /**
@@ -96,5 +101,47 @@ public class User {
     public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
+    /**
+     * Add an event to a User's waitlist.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     */
+    public void addToWaitlist(Event event){
+        waitList.add(event);
+    }
+
+    /**
+     * Remove an event from a User's waitlist.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     */
+    public void removeFromWaitlist(Event event){
+        waitList.remove(event);
+    }
+
+    /**
+     * Add an event to a User's registered events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     */
+    public void addRegisteredEvent(Event event){
+        registeredEvents.add(event);
+    }
+
+    /**
+     * Remove an event from a User's registered events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     */
+    public void removeRegisteredEvent(Event event){
+        registeredEvents.remove(event);
+    }
+
 
 }
