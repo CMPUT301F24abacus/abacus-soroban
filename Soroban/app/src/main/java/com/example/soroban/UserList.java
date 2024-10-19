@@ -25,7 +25,7 @@ public class UserList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: User.
-     * @return: Result if User was successfully added to list of users.
+     * @return: Result of successful addition of User to list of users.
      */
     public Boolean add(User user){
         if(userList.contains(user)){
@@ -40,7 +40,7 @@ public class UserList {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: Event.
-     * @return: Result if User was successfully removed from list of users.
+     * @return: Result of successful removal of User from list of users.
      */
     public Boolean remove(User user){
         if(userList.contains(user)){
