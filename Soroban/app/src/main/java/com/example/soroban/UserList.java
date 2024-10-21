@@ -59,5 +59,16 @@ public class UserList {
     public Integer size(){
         return userList.size();
     }
+
+    /**
+     * Return the user in the user list at the specified index.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param index: index in the user list.
+     * @return: indexed User object.
+     */
+    public User get(int index){
+        return userList.get(index);
+    }
 }
 

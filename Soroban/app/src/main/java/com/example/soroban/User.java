@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Stores any relevant information that is associated to a user.
  * @Author: Matthieu Larochelle
- * @Version: 1.1
+ * @Version: 1.2
  */
 
 public class User {
@@ -17,9 +17,9 @@ public class User {
     private String name;
     private String email;
     private int phoneNumber;
-    private ArrayList<View> views;
     private EventList waitList;
     private EventList registeredEvents;
+    private Facility facility;
 
     /**
      * Constructor method for User.
@@ -102,45 +102,79 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Creates a User's facility. This allows the User to become an organizer and create events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void createFacility(){
+        this.facility = new Facility(this);
+    }
+
+    /**
+     * Returns a User's facility.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: Facility object.
+     */
+    public Facility getFacility(){
+        return this.facility;
+    }
+
+    /**
+     * Creates a User's facility. This allows the User to become an organizer and create events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void removeFacility(){
+        if(this.facility != null){
+            this.facility.destroy();
+            this.facility = null;
+        }
+    }
 
     /**
      * Add an event to a User's waitlist.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
+     * @return : Result of successful addition to User's waitlist of events.
      */
-    public void addToWaitlist(Event event){
-        waitList.add(event);
+    public Boolean addToWaitlist(Event event){
+        return waitList.add(event);
     }
 
     /**
      * Remove an event from a User's waitlist.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
+     * @return : Result of successful removal from User's waitlist of events.
      */
-    public void removeFromWaitlist(Event event){
-        waitList.remove(event);
+    public Boolean removeFromWaitlist(Event event){
+        return waitList.remove(event);
     }
 
     /**
      * Add an event to a User's registered events.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
+     * @return : Result of successful addition to User's list of registered events.
      */
-    public void addRegisteredEvent(Event event){
-        registeredEvents.add(event);
+    public Boolean addRegisteredEvent(Event event){
+        return registeredEvents.add(event);
     }
 
     /**
      * Remove an event from a User's registered events.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
+     * @return : Result of successful removal from User's list of registered events.
      */
-    public void removeRegisteredEvent(Event event){
-        registeredEvents.remove(event);
+    public Boolean removeRegisteredEvent(Event event){
+        return registeredEvents.remove(event);
     }
 
 
