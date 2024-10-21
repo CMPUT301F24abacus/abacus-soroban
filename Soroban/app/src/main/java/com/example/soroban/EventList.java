@@ -68,7 +68,7 @@ public class EventList {
      * @Version: 1.0
      * @return: number of events integer.
      */
-    public Integer size(){
+    public int size(){
         return eventList.size();
     }
 
@@ -80,8 +80,21 @@ public class EventList {
      * @return: indexed Event object.
      */
     public Event get(int index){
-        return eventList.get(index);
+        if(index >= 0 && index < eventList.size()){
+            return eventList.get(index);
+        }else{
+            return null;
+        }
     }
 
+    /**
+     * Return a basic list of events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: ArrayList of events.
+     */
+    public ArrayList<Event> getEvents(){
+        return this.eventList;
+    }
 
 }

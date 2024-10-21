@@ -5,6 +5,7 @@ import android.view.View;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Stores any relevant information that is associated to a user.
@@ -107,8 +108,9 @@ public class User {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */
-    public void createFacility(){
+    public Facility createFacility(){
         this.facility = new Facility(this);
+        return this.facility;
     }
 
     /**
@@ -131,6 +133,26 @@ public class User {
             this.facility.destroy();
             this.facility = null;
         }
+    }
+
+    /**
+     * Getter method for User's wait list of events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: wait list ArrayList.
+     */
+    public ArrayList<Event> getWaitList() {
+        return waitList.getEvents();
+    }
+
+    /**
+     * Getter method for User's list of registered events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: registered events ArrayList.
+     */
+    public ArrayList<Event> getRegisteredEvents() {
+        return registeredEvents.getEvents();
     }
 
     /**
@@ -177,5 +199,24 @@ public class User {
         return registeredEvents.remove(event);
     }
 
+    /**
+     * Checks if one User object is equal to another..
+     * @author: Matthieu Larochelle
+     * @version: 1.0
+     * @return
+     * Return true if a User object is equal to this User object, or if all fields of the User object are equal to all fields of this User object.
+     * Returns false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User mockUser = (User) o;
+        return Objects.equals(deviceId, mockUser.getDeviceId()) && Objects.equals(name, mockUser.getName()) && Objects.equals(email, mockUser.getEmail()) && Objects.equals(phoneNumber, mockUser.getPhoneNumber());
+    }
 
 }
