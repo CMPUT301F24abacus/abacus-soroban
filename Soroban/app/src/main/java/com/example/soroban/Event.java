@@ -38,6 +38,21 @@ public class Event {
     }
 
     /**
+     * Destructor method for Event.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void destroy(){
+        for(int i = 0; i < attendees.size(); i++){
+            attendees.get(i).removeFromWaitlist(this);
+        }
+
+        for(int i = 0; i < waitingEntrants.size(); i++){
+            waitingEntrants.get(i).removeFromWaitlist(this);
+        }
+    }
+
+    /**
      * Getter method for an Event's owner.
      * @Author: Matthieu Larochelle
      * @Version: 1.0

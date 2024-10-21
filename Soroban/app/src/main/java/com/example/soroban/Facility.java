@@ -8,7 +8,7 @@ package com.example.soroban;
 public class Facility {
     private final User owner;
     private String name;
-    private final EventList hostedEvents;
+    private EventList hostedEvents;
 
     /**
      * Constructor method for Facility.
@@ -18,6 +18,16 @@ public class Facility {
     public Facility(User owner){
         this.owner = owner;
         this.hostedEvents = new EventList();
+    }
+
+    /**
+     * Destructor method for Facility.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void destroy(){
+        this.hostedEvents.destroy();  // Destroy all events hosted at the facility.
+        this.hostedEvents = null;
     }
 
     /**
