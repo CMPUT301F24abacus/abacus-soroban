@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "378389872621",
+    "project_id": "abacus-soroban",
+    "storage_bucket": "abacus-soroban.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378389872621:android:27c7a4792bc0785d72b1e4",
+        "android_client_info": {
+          "package_name": "com.example.soroban"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXkd0n6f-TvCW4eDAY8OuVbNGArvWlUZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
