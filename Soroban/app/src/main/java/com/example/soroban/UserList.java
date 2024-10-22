@@ -56,7 +56,7 @@ public class UserList {
      * @Version: 1.0
      * @return: number of users integer.
      */
-    public Integer size(){
+    public int size(){
         return userList.size();
     }
 
@@ -68,7 +68,21 @@ public class UserList {
      * @return: indexed User object.
      */
     public User get(int index){
-        return userList.get(index);
+        if(index >= 0 && index < userList.size()){
+            return userList.get(index);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Return a basic list of users.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: ArrayList of users.
+     */
+    public ArrayList<User> getUsers(){
+        return this.userList;
     }
 }
 

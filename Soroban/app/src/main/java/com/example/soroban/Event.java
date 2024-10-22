@@ -1,6 +1,7 @@
 package com.example.soroban;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Stores any relevant information that is related to an event.
@@ -169,7 +170,7 @@ public class Event {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @param user : User.
-     * @return : Result of successful addition to Event's list of waiting entrants.
+     * @return: Result of successful addition to Event's list of waiting entrants.
      */
     public Boolean addToWaitingEntrants(User user){
         if(waitingEntrants.size() < this.maxEntrants){
@@ -183,8 +184,8 @@ public class Event {
      * Remove a user from an Events's list of waiting entrants.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Param: User.
-     * @return : Result of successful removal from Event's list of waiting entrants.
+     * @param user  User.
+     * @return: Result of successful removal from Event's list of waiting entrants.
      */
     public Boolean removeFromWaitingEntrants(User user){
         return waitingEntrants.remove(user);
@@ -195,7 +196,7 @@ public class Event {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: User.
-     * @return : Result of successful addition to Event's list of attendees.
+     * @return: Result of successful addition to Event's list of attendees.
      */
     public Boolean addAttendee(User user){
         if(attendees.size() < this.sampleSize){
@@ -210,10 +211,30 @@ public class Event {
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: User.
-     * @return : Result of successful removal from Event's list of attendees.
+     * @return: Result of successful removal from Event's list of attendees.
      */
     public Boolean removeAttendee(User user){
         return attendees.remove(user);
+    }
+
+    /**
+     * Checks if one Event object is equal to another..
+     * @author: Matthieu Larochelle
+     * @version: 1.0
+     * @return
+     * Return true if an Event object is equal to this Event object, or if all fields of the Event object are equal to all fields of this Event object.
+     * Returns false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Event mockEvent = (Event) o;
+        return Objects.equals(owner, mockEvent.getOwner()) && Objects.equals(eventName, mockEvent.getEventName()) && Objects.equals(eventDate,  mockEvent.getEventDate()) && Objects.equals(drawDate,  mockEvent.getDrawDate()) && Objects.equals(sampleSize,  mockEvent.getSampleSize()) && Objects.equals(maxEntrants,  mockEvent.getMaxEntrants());
     }
 
 
