@@ -35,13 +35,14 @@ public class EventController {
      * @param drawDate: Event's date of drawing participants.
      * @param sampleSize: Sample Size of Attendees
      */
-    public void createEvent(User owner, String eventName, Date eventDate, Date drawDate, int sampleSize) {
-        Event event = new Event(owner, eventName, eventDate, drawDate, sampleSize);
+    public void createEvent(User owner, String eventName, Date eventDate, Date drawDate, int sampleSize, Facility originFacility) {
+        Event event = new Event(owner, eventName, eventDate, drawDate, sampleSize, originFacility);
 
         HashMap<String, String> data = new HashMap<>();
         data.put("Owner", event.getOwner().getName());
         data.put("Date", String.valueOf(event.getEventDate()));
         //data.put("Attendees", ...)
+
         eventRef
                 .document(event.getEventName())
                 .set(data)
@@ -51,6 +52,7 @@ public class EventController {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 });
+
     }
 
 

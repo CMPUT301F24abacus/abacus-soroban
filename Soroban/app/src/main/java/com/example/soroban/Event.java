@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Stores any relevant information that is related to an event.
  * @Author: Matthieu Larochelle
- * @Version: 1.1
+ * @Version: 1.2
  */
 
 public class Event {
@@ -17,17 +17,20 @@ public class Event {
     private final UserList waitingEntrants;
     private Integer maxEntrants;
     private Integer sampleSize;
+    private Facility originFacility;
+
 
 
     /**
      * Constructor method for an Event.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @param eventName : name string of the event.
      * @param eventDate : date of the event.
      * @param drawDate  : date when the participants of an event are drawn.
+     * @param originFacility : origin facility the event has created in
      */
-    public Event(User owner,String eventName, Date eventDate, Date drawDate, int sampleSize) {
+    public Event(User owner,String eventName, Date eventDate, Date drawDate, int sampleSize, Facility originFacility) {
         this.owner = owner;
         this.eventName = eventName;
         this.eventDate = eventDate;
@@ -35,6 +38,17 @@ public class Event {
         this.attendees = new UserList();
         this.waitingEntrants = new UserList();
         this.sampleSize = sampleSize;
+        this.originFacility = originFacility;
+    }
+
+    /**
+     * Getter method for an Event's facility.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @return: eventFacilty Facility object.
+     */
+    public Facility getFacility(){
+        return originFacility;
     }
 
     /**
