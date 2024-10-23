@@ -1,5 +1,8 @@
 package com.example.soroban;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * Stores any relevant information that is associated to a facility.
  * @Author: Matthieu Larochelle
@@ -63,23 +66,61 @@ public class Facility {
     /**
      * Add a user to an Facility's list of events.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
      * @return : Result of successful addition to Facility's list of events.
      */
     public Boolean addHostedEvent(Event event){
-        return hostedEvents.add(event);
+        if(this.equals(event.getFacility())){
+            return hostedEvents.add(event);
+        }else{
+            return Boolean.FALSE;
+        }
     }
 
     /**
      * Remove a user from an Events's list of attendees.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @Param: Event.
      * @return : Result of successful removal from Facility's list of events.
      */
     public Boolean removeHostedEvent(Event event){
-        return hostedEvents.remove(event);
+        if(this.equals(event.getFacility())){
+            return hostedEvents.remove(event);
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Getter method for Facility's list of hosted events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: hosted events ArrayList.
+     */
+    public ArrayList<Event> getHostedEvents() {
+        return hostedEvents.getEvents();
+    }
+
+    /**
+     * Checks if one Facility object is equal to another.
+     * @author: Matthieu Larochelle
+     * @version: 1.0
+     * @return
+     * Return true if a Facility object is equal to this Facility object, or if all fields of the Facility object are equal to all fields of this Facility object.
+     * Returns false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Facility mockFacility = (Facility) o;
+        return Objects.equals(name, mockFacility.getName()) && Objects.equals(owner, mockFacility.getOwner());
     }
 
 }

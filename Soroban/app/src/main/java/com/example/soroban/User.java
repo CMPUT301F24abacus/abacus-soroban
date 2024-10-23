@@ -1,9 +1,7 @@
 package com.example.soroban;
 
 import android.provider.Settings;
-import android.view.View;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -158,49 +156,49 @@ public class User {
     /**
      * Add an event to a User's waitlist.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.2
      * @Param: Event.
      * @return : Result of successful addition to User's waitlist of events.
      */
     public Boolean addToWaitlist(Event event){
-        return waitList.add(event);
+        return waitList.add(event) && (event.getWaitingEntrants().contains(this) ? Boolean.TRUE : event.addToWaitingEntrants(this));
     }
 
     /**
      * Remove an event from a User's waitlist.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.2
      * @Param: Event.
      * @return : Result of successful removal from User's waitlist of events.
      */
     public Boolean removeFromWaitlist(Event event){
-        return waitList.remove(event);
+        return waitList.remove(event) && (event.getWaitingEntrants().contains(this) ? event.removeFromWaitingEntrants(this) : Boolean.TRUE);
     }
 
     /**
      * Add an event to a User's registered events.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.2
      * @Param: Event.
      * @return : Result of successful addition to User's list of registered events.
      */
     public Boolean addRegisteredEvent(Event event){
-        return registeredEvents.add(event);
+        return registeredEvents.add(event) && (event.getAttendees().contains(this) ? Boolean.TRUE : event.addAttendee(this));
     }
 
     /**
      * Remove an event from a User's registered events.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.2
      * @Param: Event.
      * @return : Result of successful removal from User's list of registered events.
      */
     public Boolean removeRegisteredEvent(Event event){
-        return registeredEvents.remove(event);
+        return registeredEvents.remove(event) && (event.getAttendees().contains(this) ? event.removeAttendee(this) : Boolean.TRUE);
     }
 
     /**
-     * Checks if one User object is equal to another..
+     * Checks if one User object is equal to another.
      * @author: Matthieu Larochelle
      * @version: 1.0
      * @return
