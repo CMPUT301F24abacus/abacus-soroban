@@ -104,6 +104,8 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Confirmed Events -->
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -113,6 +115,7 @@
         android:textSize="18sp" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_confirmed_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.soroban.EventRegistrationActivity;
 
@@ -44,7 +45,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                 // Action for Scan QR Code
 
 
-                Intent intent = new Intent(UserDashboardActivity.this, EventRegistrationActivity.class);
+                Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
                 startActivity(intent); // Redirect to EventRegistrationActivity
             }
         });
@@ -60,6 +61,18 @@ public class UserDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Action for Create/Manage Facility
+            }
+        });
+
+        // Find the CardView for confirmed events
+        CardView confirmedEventsCard = findViewById(R.id.card_confirmed_events);
+
+        // Set an OnClickListener to navigate to ConfirmedEventsActivity
+        confirmedEventsCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserDashboardActivity.this, ConfirmedEventsActivity.class);
+                startActivity(intent);
             }
         });
     }

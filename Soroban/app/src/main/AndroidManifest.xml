@@ -27,6 +27,11 @@
             android:name=".UserDashboardActivity"
             android:exported="false"
             android:label="@string/user_dashboard_title" />
+        <activity android:name=".EventRegistrationActivity" />
+        <activity android:name=".QrCodeScanActivity" />
+        <activity android:name=".ConfirmedEventsActivity" />
+
+
 
     </application>
 
