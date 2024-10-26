@@ -32,6 +32,21 @@ public class User {
     }
 
     /**
+     * Destructor method for User.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void destroy(){
+        for(int i = 0; i < waitList.size(); i++){
+            waitList.get(i).removeFromWaitingEntrants(this);
+        }
+
+        for(int i = 0; i < registeredEvents.size(); i++){
+            registeredEvents.get(i).removeAttendee(this);
+        }
+    }
+
+    /**
      * Getter method for User's device Id.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
