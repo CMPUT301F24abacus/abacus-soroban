@@ -10,7 +10,7 @@ import java.util.Date;
 public class UserUnitTest {
 
     private Event mockEvent(User owner){
-        return new Event(owner, "mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
+        return new Event(owner, owner.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
     }
 
 
@@ -27,7 +27,7 @@ public class UserUnitTest {
     public void testRemoveFacility(){
         User newUser = new User();
 
-        Facility newFacility = newUser.createFacility();
+        newUser.createFacility();
 
         newUser.removeFacility();
 
@@ -40,9 +40,9 @@ public class UserUnitTest {
 
         Event newEvent = mockEvent(newUser);
 
-        newUser.addToWaitlist(newEvent);
+        assertTrue(newUser.addToWaitlist(newEvent));
 
-        assertEquals(newEvent, newUser.getWaitList().get(0));
+        assertTrue(newUser.getWaitList().contains(newEvent));
     }
 
     @Test

@@ -36,10 +36,10 @@ public class EventController {
      * @param sampleSize: Sample Size of Attendees
      */
     public void createEvent(User owner, String eventName, Date eventDate, Date drawDate, int sampleSize) {
-        Event event = new Event(owner, eventName, eventDate, drawDate, sampleSize);
+        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
 
         HashMap<String, String> data = new HashMap<>();
-        data.put("Owner", event.getOwner().getName());
+        data.put("Owner", event.getOwner().getDeviceId());
         data.put("Date", String.valueOf(event.getEventDate()));
         //data.put("Attendees", ...)
         eventRef
