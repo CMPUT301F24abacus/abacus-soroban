@@ -64,7 +64,7 @@ public class Facility {
     }
 
     /**
-     * Add a user to an Facility's list of events.
+     * Add an event to a Facility's list of events.
      * @Author: Matthieu Larochelle
      * @Version: 1.1
      * @Param: Event.
@@ -79,7 +79,7 @@ public class Facility {
     }
 
     /**
-     * Remove a user from an Events's list of attendees.
+     * Remove an event from a Facility's list of events.
      * @Author: Matthieu Larochelle
      * @Version: 1.1
      * @Param: Event.

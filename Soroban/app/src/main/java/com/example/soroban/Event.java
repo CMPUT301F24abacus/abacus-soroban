@@ -31,6 +31,7 @@ public class Event {
      * @param eventName : name string of the event.
      * @param eventDate : date of the event.
      * @param drawDate  : date when the participants of an event are drawn.
+     * @param sampleSize: number of participants drawn.
      */
     public Event(User owner, Facility facility, String eventName, Date eventDate, Date drawDate, int sampleSize) {
         this.owner = owner;
