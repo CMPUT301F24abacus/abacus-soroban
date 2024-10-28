@@ -23,10 +23,10 @@ public class User {
     /**
      * Constructor method for User.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      */
-    public User() {
-        this.deviceId = Settings.Secure.ANDROID_ID;
+    public User(String deviceId) {
+        this.deviceId = deviceId;
         this.waitList = new EventList();
         this.registeredEvents = new EventList();
     }
