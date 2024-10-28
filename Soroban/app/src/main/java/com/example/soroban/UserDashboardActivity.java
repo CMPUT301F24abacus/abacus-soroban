@@ -37,7 +37,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         Button manageFacility = findViewById(R.id.btn_manage_facility);
 
         /**
-         * Set up button click listeners.
+         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
          */
         scanQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,14 +49,18 @@ public class UserDashboardActivity extends AppCompatActivity {
                 startActivity(intent); // Redirect to EventRegistrationActivity
             }
         });
-
+        /**
+         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
+         */
         joinWaitingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Action for Join Waiting List
             }
         });
-
+        /**
+         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
+         */
         manageFacility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,5 +79,12 @@ public class UserDashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // UserDashboardActivity.java
+        findViewById(R.id.icon_notifications).setOnClickListener(v -> {
+            Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
     }
 }

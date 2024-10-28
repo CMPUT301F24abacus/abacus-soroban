@@ -6,6 +6,13 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * this activity is responsible for handling the event registration process.
+ * we are using this in a rather tricky way as this screen alternatively shows the register and unregister buttons depending
+ * on the registration status of the user.
+ * the screen is also responsible for updating the UI when the user registers or unregisters from the event.
+ * things shown on this screen: event details. event poster, event date, event time, event location, event description.
+ */
 public class EventRegistrationActivity extends AppCompatActivity {
 
     private Button registerButton;

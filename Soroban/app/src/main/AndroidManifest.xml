@@ -30,6 +30,8 @@
         <activity android:name=".EventRegistrationActivity" />
         <activity android:name=".QrCodeScanActivity" />
         <activity android:name=".ConfirmedEventsActivity" />
+        <activity android:name=".NotificationActivity" />
+
 
 
 

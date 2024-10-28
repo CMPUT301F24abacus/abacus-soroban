@@ -1,3 +1,9 @@
+/**
+This screen will display the events in which the User has already registered and secured their spot
+Author: Ayan Imran Chaudhry
+References: ChatGPT, Stack Overflow, Android Documentation
+ */
+
 package com.example.soroban;
 
 import android.content.Intent;
@@ -18,6 +24,10 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
     private RecyclerView recyclerConfirmedEvents;
     private ConfirmedEventsAdapter adapter;
 
+    /**
+     * This method is called when the activity is created.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +40,9 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
         adapter = new ConfirmedEventsAdapter(confirmedEventsList);
         recyclerConfirmedEvents.setAdapter(adapter);
     }
-
+    /**
+    this is a sample method to get the confirmed events.
+     */
     private List<String> getConfirmedEvents() {
         // Sample data; replace with actual data source.
         List<String> events = new ArrayList<>();
@@ -40,6 +52,9 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
         return events;
     }
 
+    /**
+     * This is a sample adapter to display the confirmed events.
+     */
     private class ConfirmedEventsAdapter extends RecyclerView.Adapter<ConfirmedEventsAdapter.ViewHolder> {
         private List<String> confirmedEvents;
 
@@ -47,12 +62,27 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
             this.confirmedEvents = confirmedEvents;
         }
 
+        /**
+         * This method is called when a new ViewHolder is created.
+         * @param parent The ViewGroup into which the new View will be added after it is bound to
+         *               an adapter position.
+         * @param viewType The view type of the new View.
+         *
+         * @return
+         */
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.item_confirmed_event, parent, false);
             return new ViewHolder(view);
         }
 
+        /**
+         * This method is called by RecyclerView to display the data at the specified position.
+         * @param holder The ViewHolder which should be updated to represent the contents of the
+         *        item at the given position in the data set.
+         * @param position The position of the item within the adapter's data set.
+         */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             String eventName = confirmedEvents.get(position);
@@ -65,6 +95,10 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
             });
         }
 
+        /**
+         * This method returns the total number of items in the data set held by the adapter.
+         * @return
+         */
         @Override
         public int getItemCount() {
             return confirmedEvents.size();

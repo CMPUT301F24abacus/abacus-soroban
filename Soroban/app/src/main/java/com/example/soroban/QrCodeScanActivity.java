@@ -1,3 +1,8 @@
+/**
+ *  Author: Ayan Chaudhry
+ *  References: ChatGPT and StackOverflow
+ */
+
 package com.example.soroban;
 
 import android.content.Intent;
@@ -6,8 +11,17 @@ import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.EventRegistrationActivity;
+
+/**
+ * Activity to scan QR code and redirect to EventRegistrationActivity
+ */
 public class QrCodeScanActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +32,10 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
         // Set click listener to redirect to EventRegistrationActivity
         qrCodeImage.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when the QR code image is clicked.
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 // Navigate to EventRegistrationActivity
