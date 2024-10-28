@@ -56,8 +56,33 @@ public class UserList {
      * @Version: 1.0
      * @return: number of users integer.
      */
-    public Integer size(){
+    public int size(){
         return userList.size();
+    }
+
+    /**
+     * Return the user in the user list at the specified index.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param index: index in the user list.
+     * @return: indexed User object.
+     */
+    public User get(int index){
+        if(index >= 0 && index < userList.size()){
+            return userList.get(index);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Return a basic list of users.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: ArrayList of users.
+     */
+    public ArrayList<User> getUsers(){
+        return this.userList;
     }
 }
 
