@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- colors.xml -->
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary and Secondary Colors -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Background Colors for Notifications -->
+    <color name="notification_positive_background">#A1CDA8</color> <!-- Green background for positive notifications -->
+    <color name="notification_negative_background">#F28B82</color> <!-- Red background for negative notifications -->
+    <color name="notification_available_spots_background">#80DEEA</color> <!-- Blue background for available spots notifications -->
+
+    <!-- General Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="dark_gray">#616161</color>
+
+    <!-- Button Colors -->
+    <color name="button_background_green">#A1CDA8</color>
+    <color name="button_text_color">#000000</color>
+
+    <!-- Notification Icon Colors -->
+    <color name="icon_sound_color">#2196F3</color> <!-- Blue color for sound icon -->
+    <color name="icon_clear_color">#FF5252</color> <!-- Red color for clear icon -->
+
+    <color name="color_bad_news">#E75A2A</color> <!-- Red -->
+    <color name="color_spot_confirmed">#18C662</color> <!-- Green -->
+    <color name="color_registration_open">#23BCCF</color> <!-- Blue -->
+
+
 </resources>
