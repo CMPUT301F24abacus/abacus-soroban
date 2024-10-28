@@ -8,6 +8,7 @@
 package com.example.soroban;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,16 +18,39 @@ import androidx.cardview.widget.CardView;
 import com.example.soroban.EventRegistrationActivity;
 
 public class UserDashboardActivity extends AppCompatActivity {
+    private User appUser;
+
     /**
      * Called when the activity is first created.
      * @param savedInstanceState
      * Author: Ayan Chaudhry
      *
      */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_dashboard);
+
+        // Get arguments passed from previous activity.
+        // Reference: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
+        Bundle args = getIntent().getExtras();
+
+        // Initialize appUser for this activity.
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+            }
+
+            if(appUser == null){
+                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
+            }
+        }else{
+            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
+        }
+        
         /**
          * Set up button actions.
          * Buttons are: Scan QR Code, Join Waiting List, Manage Facility

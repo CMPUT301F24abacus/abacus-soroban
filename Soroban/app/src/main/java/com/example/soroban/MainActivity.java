@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         // Get Android Device Id.
         // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-        
+
         // Set window insets for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to UserDashboardActivity
                 Intent intent = new Intent(MainActivity.this, UserDashboardActivity.class);
+                intent.putExtra("appUser",appUser);
                 startActivity(intent);
             }
         });

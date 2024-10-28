@@ -2,6 +2,7 @@ package com.example.soroban;
 
 import android.provider.Settings;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
  * @Version: 1.2
  */
 
-public class User {
+public class User implements Serializable {
     private final String deviceId;
     private String name;
     private String email;
