@@ -1,19 +1,17 @@
-/**
- * Author: Ayan Chaudhry
- * References: Chat GPT, Stack Overflow, Geeks for Geeks
- * Purpose: To display notifications in a recycler view
- */
-
 package com.example.soroban;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.soroban.Notification;
+
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
@@ -37,10 +35,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.titleTextView.setText(notification.getTitle());
         holder.timeTextView.setText(notification.getTime());
         holder.eventTextView.setText(notification.getEvent());
-        /**
-         * Set background color based on notification type
-         * 3 cases - bad news, spot confirmed, registration open
-         */
+
         // Set background color based on notification type
         switch (notification.getType()) {
             case BAD_NEWS:
@@ -54,36 +49,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
         }
 
-        /**
-        Set the icon based on the muted state
-         */
         // Set the icon based on the muted state
         if (notification.isMuted()) {
             holder.muteIcon.setImageResource(R.drawable.ic_mute);
         } else {
             holder.muteIcon.setImageResource(R.drawable.ic_sound);
         }
-        /**
-         * Handle mute/unmute toggle
-         */
+
         // Handle mute/unmute toggle
         holder.muteIcon.setOnClickListener(v -> {
-            // Toggle the muted state
             notification.setMuted(!notification.isMuted());
-            /**
-             * Update the icon based on the new state
-             */
-            // Update the icon based on the new state
-            if (notification.isMuted()) {
-                holder.muteIcon.setImageResource(R.drawable.ic_mute);
-            } else {
-                holder.muteIcon.setImageResource(R.drawable.ic_sound);
-            }
-            /**
-             * Notify the adapter of the change to refresh the UI
-             */
-            // Notify the adapter of the change to refresh the UI
+            holder.muteIcon.setImageResource(notification.isMuted() ? R.drawable.ic_mute : R.drawable.ic_sound);
             notifyItemChanged(position);
+        });
+
+        // Handle delete button click
+        holder.deleteButton.setOnClickListener(v -> {
+            // Remove the notification and refresh the list
+            notificationList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, notificationList.size()); // Notify range change to update the list
         });
     }
 
@@ -109,6 +94,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView, timeTextView, eventTextView;
         ImageView muteIcon;
+        Button deleteButton;
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,6 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             timeTextView = itemView.findViewById(R.id.notification_time);
             eventTextView = itemView.findViewById(R.id.notification_event);
             muteIcon = itemView.findViewById(R.id.mute_icon);
+            deleteButton = itemView.findViewById(R.id.btn_delete); // Initialize the delete button
         }
     }
 }
