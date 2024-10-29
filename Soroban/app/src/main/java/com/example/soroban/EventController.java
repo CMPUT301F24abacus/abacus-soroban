@@ -1,57 +1,41 @@
 package com.example.soroban;
 
-import android.util.Log;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import  java.util.Date;
 
-import java.util.Date;
-import java.util.HashMap;
-
+/**
+ * Any class that deals with the modification of an Event object must utilize this class.
+ * @Author: Matthieu Larochelle
+ * @Version: 1.1
+ */
 public class EventController {
     private Event event;
-    private FirebaseFirestore db;
-    private CollectionReference eventRef;
 
     /**
      * Constructor method for EventController.
-     * @Author: Kevin Li
-     * @Version: 1.0
+     * @Author: Kevin Li, Matthieu Larochelle
+     * @Version: 1.1
      */
     public EventController(Event event) {
-        db = FirebaseFirestore.getInstance();
-        eventRef = db.collection("events");
         this.event = event;
     }
 
     /**
-     * Create an Event.
-     * @Author: Kevin Li
+     * Update Event.
+     * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @param owner: Event's owner.
-     * @param eventName: Event's name.
-     * @param eventDate: Event's starting date.
-     * @param drawDate: Event's date of drawing participants.
-     * @param sampleSize: Sample Size of Attendees
+     * @param eventName: Event's new name.
+     * @param eventDate: Event's new date.
+     * @param drawDate: Event's new  draw date.
+     * @param sampleSize: Event's new sample size.
+     * @param maxEntrants : Event's new max number of entrants.
      */
-    public void createEvent(User owner, String eventName, Date eventDate, Date drawDate, int sampleSize) {
-        Event event = new Event(owner, eventName, eventDate, drawDate, sampleSize);
-
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Owner", event.getOwner().getName());
-        data.put("Date", String.valueOf(event.getEventDate()));
-        //data.put("Attendees", ...)
-        eventRef
-                .document(event.getEventName())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                });
+    public void updateEvent(String eventName, Date eventDate, Date drawDate, int sampleSize, int maxEntrants){
+        event.setEventName(eventName);
+        event.setEventDate(eventDate);
+        event.setDrawDate(drawDate);
+        event.setSampleSize(sampleSize);
+        event.setMaxEntrants(maxEntrants);
     }
-
 
 }

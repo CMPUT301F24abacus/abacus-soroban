@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @Author: Matthieu Larochelle
  * @Version: 1.1
  */
-public class EventList {
+public class EventList implements Serializable  {
     private ArrayList<Event> eventList;
 
     /**

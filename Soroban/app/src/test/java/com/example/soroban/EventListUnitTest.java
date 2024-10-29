@@ -9,7 +9,7 @@ import java.util.Date;
 public class EventListUnitTest {
 
     private Event mockEvent(User owner){
-        return new Event(owner, "mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
+        return new Event(owner, owner.createFacility(), "mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
     }
 
     @Test
