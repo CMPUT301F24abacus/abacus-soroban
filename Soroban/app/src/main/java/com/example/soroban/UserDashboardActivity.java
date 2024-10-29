@@ -16,15 +16,18 @@ import java.util.Arrays;
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
     private ListView waitlistedEventsListView;
+    private EventList waitlistedEventsListData;
+    private EventArrayAdapter waitlistedAdapter;
     private ListView confirmedEventsListView;
+    private EventList confirmedEventsListData;
+    private EventArrayAdapter confirmedAdapter;
+
     /**
      * Called when the activity is first created.
      * @param savedInstanceState
      * Author: Ayan Chaudhry
      *
      */
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,11 @@ public class UserDashboardActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
-        
+
+        // Grab event data from appUser
+        waitlistedEventsListData = appUser.getWaitList();
+        confirmedEventsListData = appUser.getRegisteredEvents();
+
         /**
          * Set up button actions.
          * Buttons are: Scan QR Code, Join Waiting List, Manage Facility
@@ -73,27 +80,13 @@ public class UserDashboardActivity extends AppCompatActivity {
             // Action for Manage Facility
         });
 
-        // Initialize ListViews for waitlisted and confirmed events
+        // References for waitlisted and confirmed events ListViews
         waitlistedEventsListView = findViewById(R.id.list_waitlisted_events);
         confirmedEventsListView = findViewById(R.id.list_confirmed_events);
 
-        // Sample data for waitlisted and confirmed events
-        ArrayList<String> waitlistedEvents = new ArrayList<>(Arrays.asList(
-                "Event Name, Organized by ABC",
-                "Event Name, Organized by DEF",
-                "Event Name, Organized by GHI"
-        ));
-        ArrayList<String> confirmedEvents = new ArrayList<>(Arrays.asList(
-                "Event Name, Organized by LMN",
-                "Event Name, Organized by OPQ",
-                "Event Name, Organized by RST"
-        ));
-
         // Set up ArrayAdapters for both ListViews
-        ArrayAdapter<String> waitlistedAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, waitlistedEvents);
-        ArrayAdapter<String> confirmedAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, confirmedEvents);
+        waitlistedAdapter = new EventArrayAdapter(this,waitlistedEventsListData);
+        confirmedAdapter = new EventArrayAdapter(this, confirmedEventsListData);
 
         waitlistedEventsListView.setAdapter(waitlistedAdapter);
         confirmedEventsListView.setAdapter(confirmedAdapter);

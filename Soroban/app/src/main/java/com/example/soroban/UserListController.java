@@ -29,7 +29,7 @@ public class UserListController {
      * @return : Result of successful update of User in UserList.
      */
     public Boolean updateUser(User user, String firstName, String lastName, String email, String number){
-        if(userList.getUsers().contains(user)){
+        if(userList.contains(user)){
             user.setName(firstName + lastName);
             user.setEmail(email);
             user.setPhoneNumber(Integer.parseInt(number));

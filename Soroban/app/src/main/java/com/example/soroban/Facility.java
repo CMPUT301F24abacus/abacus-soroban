@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
  * @Author: Matthieu Larochelle
  * @Version: 1.0
  */
-public class Facility {
+public class Facility implements Serializable {
     private final User owner;
     private String name;
     private EventList hostedEvents;
@@ -72,7 +73,7 @@ public class Facility {
      */
     public Boolean addHostedEvent(Event event){
         if(this.equals(event.getFacility())){
-            return hostedEvents.add(event);
+            return hostedEvents.addEvent(event);
         }else{
             return Boolean.FALSE;
         }
@@ -100,7 +101,7 @@ public class Facility {
      * @Return: hosted events ArrayList.
      */
     public ArrayList<Event> getHostedEvents() {
-        return hostedEvents.getEvents();
+        return hostedEvents;
     }
 
     /**
