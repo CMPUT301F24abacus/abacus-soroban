@@ -1,31 +1,29 @@
-/**
- * Represents the user's dashboard activity, which is supposed to be the main screen for the users.
- * Author: Ayan Chaudhry
- * Resources used: ChatGPT for code assistance
- * @version 1.0
- */
-
 package com.example.soroban;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import android.widget.ListView;
 
-import com.example.soroban.EventRegistrationActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
-
+    private ListView waitlistedEventsListView;
+    private ListView confirmedEventsListView;
     /**
      * Called when the activity is first created.
      * @param savedInstanceState
      * Author: Ayan Chaudhry
      *
      */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,59 +54,54 @@ public class UserDashboardActivity extends AppCompatActivity {
          * Buttons are: Scan QR Code, Join Waiting List, Manage Facility
          */
 
+        // Initialize buttons
         Button scanQrCode = findViewById(R.id.btn_scan_qr_code);
         Button joinWaitingList = findViewById(R.id.btn_join_waiting_list);
         Button manageFacility = findViewById(R.id.btn_manage_facility);
 
-        /**
-         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
-         */
-        scanQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Action for Scan QR Code
-
-
-                Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
-                startActivity(intent); // Redirect to EventRegistrationActivity
-            }
-        });
-        /**
-         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
-         */
-        joinWaitingList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Action for Join Waiting List
-            }
-        });
-        /**
-         * Set up button click listeners for QR CODE SCAN, JOIN WAITING LIST, and MANAGE FACILITY.
-         */
-        manageFacility.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Action for Create/Manage Facility
-            }
+        // Set up click listeners for buttons
+        scanQrCode.setOnClickListener(v -> {
+            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
+            startActivity(intent);
         });
 
-        // Find the CardView for confirmed events
-        CardView confirmedEventsCard = findViewById(R.id.card_confirmed_events);
-
-        // Set an OnClickListener to navigate to ConfirmedEventsActivity
-        confirmedEventsCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserDashboardActivity.this, ConfirmedEventsActivity.class);
-                startActivity(intent);
-            }
+        joinWaitingList.setOnClickListener(v -> {
+            // Action for Join Waiting List
         });
 
-        // UserDashboardActivity.java
+        manageFacility.setOnClickListener(v -> {
+            // Action for Manage Facility
+        });
+
+        // Initialize ListViews for waitlisted and confirmed events
+        waitlistedEventsListView = findViewById(R.id.list_waitlisted_events);
+        confirmedEventsListView = findViewById(R.id.list_confirmed_events);
+
+        // Sample data for waitlisted and confirmed events
+        ArrayList<String> waitlistedEvents = new ArrayList<>(Arrays.asList(
+                "Event Name, Organized by ABC",
+                "Event Name, Organized by DEF",
+                "Event Name, Organized by GHI"
+        ));
+        ArrayList<String> confirmedEvents = new ArrayList<>(Arrays.asList(
+                "Event Name, Organized by LMN",
+                "Event Name, Organized by OPQ",
+                "Event Name, Organized by RST"
+        ));
+
+        // Set up ArrayAdapters for both ListViews
+        ArrayAdapter<String> waitlistedAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, waitlistedEvents);
+        ArrayAdapter<String> confirmedAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, confirmedEvents);
+
+        waitlistedEventsListView.setAdapter(waitlistedAdapter);
+        confirmedEventsListView.setAdapter(confirmedAdapter);
+
+        // Notification icon click listener
         findViewById(R.id.icon_notifications).setOnClickListener(v -> {
             Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
             startActivity(intent);
         });
-
     }
 }
