@@ -48,7 +48,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
-        
+
         /**
          * Set up button actions.
          * Buttons are: Scan QR Code, Join Waiting List, Manage Facility
