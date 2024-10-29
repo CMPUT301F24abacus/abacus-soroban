@@ -1,15 +1,18 @@
 package com.example.soroban;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Stores any relevant information that is related to an event.
  * @Author: Matthieu Larochelle
- * @Version: 1.1
+ * @Version: 1.2
  */
 
 public class Event {
     private final User owner;
+    private final Facility facility;
     private String eventName;
     private Date eventDate;
     private Date drawDate;
@@ -23,18 +26,36 @@ public class Event {
      * Constructor method for an Event.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param owner : User object of the owner of the event.
+     * @param facility : Facility object that the event is hosted at.
      * @param eventName : name string of the event.
      * @param eventDate : date of the event.
      * @param drawDate  : date when the participants of an event are drawn.
      */
-    public Event(User owner,String eventName, Date eventDate, Date drawDate, int sampleSize) {
+    public Event(User owner, Facility facility, String eventName, Date eventDate, Date drawDate, int sampleSize) {
         this.owner = owner;
+        this.facility = facility;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.drawDate = drawDate;
         this.attendees = new UserList();
         this.waitingEntrants = new UserList();
         this.sampleSize = sampleSize;
+    }
+
+    /**
+     * Destructor method for Event.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void destroy(){
+        for(int i = 0; i < attendees.size(); i++){
+            attendees.get(i).removeRegisteredEvent(this);
+        }
+
+        for(int i = 0; i < waitingEntrants.size(); i++){
+            waitingEntrants.get(i).removeFromWaitlist(this);
+        }
     }
 
     /**
@@ -46,6 +67,17 @@ public class Event {
 
     public User getOwner(){
         return owner;
+    }
+
+    /**
+     * Getter method for an Event's facility.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: facility Facility object.
+     */
+
+    public Facility getFacility(){
+        return facility;
     }
 
     /**
@@ -152,13 +184,13 @@ public class Event {
     /**
      * Add a user to an Events's list of waiting entrants.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.2
      * @param user : User.
-     * @return : Result of successful addition to Event's list of waiting entrants.
+     * @return: Result of successful addition to Event's list of waiting entrants.
      */
     public Boolean addToWaitingEntrants(User user){
-        if(waitingEntrants.size() < this.maxEntrants){
-            return waitingEntrants.add(user);
+        if(this.maxEntrants == null || waitingEntrants.size() < this.maxEntrants){
+            return waitingEntrants.add(user) && (user.getWaitList().contains(this) ? Boolean.TRUE :user.addToWaitlist(this));
         }else{
             return Boolean.FALSE;
         }
@@ -167,24 +199,36 @@ public class Event {
     /**
      * Remove a user from an Events's list of waiting entrants.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @Param: User.
-     * @return : Result of successful removal from Event's list of waiting entrants.
+     * @Version: 1.2
+     * @param user  User.
+     * @return: Result of successful removal from Event's list of waiting entrants.
      */
     public Boolean removeFromWaitingEntrants(User user){
-        return waitingEntrants.remove(user);
+        return waitingEntrants.remove(user) && (user.getWaitList().contains(this) ? user.removeFromWaitlist(this)  : Boolean.TRUE);
     }
+
+
+    /**
+     * Getter method for Event's list of waiting entrants.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: wait list ArrayList.
+     */
+    public ArrayList<User> getWaitingEntrants() {
+        return waitingEntrants.getUsers();
+    }
+
 
     /**
      * Add a user to an Events's list of attendees.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.2
      * @Param: User.
-     * @return : Result of successful addition to Event's list of attendees.
+     * @return: Result of successful addition to Event's list of attendees.
      */
     public Boolean addAttendee(User user){
         if(attendees.size() < this.sampleSize){
-            return attendees.add(user);
+            return attendees.add(user) && (user.getWaitList().contains(this) ? Boolean.TRUE : user.addRegisteredEvent(this));
         }else{
             return Boolean.FALSE;
         }
@@ -193,12 +237,42 @@ public class Event {
     /**
      * Remove a user from an Events's list of attendees.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.2
      * @Param: User.
-     * @return : Result of successful removal from Event's list of attendees.
+     * @return: Result of successful removal from Event's list of attendees.
      */
     public Boolean removeAttendee(User user){
-        return attendees.remove(user);
+        return attendees.remove(user) && (user.getWaitList().contains(this) ? user.removeRegisteredEvent(this) : Boolean.TRUE);
+    }
+
+    /**
+     * Getter method for Event's list of attendees.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: attendee list ArrayList.
+     */
+    public ArrayList<User> getAttendees() {
+        return attendees.getUsers();
+    }
+
+    /**
+     * Checks if one Event object is equal to another..
+     * @author: Matthieu Larochelle
+     * @version: 1.0
+     * @return
+     * Return true if an Event object is equal to this Event object, or if all fields of the Event object are equal to all fields of this Event object.
+     * Returns false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Event mockEvent = (Event) o;
+        return Objects.equals(owner, mockEvent.getOwner()) && Objects.equals(eventName, mockEvent.getEventName()) && Objects.equals(eventDate,  mockEvent.getEventDate()) && Objects.equals(drawDate,  mockEvent.getDrawDate()) && Objects.equals(sampleSize,  mockEvent.getSampleSize()) && Objects.equals(maxEntrants,  mockEvent.getMaxEntrants());
     }
 
 

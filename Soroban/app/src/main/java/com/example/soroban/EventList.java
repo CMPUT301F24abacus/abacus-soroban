@@ -20,6 +20,18 @@ public class EventList {
         this.eventList = new ArrayList<Event>();
     }
 
+
+    /**
+     * Destructor method for EventList.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void destroy(){
+        for(int i = 0; i < eventList.size(); i++){
+            eventList.get(i).destroy();
+        }
+    }
+
     /**
      * Add an event to an event list.
      * @Author: Matthieu Larochelle
@@ -56,8 +68,33 @@ public class EventList {
      * @Version: 1.0
      * @return: number of events integer.
      */
-    public Integer size(){
+    public int size(){
         return eventList.size();
+    }
+
+    /**
+     * Return the event in the event list at the specified index.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param index: index in the event list.
+     * @return: indexed Event object.
+     */
+    public Event get(int index){
+        if(index >= 0 && index < eventList.size()){
+            return eventList.get(index);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Return a basic list of events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: ArrayList of events.
+     */
+    public ArrayList<Event> getEvents(){
+        return this.eventList;
     }
 
 }
