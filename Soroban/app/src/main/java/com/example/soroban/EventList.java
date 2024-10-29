@@ -10,7 +10,8 @@ import java.util.ArrayList;
  * @Version: 2.0
  */
 public class EventList extends ArrayList<Event> implements Serializable {
-
+ 
+  
     /**
      * Constructor method for EventList.
      * @Author: Matthieu Larochelle
