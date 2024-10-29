@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
     private User appUser;
 
@@ -24,6 +26,16 @@ public class MainActivity extends AppCompatActivity {
         // Get Android Device Id.
         // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+
+        /**
+         * !!! TEMPORARY BAD TEST !!!
+         */
+        Event mockEvent = new Event(appUser,appUser.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 3);
+        appUser.addToWaitlist(mockEvent);
+        /**
+         * !!! TEMPORARY BAD TEST !!!
+         */
 
         // Set window insets for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

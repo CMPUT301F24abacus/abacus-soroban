@@ -4,10 +4,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import android.provider.Settings;
+
 import java.util.Date;
 
 
 public class UserUnitTest {
+
+    private User mockUser(){
+        return new User("testId");
+    }
 
     private Event mockEvent(User owner){
         return new Event(owner, owner.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
@@ -16,7 +22,7 @@ public class UserUnitTest {
 
     @Test
     public void testCreateFacility(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         Facility newFacility = newUser.createFacility();
 
@@ -25,7 +31,7 @@ public class UserUnitTest {
 
     @Test
     public void testRemoveFacility(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         newUser.createFacility();
 
@@ -36,18 +42,20 @@ public class UserUnitTest {
 
     @Test
     public void testAddToWaitList(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         Event newEvent = mockEvent(newUser);
 
         assertTrue(newUser.addToWaitlist(newEvent));
 
+        assertEquals(1, newUser.getWaitList().size());
         assertTrue(newUser.getWaitList().contains(newEvent));
+        assertFalse(newUser.addToWaitlist(newEvent));
     }
 
     @Test
     public void testRemoveFromWaitList(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         Event newEvent = mockEvent(newUser);
 
@@ -61,18 +69,20 @@ public class UserUnitTest {
 
     @Test
     public void testAddRegisteredEvent(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         Event newEvent = mockEvent(newUser);
 
-        newUser.addRegisteredEvent(newEvent);
+        assertTrue(newUser.addRegisteredEvent(newEvent));
 
-        assertEquals(newEvent, newUser.getRegisteredEvents().get(0));
+        assertEquals(1, newUser.getRegisteredEvents().size());
+        assertTrue(newUser.getRegisteredEvents().contains(newEvent));
+        assertFalse(newUser.addRegisteredEvent(newEvent));
     }
 
     @Test
     public void testRemoveRegisteredEvent(){
-        User newUser = new User();
+        User newUser = mockUser();
 
         Event newEvent = mockEvent(newUser);
 

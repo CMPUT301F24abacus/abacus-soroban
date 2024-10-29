@@ -1,88 +1,46 @@
 package com.example.soroban;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Keeps track of user objects.
  * @Author: Matthieu Larochelle
- * @Version: 1.1
+ * @Version: 2.0
  */
-public class UserList {
-    private ArrayList<User> userList;
-
+public class UserList extends ArrayList<User> implements Serializable {
     /**
      * Constructor method for UserList.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 2.0
      */
     public UserList(){
-        this.userList = new ArrayList<User>();
+        super();
     }
 
     /**
-     * Add a user to a user list.
+     * Destructor method for UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Param: User.
-     * @return: Result of successful addition of User to list of users.
      */
-    public Boolean add(User user){
-        if(userList.contains(user)){
-            return Boolean.FALSE; // User already present in list of users.
-        }else{
-            return userList.add(user);
+    public void destroy(){
+        for(int i = 0; i < this.size(); i++){
+            this.get(i).destroy();
         }
     }
 
     /**
-     * Remove an event from an event list.
+     * Add user to UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Param: Event.
-     * @return: Result of successful removal of User from list of users.
      */
-    public Boolean remove(User user){
-        if(userList.contains(user)){
-            return userList.remove(user);
+    public boolean addUser(User user){
+        if(this.contains(user)){
+            return false;
         }else{
-            return Boolean.FALSE; // Event is not present in list of users.;
+            return add(user);
         }
-    }
-
-    /**
-     * Return the number of users in the user list.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @return: number of users integer.
-     */
-    public int size(){
-        return userList.size();
-    }
-
-    /**
-     * Return the user in the user list at the specified index.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @param index: index in the user list.
-     * @return: indexed User object.
-     */
-    public User get(int index){
-        if(index >= 0 && index < userList.size()){
-            return userList.get(index);
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * Return a basic list of users.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @return: ArrayList of users.
-     */
-    public ArrayList<User> getUsers(){
-        return this.userList;
     }
 }
 

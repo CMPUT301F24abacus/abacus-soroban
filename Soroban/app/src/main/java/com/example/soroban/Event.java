@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @Version: 1.2
  */
 
-public class Event {
+public class Event implements Serializable {
     private final User owner;
     private final Facility facility;
     private String eventName;
@@ -191,7 +192,7 @@ public class Event {
      */
     public Boolean addToWaitingEntrants(User user){
         if(this.maxEntrants == null || waitingEntrants.size() < this.maxEntrants){
-            return waitingEntrants.add(user) && (user.getWaitList().contains(this) ? Boolean.TRUE :user.addToWaitlist(this));
+            return waitingEntrants.addUser(user) && (user.getWaitList().contains(this) ? Boolean.TRUE :user.addToWaitlist(this));
         }else{
             return Boolean.FALSE;
         }
@@ -213,10 +214,10 @@ public class Event {
      * Getter method for Event's list of waiting entrants.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Return: wait list ArrayList.
+     * @Return: waiting entrant list UserList.
      */
-    public ArrayList<User> getWaitingEntrants() {
-        return waitingEntrants.getUsers();
+    public UserList getWaitingEntrants() {
+        return waitingEntrants;
     }
 
 
@@ -229,7 +230,7 @@ public class Event {
      */
     public Boolean addAttendee(User user){
         if(attendees.size() < this.sampleSize){
-            return attendees.add(user) && (user.getWaitList().contains(this) ? Boolean.TRUE : user.addRegisteredEvent(this));
+            return attendees.addUser(user) && (user.getRegisteredEvents().contains(this) ? Boolean.TRUE : user.addRegisteredEvent(this));
         }else{
             return Boolean.FALSE;
         }
@@ -250,10 +251,10 @@ public class Event {
      * Getter method for Event's list of attendees.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Return: attendee list ArrayList.
+     * @Return: attendee UserList.
      */
-    public ArrayList<User> getAttendees() {
-        return attendees.getUsers();
+    public UserList getAttendees() {
+        return attendees;
     }
 
     /**

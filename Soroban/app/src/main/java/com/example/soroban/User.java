@@ -153,20 +153,20 @@ public class User implements Serializable {
      * Getter method for User's wait list of events.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Return: wait list ArrayList.
+     * @Return: wait list EventList.
      */
-    public ArrayList<Event> getWaitList() {
-        return waitList.getEvents();
+    public EventList getWaitList() {
+        return waitList;
     }
 
     /**
      * Getter method for User's list of registered events.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Return: registered events ArrayList.
+     * @Return: registered events EventList.
      */
-    public ArrayList<Event> getRegisteredEvents() {
-        return registeredEvents.getEvents();
+    public EventList getRegisteredEvents() {
+        return registeredEvents;
     }
 
     /**
@@ -177,7 +177,7 @@ public class User implements Serializable {
      * @return : Result of successful addition to User's waitlist of events.
      */
     public Boolean addToWaitlist(Event event){
-        return waitList.add(event) && (event.getWaitingEntrants().contains(this) ? Boolean.TRUE : event.addToWaitingEntrants(this));
+        return waitList.addEvent(event) && (event.getWaitingEntrants().contains(this) ? Boolean.TRUE : event.addToWaitingEntrants(this));
     }
 
     /**
@@ -199,7 +199,7 @@ public class User implements Serializable {
      * @return : Result of successful addition to User's list of registered events.
      */
     public Boolean addRegisteredEvent(Event event){
-        return registeredEvents.add(event) && (event.getAttendees().contains(this) ? Boolean.TRUE : event.addAttendee(this));
+        return registeredEvents.addEvent(event) && (event.getAttendees().contains(this) ? Boolean.TRUE : event.addAttendee(this));
     }
 
     /**
