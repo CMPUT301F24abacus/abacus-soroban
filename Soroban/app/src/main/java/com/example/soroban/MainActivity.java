@@ -14,10 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
     private User appUser;
@@ -47,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 });
+
+
+        /**
+         * !!! TEMPORARY BAD TEST !!!
+         */
+        Event mockEvent = new Event(appUser,appUser.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 3);
+        appUser.addToWaitlist(mockEvent);
+        /**
+         * !!! TEMPORARY BAD TEST !!!
+         */
 
         // Set window insets for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

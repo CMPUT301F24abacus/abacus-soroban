@@ -27,7 +27,7 @@ public class EventListController {
      * @return : Result of successful update of Event in EventList.
      */
     public Boolean updateEvent(Event event, String eventName, Date eventDate, Date drawDate, int sampleSize, int maxEntrants){
-        if(eventList.getEvents().contains(event)){
+        if(eventList.contains(event)){
             event.setEventName(eventName);
             event.setEventDate(eventDate);
             event.setDrawDate(drawDate);
