@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -24,12 +23,19 @@
             android:layout_height="wrap_content"
             android:text="Time" />
 
+
         <TextView
             android:id="@+id/notification_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Event" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
 
     <ImageView
         android:id="@+id/mute_icon"

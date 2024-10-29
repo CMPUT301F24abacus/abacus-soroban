@@ -1,7 +1,7 @@
 /**
-This screen will display the events in which the User has already registered and secured their spot
-Author: Ayan Imran Chaudhry
-References: ChatGPT, Stack Overflow, Android Documentation
+ * This screen will display the events in which the User has already registered and secured their spot
+ * Author: Ayan Imran Chaudhry
+ * References: ChatGPT, Stack Overflow, Android Documentation
  */
 
 package com.example.soroban;
@@ -40,8 +40,9 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
         adapter = new ConfirmedEventsAdapter(confirmedEventsList);
         recyclerConfirmedEvents.setAdapter(adapter);
     }
+
     /**
-    this is a sample method to get the confirmed events.
+     * This is a sample method to get the confirmed events.
      */
     private List<String> getConfirmedEvents() {
         // Sample data; replace with actual data source.
@@ -70,7 +71,6 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
          *
          * @return
          */
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.item_confirmed_event, parent, false);
@@ -91,7 +91,6 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
                 Intent intent = new Intent(ConfirmedEventsActivity.this, EventRegistrationActivity.class);
                 intent.putExtra("isRegistered", true); // Pass true if the user is registered for the event
                 startActivity(intent);
-
             });
         }
 
