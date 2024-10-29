@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Soroban</string>
     <string name="user_dashboard_title">Dashboard\n</string>
+    <string name="confirmEventRegistrationText">Confirm registration for \"Event Name\"?</string>
+    <string name="unregisterEventText">Unregister from \"Event Name\"?</string>
+    <string name="DeclineButtonText">Decline</string>
+    <string name="ConfirmButtonText">Confirm</string>
+    <string name="usernameText">username</string>
+    <string name="firstNameText">First Name</string>
+    <string name="lastNameText">Last Name</string>
+    <string name="emailAddressText">Email Address</string>
+    <string name="phoneNumberText">Phone Number</string>
+    <string name="phoneNumberField">+1 780 780 0780</string>
+    <string name="firstNameField">John</string>
+    <string name="lastNameField">Smith</string>
+    <string name="emailAddressField">jsmith@example.com</string>
+    <string name="registrationStatusText">Status</string>
+    <string name="registrationStatusField">Sample User Status</string>
 </resources>
