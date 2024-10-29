@@ -14,4 +14,6 @@
     <string name="firstNameField">John</string>
     <string name="lastNameField">Smith</string>
     <string name="emailAddressField">jsmith@example.com</string>
+    <string name="registrationStatusText">Status</string>
+    <string name="registrationStatusField">Sample User Status</string>
 </resources>
