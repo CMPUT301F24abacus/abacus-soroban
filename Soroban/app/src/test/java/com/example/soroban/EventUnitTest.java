@@ -9,6 +9,10 @@ import java.util.Date;
 
 public class EventUnitTest {
 
+    private User mockUser(){
+        return new User("testId");
+    }
+
     private Event mockEvent(User owner){
         return new Event(owner, owner.createFacility(), "mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
     }
@@ -16,16 +20,16 @@ public class EventUnitTest {
 
     @Test
     public void testDestroy(){
-        User owner = new User();
+        User owner = mockUser();
         Event newEvent = mockEvent(owner);
 
         // Add a new entrant
-        User newEntrant = new User();
+        User newEntrant = mockUser();
         newEntrant.addToWaitlist(newEvent);
         newEvent.addToWaitingEntrants(newEntrant);
 
         // Add a new attendee
-        User newAttendee = new User();
+        User newAttendee = mockUser();
         newAttendee.addRegisteredEvent(newEvent);
         newEvent.addAttendee(newAttendee);
 
@@ -37,11 +41,11 @@ public class EventUnitTest {
 
     @Test
     public void testAddToWaitingEntrants(){
-        User owner = new User();
+        User owner = mockUser();
         Event newEvent = mockEvent(owner);
 
         // Add a new entrant
-        User firstEntrant = new User();
+        User firstEntrant = mockUser();
         firstEntrant.setName("Elmo");
         assertTrue(newEvent.addToWaitingEntrants(firstEntrant));
 
@@ -50,7 +54,7 @@ public class EventUnitTest {
         newEvent.setMaxEntrants(1);
 
         // Add a new entrant
-        User secondEntrant = new User();
+        User secondEntrant = mockUser();
         firstEntrant.setName("Oscar");
         assertFalse(newEvent.addToWaitingEntrants(secondEntrant));
 
@@ -59,32 +63,30 @@ public class EventUnitTest {
         newEvent.setMaxEntrants(2);
 
         assertTrue(newEvent.addToWaitingEntrants(secondEntrant));
-
         assertTrue(newEvent.getWaitingEntrants().contains(secondEntrant));
     }
 
     @Test
     public void testRemoveFromWaitingEntrants(){
-        User owner = new User();
+        User owner = mockUser();
         Event newEvent = mockEvent(owner);
 
         // Add a new entrant
-        User firstEntrant = new User();
+        User firstEntrant = mockUser();
         firstEntrant.setName("Elmo");
         newEvent.addToWaitingEntrants(firstEntrant);
 
         assertTrue(newEvent.removeFromWaitingEntrants(firstEntrant));
-
         assertFalse(newEvent.getWaitingEntrants().contains(firstEntrant));
     }
 
     @Test
     public void testAddAttendee(){
-        User owner = new User();
+        User owner = mockUser();
         Event newEvent = mockEvent(owner);
 
         // Add a new entrant
-        User firstEntrant = new User();
+        User firstEntrant = mockUser();
         firstEntrant.setName("Elmo");
         assertTrue(newEvent.addToWaitingEntrants(firstEntrant));
 
@@ -93,7 +95,7 @@ public class EventUnitTest {
         newEvent.setMaxEntrants(1);
 
         // Add a new entrant
-        User secondEntrant = new User();
+        User secondEntrant = mockUser();
         firstEntrant.setName("Oscar");
         assertFalse(newEvent.addToWaitingEntrants(secondEntrant));
 
@@ -108,11 +110,11 @@ public class EventUnitTest {
 
     @Test
     public void testRemoveAttendee(){
-        User owner = new User();
+        User owner = mockUser();
         Event newEvent = mockEvent(owner);
 
         // Add a new entrant
-        User firstEntrant = new User();
+        User firstEntrant = mockUser();
         firstEntrant.setName("Elmo");
         newEvent.addAttendee(firstEntrant);
 

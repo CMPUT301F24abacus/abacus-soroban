@@ -7,6 +7,10 @@ import org.junit.Test;
 import java.util.Date;
 
 public class FacilityUnitTest {
+    private User mockUser(){
+        return new User("testId");
+    }
+
     private Event mockEvent(User owner){
         return new Event(owner, owner.createFacility(), "mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 5);
     }
@@ -14,23 +18,21 @@ public class FacilityUnitTest {
 
     @Test
     public void testDestroy(){
-        User owner = new User();
-        Facility newFacility = owner.createFacility();
+        User owner = mockUser();
+        owner.createFacility();
         Event newEvent = mockEvent(owner);
 
-        newFacility.addHostedEvent(newEvent);
+        owner.getFacility().addHostedEvent(newEvent);
 
-        newFacility.destroy();
+        owner.getFacility().destroy();
 
         // Hosted events are discontinued.
-        assertThrows(NullPointerException.class, ()->{
-            newFacility.getHostedEvents();
-        });
+        assertNull(owner.getFacility().getHostedEvents());
     }
 
     @Test
     public void testAddHostedEvent(){
-        User owner = new User();
+        User owner = mockUser();
         Facility newFacility = owner.createFacility();
         Event newEvent = mockEvent(owner);
 
@@ -42,7 +44,7 @@ public class FacilityUnitTest {
 
     @Test
     public void testRemoveHostedEvent(){
-        User owner = new User();
+        User owner = mockUser();
         Facility newFacility = owner.createFacility();
         Event newEvent = mockEvent(owner);
 
