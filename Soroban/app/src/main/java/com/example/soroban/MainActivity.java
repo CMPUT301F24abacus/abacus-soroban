@@ -27,10 +27,12 @@ public class MainActivity extends AppCompatActivity {
         // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
-
         /**
          * !!! TEMPORARY BAD TEST !!!
          */
+        appUser.setName("Elmo");
+        appUser.setEmail("elmo@gmail.com");
+        appUser.setPhoneNumber(911);
         Event mockEvent = new Event(appUser,appUser.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 3);
         appUser.addToWaitlist(mockEvent);
         /**

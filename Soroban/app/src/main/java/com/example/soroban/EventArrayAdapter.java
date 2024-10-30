@@ -30,12 +30,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.eventlist_content, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_confirmed_event, parent,false);
         }
 
         Event event = events.get(position);
 
-        TextView eventName = view.findViewById(R.id.event_list_name);
+        TextView eventName = view.findViewById(R.id.tv_event_name);
 
         eventName.setText(event.getEventName());
 
