@@ -5,7 +5,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
@@ -43,8 +42,6 @@
         <activity android:name=".QrCodeScanActivity" />
         <activity android:name=".ConfirmedEventsActivity" />
         <activity android:name=".NotificationActivity" />
-
-
 
 
     </application>
