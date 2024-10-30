@@ -25,9 +25,10 @@
     <color name="icon_sound_color">#2196F3</color> <!-- Blue color for sound icon -->
     <color name="icon_clear_color">#FF5252</color> <!-- Red color for clear icon -->
 
-    <color name="color_bad_news">#E75A2A</color> <!-- Red -->
+    <color name="color_bad_news">#D22B2B</color> <!-- Red -->
     <color name="color_spot_confirmed">#18C662</color> <!-- Green -->
     <color name="color_registration_open">#23BCCF</color> <!-- Blue -->
+    <color name="color_lukewarm_news">#FFBF00</color> <!-- Yellow -->
 
 
 </resources>
