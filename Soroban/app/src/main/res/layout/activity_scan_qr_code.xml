@@ -50,8 +50,8 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/qr_scan"
         app:backgroundTint="@color/colorPrimary"
-        app:layout_anchor="@+id/bottomAppBar"
-        app:layout_anchorGravity="center"
+        app:layout_anchor="@+id/layout_result"
+        app:layout_anchorGravity="bottom|center"
         app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
