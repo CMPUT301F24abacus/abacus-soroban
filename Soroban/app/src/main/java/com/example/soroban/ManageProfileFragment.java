@@ -5,23 +5,22 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.Serializable;
 
-public class ViewProfileFragment extends DialogFragment{
+public class ManageProfileFragment extends DialogFragment{
 
-    public static ViewProfileFragment newInstance(@Nullable User user){
+    public static ManageProfileFragment newInstance(@Nullable User user){
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
 
-        ViewProfileFragment newFragment = new ViewProfileFragment();
+        ManageProfileFragment newFragment = new ManageProfileFragment();
         newFragment.setArguments(args);
         return newFragment;
     }
@@ -31,13 +30,13 @@ public class ViewProfileFragment extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        View view = getLayoutInflater().inflate(R.layout.user_profile_view, null);
+        View view = getLayoutInflater().inflate(R.layout.user_profile_edit, null);
 
         // Get references to all views that will display a profile's information.
-        TextView firstNameText = view.findViewById(R.id.user_FirstNameField);
-        TextView lastNameText = view.findViewById(R.id.user_LastNameField);
-        TextView emailText = view.findViewById(R.id.user_emailAddressField);
-        TextView phoneNumberText = view.findViewById(R.id.user_phoneNumberField);
+        TextView firstNameText = view.findViewById(R.id.user_firstNameEdit);
+        TextView lastNameText = view.findViewById(R.id.user_lastNameEdit);
+        TextView emailText = view.findViewById(R.id.user_emailAddressEdit);
+        TextView phoneNumberText = view.findViewById(R.id.user_PhoneNumberEdit);
 
         Bundle args = getArguments();
         if(args != null){
@@ -63,17 +62,14 @@ public class ViewProfileFragment extends DialogFragment{
                 phoneNumberText.setText(String.valueOf(appUser.getPhoneNumber()));
 
                 // Set up listeners for buttons
-                FloatingActionButton editButton = view.findViewById(R.id.floatingEditButton);
-                FloatingActionButton backButton = view.findViewById(R.id.floatingBackButton);
+                Button discardButton = view.findViewById(R.id.discardChangesButton);
+                Button confirmButton = view.findViewById(R.id.confirmChangesButton);
 
-
-                editButton.setOnClickListener(v -> {
-                    ManageProfileFragment dialogFragment = ManageProfileFragment.newInstance(appUser);
+                discardButton.setOnClickListener(v -> {
                     newDialog.dismiss();
-                    dialogFragment.show(getParentFragmentManager(), "Manage profile");
                 });
 
-                backButton.setOnClickListener(v -> {
+                confirmButton.setOnClickListener(v -> {
                     newDialog.dismiss();
                 });
 
@@ -84,7 +80,7 @@ public class ViewProfileFragment extends DialogFragment{
             return newDialog;
 
         }else{
-            throw new RuntimeException("Instantiate ViewProfileFragment by using newInstance() method.");
+            throw new RuntimeException("Instantiate ManageProfileFragment by using newInstance() method.");
         }
     }
 
