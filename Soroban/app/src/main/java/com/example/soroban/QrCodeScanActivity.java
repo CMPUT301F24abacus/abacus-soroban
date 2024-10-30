@@ -1,6 +1,6 @@
 /**
- *  Author: Ayan Chaudhry
- *  References: ChatGPT and StackOverflow
+ *  Author: Edwin Manalastas
+ *  References: Youtube / ChatGPT (for small bugs)
  */
 
 package com.example.soroban;
@@ -50,9 +50,15 @@ public class QrCodeScanActivity extends AppCompatActivity {
         }
     });
 
+    // Action after scanning QRCode
     private void setResult(String contents) {
-        binding.textResult.setText(contents);
+        Intent intent = new Intent(QrCodeScanActivity.this, EventRegistrationActivity.class);
+        intent.putExtra("qrResult", contents); // Pass the scanned QR code result to EventRegistrationActivity
+        // Retrieve using getIntent().getStringExtra("qrResult")
+        startActivity(intent);
     }
+    // Need to implement Passing QR Code Dara to EventRegistrationActivity (if needed)
+
 
     private void showCamera() {
         ScanOptions options = new ScanOptions();
