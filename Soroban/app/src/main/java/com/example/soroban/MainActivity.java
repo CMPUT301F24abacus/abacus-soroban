@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         // Add the use into the Firebase Database
         firebaseController.createUserDb(appUser);
 
-
         /**
          * !!! TEMPORARY BAD TEST !!!
          */

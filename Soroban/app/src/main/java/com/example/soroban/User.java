@@ -1,9 +1,6 @@
 package com.example.soroban;
 
-import android.provider.Settings;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -14,7 +11,8 @@ import java.util.Objects;
 
 public class User implements Serializable {
     private final String deviceId;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private int phoneNumber;
     private EventList waitList;
@@ -58,23 +56,43 @@ public class User implements Serializable {
     }
 
     /**
-     * Getter method for User's name.
+     * Getter method for User's first name.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Return: name string.
      */
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
-     * Setter method for User's name.
+     * Setter method for User's last name.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @Param: name string.
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * Getter method for User's last name.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: name string.
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Setter method for User's first name.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: name string.
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     /**
@@ -230,7 +248,7 @@ public class User implements Serializable {
             return false;
         }
         User mockUser = (User) o;
-        return Objects.equals(deviceId, mockUser.getDeviceId()) && Objects.equals(name, mockUser.getName()) && Objects.equals(email, mockUser.getEmail()) && Objects.equals(phoneNumber, mockUser.getPhoneNumber());
+        return Objects.equals(deviceId, mockUser.getDeviceId()) && Objects.equals(firstName, mockUser.getFirstName()) && Objects.equals(lastName, mockUser.getLastName()) && Objects.equals(email, mockUser.getEmail()) && Objects.equals(phoneNumber, mockUser.getPhoneNumber());
     }
 
 }

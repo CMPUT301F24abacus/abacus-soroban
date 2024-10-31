@@ -27,10 +27,12 @@ public class UserController {
      * @param email: User's new email address.
      * @param number: User's new phone number.
      */
-    public void updateUser(String firstName, String lastName, String email, String number){
-        user.setName(firstName + lastName);
-        user.setEmail(email);
-        user.setPhoneNumber(Integer.parseInt(number));
+    public void updateUser(CharSequence firstName, CharSequence lastName, CharSequence email, CharSequence number){
+        user.setFirstName(firstName.toString());
+        user.setLastName(lastName.toString());
+        user.setEmail(email.toString());
+        int phoneNumber = Integer.parseInt(number.toString().replaceAll("\\D", ""));
+        user.setPhoneNumber(phoneNumber);
     }
 
     /**
