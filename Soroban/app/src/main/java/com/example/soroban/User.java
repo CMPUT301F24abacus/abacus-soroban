@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private long phoneNumber;
     private EventList waitList;
     private EventList registeredEvents;
     private Facility facility;
@@ -119,9 +119,9 @@ public class User implements Serializable {
      * Getter method for User's phone number.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Return: phone number integer.
+     * @Return: phone number long.
      */
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -129,9 +129,9 @@ public class User implements Serializable {
      * Setter method for User's phone number.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @Param: phone number integer.
+     * @Param: phone number long.
      */
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
