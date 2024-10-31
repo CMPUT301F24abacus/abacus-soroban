@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,10 +63,12 @@ public class UserDashboardActivity extends AppCompatActivity {
          * Buttons are: Scan QR Code, Join Waiting List, Manage Facility
          */
 
-        // Initialize buttons
+        // Initialize buttons and
         Button scanQrCode = findViewById(R.id.btn_scan_qr_code);
         Button joinWaitingList = findViewById(R.id.btn_join_waiting_list);
         Button manageFacility = findViewById(R.id.btn_manage_facility);
+        ImageView profileIcon = findViewById(R.id.icon_profile);
+        ImageView notificationsIcon = findViewById(R.id.icon_notifications);
 
         // Set up click listeners for buttons
         scanQrCode.setOnClickListener(v -> {
@@ -80,6 +84,21 @@ public class UserDashboardActivity extends AppCompatActivity {
             // Action for Manage Facility
         });
 
+        profileIcon.setOnClickListener(v -> {
+            //Action for Profile Icon
+            ViewProfileFragment dialogFragment = ViewProfileFragment.newInstance(appUser);
+            dialogFragment.show(getSupportFragmentManager(), "View profile");
+            //Intent intent = new Intent(UserDashboardActivity.this, ProfileViewActivity.class);
+            //startActivity(intent);
+        });
+
+        notificationsIcon.setOnClickListener(v -> {
+            // Action for notification Icon
+            Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
+
         // References for waitlisted and confirmed events ListViews
         waitlistedEventsListView = findViewById(R.id.list_waitlisted_events);
         confirmedEventsListView = findViewById(R.id.list_confirmed_events);
@@ -91,10 +110,5 @@ public class UserDashboardActivity extends AppCompatActivity {
         waitlistedEventsListView.setAdapter(waitlistedAdapter);
         confirmedEventsListView.setAdapter(confirmedAdapter);
 
-        // Notification icon click listener
-        findViewById(R.id.icon_notifications).setOnClickListener(v -> {
-            Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
-            startActivity(intent);
-        });
     }
 }

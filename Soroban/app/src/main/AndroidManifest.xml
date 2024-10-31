@@ -25,9 +25,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- User Dashboard Activity -->
+        </activity> <!-- User Dashboard Activity -->
         <activity
             android:name=".UserDashboardActivity"
             android:exported="false"
@@ -42,8 +40,6 @@
         <activity android:name=".QrCodeScanActivity" />
         <activity android:name=".ConfirmedEventsActivity" />
         <activity android:name=".NotificationActivity" />
-
-
     </application>
 
 </manifest>

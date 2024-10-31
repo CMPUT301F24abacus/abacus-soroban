@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
-
         /**
          * !!! TEMPORARY BAD TEST !!!
          */
