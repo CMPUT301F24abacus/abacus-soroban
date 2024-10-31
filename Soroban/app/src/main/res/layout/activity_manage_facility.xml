@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    android:padding="16dp">
+
+    <!-- Facility Name Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Facility Name:"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editFacilityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Facility Name"
+        android:backgroundTint="@color/accent"
+        android:padding="8dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary" />
+
+    <!-- Facility Details Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Details:"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editFacilityDetails"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="Enter Facility Details Here"
+        android:backgroundTint="@color/accent"
+        android:padding="8dp"
+        android:gravity="top"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:inputType="textMultiLine" />
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/btnSaveFacility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/primary"
+        android:layout_marginTop="24dp"
+        android:textStyle="bold" />
+</LinearLayout>
