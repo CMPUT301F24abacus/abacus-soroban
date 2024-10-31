@@ -35,7 +35,9 @@ public class FireBaseController {
      */
     public void createUserDb(User user) {
         Map<String, Object> data = new HashMap<>();
-        data.put("name", user.getName());
+        data.put("deviceId", user.getDeviceId());
+        data.put("firstName", user.getFirstName());
+        data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         data.put("facility", user.getFacility());
@@ -81,7 +83,8 @@ public class FireBaseController {
      */
     public void userUpdate(User user) {
         Map<String, Object> data = new HashMap<>();
-        data.put("name", user.getName());
+        data.put("firstName", user.getFirstName());
+        data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
 
