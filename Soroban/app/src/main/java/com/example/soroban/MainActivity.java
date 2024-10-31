@@ -30,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
         /**
          * !!! TEMPORARY BAD TEST !!!
          */
-        appUser.setName("Elmo");
-        appUser.setEmail("elmo@gmail.com");
-        appUser.setPhoneNumber(911);
         Event mockEvent = new Event(appUser,appUser.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 3);
         appUser.addToWaitlist(mockEvent);
         /**

@@ -88,6 +88,8 @@ public class UserDashboardActivity extends AppCompatActivity {
             //Action for Profile Icon
             ViewProfileFragment dialogFragment = ViewProfileFragment.newInstance(appUser);
             dialogFragment.show(getSupportFragmentManager(), "View profile");
+            //Intent intent = new Intent(UserDashboardActivity.this, ProfileViewActivity.class);
+            //startActivity(intent);
         });
 
         notificationsIcon.setOnClickListener(v -> {

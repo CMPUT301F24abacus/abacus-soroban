@@ -57,8 +57,8 @@ public class ViewProfileFragment extends DialogFragment{
 
                 // Update views to have correct info
 
-                firstNameText.setText(appUser.getName());
-                lastNameText.setText(appUser.getName());
+                firstNameText.setText(appUser.getFirstName());
+                lastNameText.setText(appUser.getLastName());
                 emailText.setText(appUser.getEmail());
                 phoneNumberText.setText(String.valueOf(appUser.getPhoneNumber()));
 

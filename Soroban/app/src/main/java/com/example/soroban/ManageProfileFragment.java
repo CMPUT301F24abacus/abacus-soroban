@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import java.io.Serializable;
 
 public class ManageProfileFragment extends DialogFragment{
+    private UserController userController;
 
     public static ManageProfileFragment newInstance(@Nullable User user){
         Bundle args = new Bundle();
@@ -33,10 +34,10 @@ public class ManageProfileFragment extends DialogFragment{
         View view = getLayoutInflater().inflate(R.layout.user_profile_edit, null);
 
         // Get references to all views that will display a profile's information.
-        TextView firstNameText = view.findViewById(R.id.user_firstNameEdit);
-        TextView lastNameText = view.findViewById(R.id.user_lastNameEdit);
-        TextView emailText = view.findViewById(R.id.user_emailAddressEdit);
-        TextView phoneNumberText = view.findViewById(R.id.user_PhoneNumberEdit);
+        TextView firstNameEdit = view.findViewById(R.id.user_firstNameEdit);
+        TextView lastNameEdit = view.findViewById(R.id.user_lastNameEdit);
+        TextView emailEdit = view.findViewById(R.id.user_emailAddressEdit);
+        TextView phoneNumberEdit = view.findViewById(R.id.user_PhoneNumberEdit);
 
         Bundle args = getArguments();
         if(args != null){
@@ -54,22 +55,28 @@ public class ManageProfileFragment extends DialogFragment{
             if(user != null){
                 User appUser= (User)user;
 
+                // Set up controller to enable changes to user
+                userController = new UserController(appUser);
+
                 // Update views to have correct info
 
-                firstNameText.setText(appUser.getName());
-                lastNameText.setText(appUser.getName());
-                emailText.setText(appUser.getEmail());
-                phoneNumberText.setText(String.valueOf(appUser.getPhoneNumber()));
+                firstNameEdit.setText(appUser.getFirstName());
+                lastNameEdit.setText(appUser.getLastName());
+                emailEdit.setText(appUser.getEmail());
+                phoneNumberEdit.setText(String.valueOf(appUser.getPhoneNumber()));
 
                 // Set up listeners for buttons
                 Button discardButton = view.findViewById(R.id.discardChangesButton);
                 Button confirmButton = view.findViewById(R.id.confirmChangesButton);
 
+                // Exit Profile editing
                 discardButton.setOnClickListener(v -> {
                     newDialog.dismiss();
                 });
 
+                // Confirm Profile edits
                 confirmButton.setOnClickListener(v -> {
+                    userController.updateUser(firstNameEdit.getText(), lastNameEdit.getText(), emailEdit.getText(), phoneNumberEdit.getText());
                     newDialog.dismiss();
                 });
 
