@@ -1,6 +1,6 @@
 /**
  *  Author: Edwin Manalastas
- *  References: Youtube / ChatGPT (for small bugs)
+ *  References: Youtube / StackOverflow / ChatGPT (for small bugs)
  */
 
 package com.example.soroban;
