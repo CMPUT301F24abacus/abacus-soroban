@@ -140,7 +140,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                         String eventName = doc.getString("eventName");
                         Date eventDate = doc.getDate("eventDate");
                         Date drawDate = doc.getDate("drawDate");
-                        Integer sampleSize = (Integer) doc.get("sampleSize");
+                        Integer sampleSize = ((Long) doc.get("sampleSize")).intValue();
                         Log.d("Firestore", "Event fetched");
                         waitlistedEventsListData.add(new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize));
                     }
@@ -163,7 +163,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                         String eventName = doc.getString("eventName");
                         Date eventDate = doc.getDate("eventDate");
                         Date drawDate = doc.getDate("drawDate");
-                        Integer sampleSize = (Integer) doc.get("sampleSize");
+                        Integer sampleSize = ((Long) doc.get("sampleSize")).intValue();
                         Log.d("Firestore", "Event fetched");
                         confirmedEventsListData.add(new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize));
                     }
