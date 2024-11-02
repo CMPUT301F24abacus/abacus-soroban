@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.storage)
 
     // Unit testing dependencies
     testImplementation(libs.junit)
