@@ -60,6 +60,12 @@ public class FireBaseController implements Serializable {
     }
 
 
+    /**
+     * Fetches a User's document in Firebase. If its does not exist, creates a new one.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
     public void fetchUserDoc(User user){
         // Reference: https://firebase.google.com/docs/firestore/query-data/get-data#java
         DocumentReference docRef = userRf.document(user.getDeviceId());
