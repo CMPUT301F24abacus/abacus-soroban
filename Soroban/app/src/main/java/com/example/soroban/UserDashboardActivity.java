@@ -27,6 +27,7 @@ import java.util.Date;
 
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
+    private FireBaseController fireBaseController;
     private ListView waitlistedEventsListView;
     private EventList waitlistedEventsListData;
     private EventArrayAdapter waitlistedAdapter;
@@ -39,7 +40,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     /**
      * Called when the activity is first created.
      * @param savedInstanceState
-     * Author: Ayan Chaudhry
+     * Author: Ayan Chaudhry, Matthieu Larochelle, Kevin Li
      *
      */
     @Override
@@ -62,9 +63,11 @@ public class UserDashboardActivity extends AppCompatActivity {
                 appUser = (User) args.getSerializable("appUser");
             }
 
-            if(appUser == null){
+            if(appUser == null ){
                 throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
             }
+
+
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
@@ -103,8 +106,6 @@ public class UserDashboardActivity extends AppCompatActivity {
             //Action for Profile Icon
             ViewProfileFragment dialogFragment = ViewProfileFragment.newInstance(appUser);
             dialogFragment.show(getSupportFragmentManager(), "View profile");
-            //Intent intent = new Intent(UserDashboardActivity.this, ProfileViewActivity.class);
-            //startActivity(intent);
         });
 
         notificationsIcon.setOnClickListener(v -> {
