@@ -4,33 +4,38 @@ package com.example.soroban;
 /**
  * Any class that deals with the modification of a User object must utilize this class.
  * @Author: Matthieu Larochelle
- * @Version: 1.0
+ * @Version: 1.1
  */
 public class UserController {
     private User user;
+    private FireBaseController fireBaseController;
 
     /**
      * Constructor method for UserController.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      */
     public UserController(User user){
         this.user = user;
+        this.fireBaseController = new FireBaseController();
     }
 
     /**
      * Update User.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.2
      * @param firstName: User's new first name.
      * @param lastName : User's new last name.
      * @param email: User's new email address.
      * @param number: User's new phone number.
      */
-    public void updateUser(String firstName, String lastName, String email, String number){
-        user.setName(firstName + lastName);
-        user.setEmail(email);
-        user.setPhoneNumber(Integer.parseInt(number));
+    public void updateUser(CharSequence firstName, CharSequence lastName, CharSequence email, CharSequence number){
+        user.setFirstName(firstName.toString());
+        user.setLastName(lastName.toString());
+        user.setEmail(email.toString());
+        int phoneNumber = Integer.parseInt(number.toString().replaceAll("\\D", ""));
+        user.setPhoneNumber(phoneNumber);
+        fireBaseController.userUpdate(user);
     }
 
     /**
