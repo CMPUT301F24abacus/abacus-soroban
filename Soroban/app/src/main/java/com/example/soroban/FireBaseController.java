@@ -2,17 +2,23 @@ package com.example.soroban;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class FireBaseController {
+public class FireBaseController implements Serializable {
     FirebaseFirestore db;
     CollectionReference userRf;
     CollectionReference eventRf;
@@ -44,13 +50,42 @@ public class FireBaseController {
 
         userRf
                 .document(user.getDeviceId())
-                .update(data)
+                .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 });
+    }
+
+
+    public void fetchUserDoc(User user){
+        // Reference: https://firebase.google.com/docs/firestore/query-data/get-data#java
+        DocumentReference docRef = userRf.document(user.getDeviceId());
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.d("Firestore", "User document found.");
+                        Map<String, Object> userData = document.getData();
+                        assert userData != null;
+                        user.setEmail((String) userData.get("email"));
+                        user.setFirstName((String) userData.get("firstName"));
+                        user.setLastName((String) userData.get("lastName"));
+                        user.setPhoneNumber((long) userData.get("phoneNumber"));
+                    }else{
+                        Log.d("Firestore", "User document not found.");
+                        createUserDb(user);
+                    }
+                }else{
+                    Log.d("Firestore", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     /**

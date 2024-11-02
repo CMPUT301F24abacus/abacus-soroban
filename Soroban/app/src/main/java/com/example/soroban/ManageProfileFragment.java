@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class ManageProfileFragment extends DialogFragment{
     private UserController userController;
 
-    public static ManageProfileFragment newInstance(@Nullable User user){
+    public static ManageProfileFragment newInstance(@NonNull User user){
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
 
@@ -50,7 +50,6 @@ public class ManageProfileFragment extends DialogFragment{
 
             Serializable user = args.getSerializable("appUser");
 
-
             // Check if the app user was passed as an argument
             if(user != null){
                 User appUser= (User)user;
@@ -59,7 +58,6 @@ public class ManageProfileFragment extends DialogFragment{
                 userController = new UserController(appUser);
 
                 // Update views to have correct info
-
                 firstNameEdit.setText(appUser.getFirstName());
                 lastNameEdit.setText(appUser.getLastName());
                 emailEdit.setText(appUser.getEmail());
