@@ -1,23 +1,35 @@
 package com.example.soroban;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.util.Log;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.io.Serializable;
 
-public class ManageProfileFragment extends DialogFragment{
+public class ManageProfileFragment extends DialogFragment {
     private UserController userController;
+    private ProfileRepository profileRepository;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private ImageView userProfilePhoto;
+    private User appUser;
 
-    public static ManageProfileFragment newInstance(@Nullable User user){
+    public static ManageProfileFragment newInstance(@Nullable User user) {
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
 
@@ -26,12 +38,30 @@ public class ManageProfileFragment extends DialogFragment{
         return newFragment;
     }
 
-
     @SuppressLint({"DialogFragmentCallbacksDetector", "SetTextI18n"})
     @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.user_profile_edit, null);
+
+        // Initialize ProfileRepository and ImageView for profile photo
+        profileRepository = new ProfileRepository();
+        userProfilePhoto = view.findViewById(R.id.userProfilePhoto);
+
+        // Initialize the image picker launcher
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        Log.d("ManageProfileFragment", "Image URI received: " + imageUri);
+                        userProfilePhoto.setImageURI(imageUri); // Display the selected image
+                        profileRepository.uploadImageToFirebase(imageUri, appUser.getDeviceId()); // Use actual user ID here
+                    } else {
+                        Log.d("ManageProfileFragment", "No image selected or result not OK");
+                    }
+                }
+        );
 
         // Get references to all views that will display a profile's information.
         TextView firstNameEdit = view.findViewById(R.id.user_firstNameEdit);
@@ -40,55 +70,62 @@ public class ManageProfileFragment extends DialogFragment{
         TextView phoneNumberEdit = view.findViewById(R.id.user_PhoneNumberEdit);
 
         Bundle args = getArguments();
-        if(args != null){
-
+        if (args != null) {
             Dialog newDialog = super.onCreateDialog(savedInstanceState);
             newDialog.setContentView(view);
-
-            // Reference: https://stackoverflow.com/questions/7189948/full-screen-dialogfragment-in-android
             newDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             Serializable user = args.getSerializable("appUser");
 
+            if (user != null) {
+                appUser = (User) user; // Store appUser reference here
 
-            // Check if the app user was passed as an argument
-            if(user != null){
-                User appUser= (User)user;
-
-                // Set up controller to enable changes to user
+                // Set up the UserController to manage user updates
                 userController = new UserController(appUser);
 
-                // Update views to have correct info
-
+                // Populate fields with user information
                 firstNameEdit.setText(appUser.getFirstName());
                 lastNameEdit.setText(appUser.getLastName());
                 emailEdit.setText(appUser.getEmail());
                 phoneNumberEdit.setText(String.valueOf(appUser.getPhoneNumber()));
 
-                // Set up listeners for buttons
+                // Set up profile picture buttons
+                ImageButton editProfileButton = view.findViewById(R.id.editProfilePhotoButton);
+                editProfileButton.setOnClickListener(v -> openImagePicker());
+
+                ImageButton removeProfileButton = view.findViewById(R.id.editProfilePhotoButton2);
+                removeProfileButton.setOnClickListener(v -> {
+                    profileRepository.deleteProfileImage(appUser.getDeviceId()); // Use actual user ID here
+                    userProfilePhoto.setImageResource(R.drawable.ic_profile); // Reset to default image
+                });
+
+                // Set up discard and confirm buttons
                 Button discardButton = view.findViewById(R.id.discardChangesButton);
+                discardButton.setOnClickListener(v -> newDialog.dismiss());
+
                 Button confirmButton = view.findViewById(R.id.confirmChangesButton);
-
-                // Exit Profile editing
-                discardButton.setOnClickListener(v -> {
-                    newDialog.dismiss();
-                });
-
-                // Confirm Profile edits
                 confirmButton.setOnClickListener(v -> {
-                    userController.updateUser(firstNameEdit.getText(), lastNameEdit.getText(), emailEdit.getText(), phoneNumberEdit.getText());
+                    // Update user information through the UserController
+                    userController.updateUser(
+                            firstNameEdit.getText().toString(),
+                            lastNameEdit.getText().toString(),
+                            emailEdit.getText().toString(),
+                            phoneNumberEdit.getText().toString()
+                    );
                     newDialog.dismiss();
                 });
-
-
-            }else{
+            } else {
                 throw new RuntimeException("Must pass User object to populate fields.");
             }
             return newDialog;
-
-        }else{
+        } else {
             throw new RuntimeException("Instantiate ManageProfileFragment by using newInstance() method.");
         }
     }
 
+    private void openImagePicker() {
+        Log.d("ManageProfileFragment", "Opening image picker");
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
 }

@@ -40,6 +40,8 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
@@ -50,6 +52,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.database)
 
     // Unit testing dependencies
     testImplementation(libs.junit)
