@@ -29,7 +29,7 @@ public class ManageProfileFragment extends DialogFragment {
     private ImageView userProfilePhoto;
     private User appUser;
 
-    public static ManageProfileFragment newInstance(@Nullable User user) {
+    public static ManageProfileFragment newInstance(@NonNull User user){
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
 
@@ -84,6 +84,7 @@ public class ManageProfileFragment extends DialogFragment {
                 userController = new UserController(appUser);
 
                 // Populate fields with user information
+
                 firstNameEdit.setText(appUser.getFirstName());
                 lastNameEdit.setText(appUser.getLastName());
                 emailEdit.setText(appUser.getEmail());

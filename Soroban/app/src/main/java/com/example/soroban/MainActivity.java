@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private User appUser;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState
+     * Author: Ayan Chaudhry, Matthieu Larochelle, Kevin Li
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +48,7 @@ public class MainActivity extends AppCompatActivity {
         // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         // Add the use into the Firebase Database
-        firebaseController.createUserDb(appUser);
-
-        /**
-         * !!! TEMPORARY BAD TEST !!!
-         */
-        //Event mockEvent = new Event(appUser,appUser.createFacility(),"mockEvent", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), 3);
-        //appUser.addToWaitlist(mockEvent);
-        /**
-         * !!! TEMPORARY BAD TEST !!!
-         */
+        firebaseController.fetchUserDoc(appUser);
 
         // Set window insets for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -69,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to UserDashboardActivity
                 Intent intent = new Intent(MainActivity.this, UserDashboardActivity.class);
-                intent.putExtra("appUser",appUser);
+                Bundle args = new Bundle();
+                args.putSerializable("appUser",appUser);
+                intent.putExtras(args);
                 startActivity(intent);
             }
         });
