@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
 public class ManageProfileFragment extends DialogFragment {
@@ -89,6 +93,31 @@ public class ManageProfileFragment extends DialogFragment {
                 lastNameEdit.setText(appUser.getLastName());
                 emailEdit.setText(appUser.getEmail());
                 phoneNumberEdit.setText(String.valueOf(appUser.getPhoneNumber()));
+
+                // Fetch and display the profile image
+                FirebaseDatabase.getInstance().getReference("users")
+                        .child(appUser.getDeviceId())
+                        .child("profileImageUrl")
+                        .get()
+                        .addOnSuccessListener(snapshot -> {
+                            String imageUrl = snapshot.getValue(String.class);
+                            Log.d("ViewProfileFragment", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
+                            if (imageUrl != null) {
+                                Log.e("ViewProfileFragment", "before glide");
+                                Glide.with(requireContext())
+                                        .load(imageUrl)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable caching to ensure updated image
+                                        .skipMemoryCache(true)
+                                        .into(userProfilePhoto);
+                                Log.e("ViewProfileFragment", "After glide");
+                            } else {
+                                userProfilePhoto.setImageResource(R.drawable.ic_profile); // Set default if no URL
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("ViewProfileFragment", "Failed to load image URL", e);
+                            userProfilePhoto.setImageResource(R.drawable.ic_profile); // Default image if fetch fails
+                        });
 
                 // Set up profile picture buttons
                 ImageButton editProfileButton = view.findViewById(R.id.editProfilePhotoButton);
