@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.soroban"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.soroban"
@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-firestore")
+
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
