@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_facility_display.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -42,7 +41,6 @@
         android:layout_marginTop="4dp"
         android:textColor="#333333" />
 
-    <!-- Inside activity_facility_display.xml -->
     <TextView
         android:id="@+id/tv_edit_facility"
         android:layout_width="wrap_content"
@@ -53,6 +51,4 @@
         android:padding="8dp"
         android:layout_gravity="end"
         android:layout_marginTop="24dp" />
-
-
 </LinearLayout>

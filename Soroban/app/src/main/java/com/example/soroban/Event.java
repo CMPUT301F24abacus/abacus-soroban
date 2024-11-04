@@ -1,7 +1,6 @@
 package com.example.soroban;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -44,6 +43,9 @@ public class Event implements Serializable {
         this.waitingEntrants = new UserList();
         this.sampleSize = sampleSize;
     }
+
+
+
 
     /**
      * Destructor method for Event.
@@ -105,12 +107,13 @@ public class Event implements Serializable {
 
     /**
      * Getter method for an Event's date.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @return: event's date.
      */
-    public Date getEventDate() {
-        return eventDate;
+    public CharSequence getEventDate() {
+        return (CharSequence) eventDate;
     }
 
     /**

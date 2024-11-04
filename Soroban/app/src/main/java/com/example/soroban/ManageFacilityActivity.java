@@ -5,62 +5,50 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ManageFacilityActivity extends AppCompatActivity {
 
-    private EditText editFacilityName, editFacilityDetails;
-    private Button btnSaveFacility;
+    private EditText editTextFacilityName, editTextFacilityDetails;
+    private Button buttonSaveChanges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_facility);
 
-        editFacilityName = findViewById(R.id.editFacilityName);
-        editFacilityDetails = findViewById(R.id.editFacilityDetails);
-        btnSaveFacility = findViewById(R.id.btnSaveFacility);
+        // Initialize views
+        editTextFacilityName = findViewById(R.id.editTextFacilityName);
+        editTextFacilityDetails = findViewById(R.id.editTextFacilityDetails);
+        buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
 
-        // Retrieve existing facility data from Intent if available
-        String facilityName = getIntent().getStringExtra("facilityName");
-        String facilityDetails = getIntent().getStringExtra("facilityDetails");
+        // Retrieve the facility data from the intent
+        Intent intent = getIntent();
+        String facilityName = intent.getStringExtra("facilityName");
+        String facilityDetails = intent.getStringExtra("facilityDetails");
 
-        // Populate fields if data exists
-        if (facilityName != null) editFacilityName.setText(facilityName);
-        if (facilityDetails != null) editFacilityDetails.setText(facilityDetails);
+        // Set the facility data in the EditText fields
+        editTextFacilityName.setText(facilityName != null ? facilityName : "");
+        editTextFacilityDetails.setText(facilityDetails != null ? facilityDetails : "");
 
-        btnSaveFacility.setOnClickListener(v -> saveFacility());
-    }
+        // Set up the button click listener to save changes
+        buttonSaveChanges.setOnClickListener(v -> {
+            String updatedFacilityName = editTextFacilityName.getText().toString().trim();
+            String updatedFacilityDetails = editTextFacilityDetails.getText().toString().trim();
 
-    private void saveFacility() {
-        String facilityName = editFacilityName.getText().toString().trim();
-        String facilityDetails = editFacilityDetails.getText().toString().trim();
+            // Validate that the facility name is not empty
+            if (updatedFacilityName.isEmpty()) {
+                Toast.makeText(this, "Facility name cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        // Input validation
-        if (facilityName.isEmpty()) {
-            editFacilityName.setError("Facility name cannot be empty");
-            editFacilityName.requestFocus();
-            return;
-        }
-
-        if (facilityDetails.isEmpty()) {
-            editFacilityDetails.setError("Facility details cannot be empty");
-            editFacilityDetails.requestFocus();
-            return;
-        }
-
-        // Save facility to database or storage (placeholder code)
-        // Example: DatabaseHelper.saveFacility(facilityName, facilityDetails);
-
-        // Display a success message
-        Toast.makeText(this, "Facility saved!", Toast.LENGTH_SHORT).show();
-
-        // Pass the edited facility data back to the calling activity
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("updatedFacilityName", facilityName);
-        resultIntent.putExtra("updatedFacilityDetails", facilityDetails);
-        setResult(RESULT_OK, resultIntent);
-
-        finish(); // Close the activity after saving
+            // Create an intent to return the updated data
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updatedFacilityName", updatedFacilityName);
+            resultIntent.putExtra("updatedFacilityDetails", updatedFacilityDetails);
+            setResult(RESULT_OK, resultIntent);
+            finish(); // Close the activity and return to the previous one
+        });
     }
 }
