@@ -1,5 +1,8 @@
-package com.example.soroban;
+package com.example.soroban.controller;
 
+
+import com.example.soroban.FireBaseController;
+import com.example.soroban.model.User;
 
 /**
  * Any class that deals with the modification of a User object must utilize this class.

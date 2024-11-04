@@ -1,29 +1,26 @@
-package com.example.soroban;
+package com.example.soroban.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
- * Keeps track of event objects.
+ * Keeps track of user objects.
  * @Author: Matthieu Larochelle
  * @Version: 2.0
  */
-public class EventList extends ArrayList<Event> implements Serializable {
- 
-  
+public class UserList extends ArrayList<User> implements Serializable {
     /**
-     * Constructor method for EventList.
+     * Constructor method for UserList.
      * @Author: Matthieu Larochelle
      * @Version: 2.0
      */
-    public EventList(){
+    public UserList(){
         super();
     }
 
-
     /**
-     * Destructor method for EventList.
+     * Destructor method for UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */
@@ -34,16 +31,16 @@ public class EventList extends ArrayList<Event> implements Serializable {
     }
 
     /**
-     * Add event to EventList.
+     * Add user to UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */
-    public boolean addEvent(Event event){
-        if(this.contains(event)){
+    public boolean addUser(User user){
+        if(this.contains(user)){
             return false;
         }else{
-            return this.add(event);
+            return add(user);
         }
     }
-
 }
+

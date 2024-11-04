@@ -1,8 +1,6 @@
 package com.example.soroban;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import com.example.soroban.model.User;
 
 public class UserListUnitTest {
     private User mockUser(){

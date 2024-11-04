@@ -5,7 +5,7 @@
  */
 
 
-package com.example.soroban;
+package com.example.soroban.model;
 
 public class Notification {
 

@@ -1,7 +1,6 @@
-package com.example.soroban;
+package com.example.soroban.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 

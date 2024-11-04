@@ -1,10 +1,12 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.soroban.R;
 
 /**
  * this activity is responsible for handling the event registration process.

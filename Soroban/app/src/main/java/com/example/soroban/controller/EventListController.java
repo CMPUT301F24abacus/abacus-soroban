@@ -1,4 +1,7 @@
-package com.example.soroban;
+package com.example.soroban.controller;
+
+import com.example.soroban.model.Event;
+import com.example.soroban.model.EventList;
 
 import java.util.Date;
 

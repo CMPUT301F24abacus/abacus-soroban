@@ -1,4 +1,7 @@
-package com.example.soroban;
+package com.example.soroban.controller;
+
+import com.example.soroban.model.User;
+import com.example.soroban.model.UserList;
 
 /**
  * Any class that deals with the modification of a UserList object must utilize this class.
