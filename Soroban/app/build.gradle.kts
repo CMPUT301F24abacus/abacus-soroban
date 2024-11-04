@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.soroban"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.soroban"
@@ -42,6 +42,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
