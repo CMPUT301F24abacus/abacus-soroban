@@ -83,9 +83,41 @@ public class FireBaseController implements Serializable {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
+                        if (facilityDocRef != null) { fetchFacilityDoc(user, facilityDocRef); }
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
+                    }
+                }else{
+                    Log.d("Firestore", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    /**
+     * Fetches a User's Facility's document in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     * @param facilityDocRef: DocumentReference of the required Facility.
+     */
+    public void fetchFacilityDoc(User user, DocumentReference facilityDocRef){
+        facilityDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentFacility = task.getResult();
+                    if(documentFacility.exists()){
+                        Map<String, Object> facilityData = documentFacility.getData();
+                        assert facilityData != null;
+                        Facility facility = new Facility(user);
+                        String name = (String) facilityData.get("name");
+                        facility.setName(name);
+                        user.setFacility(facility);
+                    }else{
+                        Log.d("Firestore", "User facility not found.");
                     }
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
