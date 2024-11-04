@@ -22,6 +22,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
 import com.example.soroban.ProfileRepository;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
@@ -32,6 +33,7 @@ import java.io.Serializable;
 
 public class ManageProfileFragment extends DialogFragment {
     private UserController userController;
+    private FireBaseController fireBaseController;
     private ProfileRepository profileRepository;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private ImageView userProfilePhoto;
@@ -91,6 +93,9 @@ public class ManageProfileFragment extends DialogFragment {
                 // Set up the UserController to manage user updates
                 userController = new UserController(appUser);
 
+                // Set up the FireBaseController to update Firestore database
+                fireBaseController = new FireBaseController();
+
                 // Populate fields with user information
 
                 firstNameEdit.setText(appUser.getFirstName());
@@ -146,6 +151,8 @@ public class ManageProfileFragment extends DialogFragment {
                             emailEdit.getText().toString(),
                             phoneNumberEdit.getText().toString()
                     );
+                    fireBaseController.userUpdate(appUser);
+
                     newDialog.dismiss();
                 });
             } else {
