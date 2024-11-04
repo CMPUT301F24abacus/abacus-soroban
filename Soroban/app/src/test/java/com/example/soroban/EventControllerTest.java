@@ -9,7 +9,6 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 import java.util.Date;
-import java.util.Optional;
 
 public class EventControllerTest {
 

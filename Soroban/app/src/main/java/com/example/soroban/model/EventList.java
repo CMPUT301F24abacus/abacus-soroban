@@ -37,6 +37,7 @@ public class EventList extends ArrayList<Event> implements Serializable {
      * Add event to EventList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @Return: Result of addition of Event to Event List
      */
     public boolean addEvent(Event event){
         if(this.contains(event)){

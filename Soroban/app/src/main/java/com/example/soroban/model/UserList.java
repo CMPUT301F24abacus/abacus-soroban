@@ -34,6 +34,7 @@ public class UserList extends ArrayList<User> implements Serializable {
      * Add user to UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @return: Result of addition of User to User List
      */
     public boolean addUser(User user){
         if(this.contains(user)){
@@ -42,5 +43,6 @@ public class UserList extends ArrayList<User> implements Serializable {
             return add(user);
         }
     }
+
 }
 

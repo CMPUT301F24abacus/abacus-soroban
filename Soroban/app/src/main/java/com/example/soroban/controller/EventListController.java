@@ -50,7 +50,8 @@ public class EventListController {
      * @return : Result of successful addition of Event to EventList.
      */
     public Boolean addEvent(Event event){
-        return eventList.add(event);
+
+        return eventList.addEvent(event);
     }
 
     /**

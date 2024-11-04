@@ -3,13 +3,9 @@ package com.example.soroban;
 import static org.junit.Assert.assertEquals;
 
 import com.example.soroban.controller.UserController;
-import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Test;
-
-import java.util.Date;
 
 public class UserControllerTest {
     private User mockUser(){
