@@ -32,6 +32,15 @@
         <activity android:name=".ConfirmedEventsActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".ManageFacilityActivity" />
+        <activity android:name=".OrganizerDashboardActivity" />
+        <activity android:name=".FacilityDisplayActivity" />
+        <activity android:name=".CreateEventActivity" />
+
+
+
+
+
+
 
 
 

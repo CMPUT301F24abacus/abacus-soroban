@@ -7,6 +7,10 @@ android {
     namespace = "com.example.soroban"
     compileSdk = 34
 
+    viewBinding {
+        var enabled = true
+    }
+
     defaultConfig {
         applicationId = "com.example.soroban"
         minSdk = 24
