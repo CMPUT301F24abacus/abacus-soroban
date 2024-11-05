@@ -8,7 +8,6 @@
 package com.example.soroban.model;
 
 public class Notification {
-
     private String title;
     private String time;
     private String event;
@@ -16,7 +15,7 @@ public class Notification {
     public enum NotificationType { BAD_NEWS, SPOT_CONFIRMED, REGISTRATION_OPEN }
     private NotificationType type;
 
-    public Notification(String title, String time, String event, NotificationType type) {
+    public Notification(String title, String time, String event, NotificationType type) {;
         this.title = title;
         this.time = time;
         this.event = event;
@@ -47,4 +46,6 @@ public class Notification {
     public void setMuted(boolean muted) {
         this.isMuted = muted;
     }
+
+
 }
