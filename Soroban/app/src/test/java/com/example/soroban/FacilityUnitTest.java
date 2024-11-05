@@ -2,6 +2,10 @@ package com.example.soroban;
 
 import static org.junit.Assert.*;
 
+import com.example.soroban.model.Event;
+import com.example.soroban.model.Facility;
+import com.example.soroban.model.User;
+
 import org.junit.Test;
 
 import java.util.Date;

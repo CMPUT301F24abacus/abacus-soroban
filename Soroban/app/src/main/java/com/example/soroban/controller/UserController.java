@@ -1,5 +1,8 @@
-package com.example.soroban;
+package com.example.soroban.controller;
 
+
+import com.example.soroban.FireBaseController;
+import com.example.soroban.model.User;
 
 /**
  * Any class that deals with the modification of a User object must utilize this class.
@@ -8,22 +11,20 @@ package com.example.soroban;
  */
 public class UserController {
     private User user;
-    private FireBaseController fireBaseController;
 
     /**
      * Constructor method for UserController.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.0
      */
     public UserController(User user){
         this.user = user;
-        this.fireBaseController = new FireBaseController();
     }
 
     /**
      * Update User.
      * @Author: Matthieu Larochelle
-     * @Version: 1.2
+     * @Version: 1.1
      * @param firstName: User's new first name.
      * @param lastName : User's new last name.
      * @param email: User's new email address.
@@ -35,7 +36,6 @@ public class UserController {
         user.setEmail(email.toString());
         int phoneNumber = Integer.parseInt(number.toString().replaceAll("\\D", ""));
         user.setPhoneNumber(phoneNumber);
-        fireBaseController.userUpdate(user);
     }
 
     /**

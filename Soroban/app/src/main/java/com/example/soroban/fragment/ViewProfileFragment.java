@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.R;
+import com.example.soroban.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 

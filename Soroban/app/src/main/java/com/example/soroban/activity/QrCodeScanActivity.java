@@ -3,7 +3,7 @@
  *  References: Youtube / ChatGPT (for small bugs)
  */
 
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,7 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.soroban.EventRegistrationActivity;
 import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;

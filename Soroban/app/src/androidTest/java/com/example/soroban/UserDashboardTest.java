@@ -14,7 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import com.example.soroban.UserDashboardActivity;
+import com.example.soroban.activity.UserDashboardActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class UserDashboardTest {
