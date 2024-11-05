@@ -29,7 +29,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- User Dashboard Activity -->
+        </activity>
+
+        <!-- User Dashboard Activity -->
         <activity
             android:name=".activity.UserDashboardActivity"
             android:exported="false"
@@ -44,6 +46,9 @@
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".OrganizerDashboardActivity" />
+        <activity android:name=".FacilityDisplayActivity" />
+        <activity android:name=".CreateEventActivity" />
         <receiver android:process=":remote" android:name=".NotificationSystem">
 
         </receiver>
