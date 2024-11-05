@@ -146,16 +146,6 @@ public class User implements Serializable {
     }
 
     /**
-     * Setter method for User's facility.
-     * @Author: Kevin Li
-     * @Version: 1.0
-     * @Param: facility.
-     */
-    public void setFacility(Facility facility) {
-        this.facility = facility;
-    }
-
-    /**
      * Returns a User's facility.
      * @Author: Matthieu Larochelle
      * @Version: 1.0

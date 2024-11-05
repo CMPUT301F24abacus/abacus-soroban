@@ -34,7 +34,7 @@ public class UserController {
         user.setFirstName(firstName.toString());
         user.setLastName(lastName.toString());
         user.setEmail(email.toString());
-        int phoneNumber = Integer.parseInt(number.toString().replaceAll("\\D", ""));
+        long phoneNumber = Long.parseLong(number.toString().replaceAll("\\D", ""));
         user.setPhoneNumber(phoneNumber);
     }
 
