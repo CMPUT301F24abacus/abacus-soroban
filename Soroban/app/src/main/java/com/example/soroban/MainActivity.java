@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Get reference to the button
         Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
+        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
 
         // Set up a click listener to navigate to UserDashboardActivity
         btnOpenDashboard.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +109,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Set up a click listener to navigate to OrganizerDashboardActivity
+
+        btnOpenOrganizerDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
+                intent.putExtra("appUser", appUser);
+                startActivity(intent);
+            }
+        });
+
     }
 
     /**

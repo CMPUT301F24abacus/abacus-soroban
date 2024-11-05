@@ -90,11 +90,11 @@ public class UserDashboardActivity extends AppCompatActivity {
         ImageView profileIcon = findViewById(R.id.icon_profile);
         ImageView notificationsIcon = findViewById(R.id.icon_notifications);
 
-        // Set up click listeners for buttons
-        scanQrCode.setOnClickListener(v -> {
-            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
-            startActivity(intent);
-        });
+//        // Set up click listeners for buttons
+//        scanQrCode.setOnClickListener(v -> {
+//            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
+//            startActivity(intent);
+//        });
 
         joinWaitingList.setOnClickListener(v -> {
             // Action for Join Waiting List

@@ -30,5 +30,9 @@
     <color name="color_registration_open">#23BCCF</color> <!-- Blue -->
     <color name="color_lukewarm_news">#FFBF00</color> <!-- Yellow -->
 
-
+    <color name="primary">#1E3A5F</color> <!-- Dark blue -->
+    <color name="accent">#00B8D4</color>  <!-- Light teal/cyan -->
+    <color name="background_light">#F5F5F5</color> <!-- Light gray -->
+    <color name="text_primary">#333333</color> <!-- Dark gray -->
+    <color name="text_secondary">#888888</color> <!-- Light gray for hint text -->
 </resources>
