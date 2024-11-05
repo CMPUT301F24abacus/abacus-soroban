@@ -1,8 +1,7 @@
 package com.example.soroban;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import com.example.soroban.model.Event;
+import com.example.soroban.model.User;
 
 import java.util.Date;
 

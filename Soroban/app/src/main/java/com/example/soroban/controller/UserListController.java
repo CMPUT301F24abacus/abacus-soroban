@@ -1,4 +1,7 @@
-package com.example.soroban;
+package com.example.soroban.controller;
+
+import com.example.soroban.model.User;
+import com.example.soroban.model.UserList;
 
 /**
  * Any class that deals with the modification of a UserList object must utilize this class.
@@ -30,7 +33,8 @@ public class UserListController {
      */
     public Boolean updateUser(User user, String firstName, String lastName, String email, String number){
         if(userList.contains(user)){
-            user.setFirstName(firstName + lastName);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
             user.setEmail(email);
             user.setPhoneNumber(Integer.parseInt(number));
             return Boolean.TRUE;
@@ -47,7 +51,7 @@ public class UserListController {
      * @return : Result of successful addition of User to UserList.
      */
     public Boolean addUser(User user){
-        return userList.add(user);
+        return userList.addUser(user);
     }
 
     /**
@@ -57,8 +61,7 @@ public class UserListController {
      * @param user
      * @return : Result of successful removal of User from UserList.
      */
-    public Boolean removeUser(User user){
-        return userList.remove(user);
+    public Boolean removeUser(User user){return userList.remove(user);
     }
 
 }

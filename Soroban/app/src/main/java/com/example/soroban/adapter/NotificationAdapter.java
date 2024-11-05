@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.soroban.Notification;
+import com.example.soroban.R;
+import com.example.soroban.model.Notification;
 
 import java.util.List;
 

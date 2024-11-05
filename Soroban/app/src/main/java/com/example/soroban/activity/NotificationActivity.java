@@ -4,17 +4,17 @@
  * this class contains all the functionalities related to Notifications for the User
  */
 
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.soroban.Notification;
-import com.example.soroban.NotificationAdapter;
+import com.example.soroban.R;
+import com.example.soroban.adapter.NotificationAdapter;
+import com.example.soroban.model.Notification;
 
 import java.util.ArrayList;
 import java.util.List;

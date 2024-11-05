@@ -1,4 +1,7 @@
-package com.example.soroban;
+package com.example.soroban.controller;
+
+import com.example.soroban.model.Event;
+import com.example.soroban.model.EventList;
 
 import java.util.Date;
 
@@ -47,7 +50,8 @@ public class EventListController {
      * @return : Result of successful addition of Event to EventList.
      */
     public Boolean addEvent(Event event){
-        return eventList.add(event);
+
+        return eventList.addEvent(event);
     }
 
     /**

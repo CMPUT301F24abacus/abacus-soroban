@@ -1,19 +1,23 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
+import com.example.soroban.R;
+import com.example.soroban.adapter.EventArrayAdapter;
+import com.example.soroban.fragment.ViewProfileFragment;
+import com.example.soroban.model.Event;
+import com.example.soroban.model.EventList;
+import com.example.soroban.model.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,8 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class UserDashboardActivity extends AppCompatActivity {
