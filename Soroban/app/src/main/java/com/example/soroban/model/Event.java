@@ -45,8 +45,6 @@ public class Event implements Serializable {
     }
 
 
-
-
     /**
      * Destructor method for Event.
      * @Author: Matthieu Larochelle
