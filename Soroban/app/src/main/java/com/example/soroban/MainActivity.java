@@ -116,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
-                intent.putExtra("appUser", appUser);
+                Bundle args = new Bundle();
+                args.putSerializable("appUser",appUser);
+                intent.putExtras(args);
                 startActivity(intent);
             }
         });

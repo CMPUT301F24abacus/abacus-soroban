@@ -35,7 +35,8 @@
         android:layout_height="wrap_content"
         android:hint="Enter event name"
         android:inputType="text"
-        android:textColor="@color/background_light" />
+        android:textColor="@color/background_light"
+        android:textColorHint="@color/text_secondary" />
 
     <!-- Event Date Input -->
     <TextView
@@ -47,13 +48,51 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/eventDateEditText"
+    <Button
+        android:id="@+id/eventDateSelectButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter event date (e.g., Jan 1, 2024)"
-        android:inputType="text"
-        android:textColor="@color/background_light" />
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/button_background_green"
+        android:text="Select Event Date" />
+
+    <!-- Draw Date Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Draw Date"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/drawDateSelectButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/button_background_green"
+        android:text="Select Draw Date" />
+
+    <!-- Sample Size Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Sample size"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/sampleSizeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter sample size"
+        android:inputType="number"
+        android:textColor="@color/background_light"
+        android:textColorHint="@color/text_secondary" />
+
 
     <!-- Save Button -->
     <Button
@@ -64,4 +103,5 @@
         android:backgroundTint="@color/notification_positive_background"
         android:text="Save Event"
         android:textColor="#FFFFFF" />
+
 </LinearLayout>
