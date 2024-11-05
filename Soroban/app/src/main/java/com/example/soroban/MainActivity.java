@@ -80,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
         askNotificationPermission();
 
         // SIMPLE TEST, TO BE REMOVED
-        NotificationSystem notificationSystem = NotificationSystem.newInstance( (AlarmManager) this.getSystemService(Context.ALARM_SERVICE), this);
-        Calendar time = Calendar.getInstance();
-        time.add(Calendar.SECOND, 3);
-        notificationSystem.setNotification(1, "Hello World", "Hello World", time);
+        //NotificationSystem notificationSystem = NotificationSystem.newInstance( (AlarmManager) this.getSystemService(Context.ALARM_SERVICE), this);
+        //Calendar time = Calendar.getInstance();
+        //time.add(Calendar.SECOND, 3);
+        //notificationSystem.setNotification(1, "Hello World", "Hello World", time);
         // SIMPLE TEST, TO BE REMOVED
 
         // Set window insets for system bars
