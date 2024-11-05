@@ -115,10 +115,9 @@ public class FireBaseController implements Serializable {
                     if(documentFacility.exists()){
                         Map<String, Object> facilityData = documentFacility.getData();
                         assert facilityData != null;
-                        Facility facility = new Facility(user);
+                        user.createFacility();
                         String name = (String) facilityData.get("name");
-                        facility.setName(name);
-                        user.setFacility(facility);
+                        user.getFacility().setName(name);
                     }else{
                         Log.d("Firestore", "User facility not found.");
                     }
