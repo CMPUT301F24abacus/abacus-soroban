@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         // Add the use into the Firebase Database
         firebaseController.fetchUserDoc(appUser);
+        firebaseController.fetchWaitListDoc(appUser);
+        firebaseController.fetchRegisteredDoc(appUser);
 
 
         // Ask for notification permissions
