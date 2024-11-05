@@ -11,9 +11,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,7 +50,6 @@ public class FireBaseController implements Serializable {
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         data.put("facility", user.getFacility());
-
         userRf
                 .document(user.getDeviceId())
                 .set(data)
@@ -127,6 +129,80 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Fetches a User's WaitList collection in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchWaitListDoc(User user) {
+        CollectionReference waitListRef = userRf.document(user.getDeviceId()).collection("waitList");
+        waitListRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                User owner = new User((String) eventData.get("owner"));
+                                fetchUserDoc(owner);
+                                Facility facility = owner.getFacility();
+                                Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                if (eventData.get("maxEntrants") != null) {
+                                    Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                                    event.setMaxEntrants(maxEntrants);
+                                }
+                                user.addToWaitlist(event);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find eventList!");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Fetches a User's RegisteredEvents collection in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchRegisteredDoc(User user) {
+        CollectionReference RegRef = userRf.document(user.getDeviceId()).collection("registeredEvents");
+        RegRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                User owner = new User((String) eventData.get("owner"));
+                                fetchUserDoc(owner);
+                                Facility facility = owner.getFacility();
+                                Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                if (eventData.get("maxEntrants") != null) {
+                                    Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                                    event.setMaxEntrants(maxEntrants);
+                                }
+                                user.addRegisteredEvent(event);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find eventList!");
+                        }
+                    }
+                });
+    }
+
+    /**
      * Update User document's facility field in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -179,15 +255,15 @@ public class FireBaseController implements Serializable {
      * @param user: User for which updating is required.
      */
     public void updateUserWaitList(User user, Event event) {
-
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
+        data.put("owner", event.getOwner().getDeviceId());
         userRf.document(user.getDeviceId())
-                .collection("waitList").add(data);
+                .collection("waitList").document(event.getEventName()).set(data);
 
     }
 
@@ -204,47 +280,10 @@ public class FireBaseController implements Serializable {
         data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
+        data.put("owner", event.getOwner().getDeviceId());
         userRf.document(user.getDeviceId())
-                .collection("registeredEvents").add(data);
+                .collection("registeredEvents").document(event.getEventName()).set(data);
     }
-
-
-
-
-
-    // Does not work for now (requires too many changes to Model Classes)
-    //public void checkUserExistFb(User appUser, String deviceId) {
-    //userRef.document(deviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-    //@Override
-    //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-    //if (task.isSuccessful()) {
-    //DocumentSnapshot document = task.getResult();
-    //if (document.exists()) {
-    //appUser = document.toObject(User.class);
-    //Log.d("Firestore", "User data retrieved for existing device ID.");
-    //} else {
-    //appUser = new User(deviceId);
-    //userRef.document(deviceId).set(appUser)
-    //.addOnSuccessListener(new OnSuccessListener<Void>() {
-    //@Override
-    //public void onSuccess(Void aVoid) {
-    //Log.d("Firestore", "New user created and saved to Firestore.");
-    //}
-    //})
-    //.addOnFailureListener(new OnFailureListener() {
-    //@Override
-    //public void onFailure(@NonNull Exception e) {
-    //Log.e("Firestore", "Error saving new user to Firestore", e);
-    //}
-    //});
-    //}
-    //} else {
-    //Log.e("Firestore", "Error checking user in Firestore", task.getException());
-    //}
-    //}
-    //});
-    //}
-
 
 
 }
