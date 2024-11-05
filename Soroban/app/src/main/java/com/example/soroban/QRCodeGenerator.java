@@ -7,10 +7,11 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
 public class QRCodeGenerator {
 
-    // Generate QR Code bitmap
-    public static Bitmap generatedQRCode(String text) {
+    // Method to generate a QR Code bitmap
+    public static Bitmap generateQRCode(String text) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
             BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 300, 300);
@@ -29,4 +30,3 @@ public class QRCodeGenerator {
         }
     }
 }
-
