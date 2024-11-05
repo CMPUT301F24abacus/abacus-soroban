@@ -44,6 +44,7 @@ public class Event implements Serializable {
         this.sampleSize = sampleSize;
     }
 
+
     /**
      * Destructor method for Event.
      * @Author: Matthieu Larochelle
@@ -104,12 +105,13 @@ public class Event implements Serializable {
 
     /**
      * Getter method for an Event's date.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @return: event's date.
      */
-    public Date getEventDate() {
-        return eventDate;
+    public CharSequence getEventDate() {
+        return (CharSequence) eventDate;
     }
 
     /**
