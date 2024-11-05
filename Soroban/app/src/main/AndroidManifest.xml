@@ -7,6 +7,10 @@
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,7 +33,7 @@
 
         <!-- User Dashboard Activity -->
         <activity
-            android:name=".UserDashboardActivity"
+            android:name=".activity.UserDashboardActivity"
             android:exported="false"
             android:label="@string/user_dashboard_title" />
 
@@ -38,11 +42,16 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation"/>
 
-        <activity android:name=".EventRegistrationActivity" />
-        <activity android:name=".QrCodeScanActivity" />
-        <activity android:name=".ConfirmedEventsActivity" />
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".activity.EventRegistrationActivity" />
+        <activity android:name=".activity.QrCodeScanActivity" />
+        <activity android:name=".activity.ConfirmedEventsActivity" />
+        <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".OrganizerDashboardActivity" />
+        <activity android:name=".FacilityDisplayActivity" />
+        <activity android:name=".CreateEventActivity" />
+        <receiver android:process=":remote" android:name=".NotificationSystem">
 
+        </receiver>
 
     </application>
 

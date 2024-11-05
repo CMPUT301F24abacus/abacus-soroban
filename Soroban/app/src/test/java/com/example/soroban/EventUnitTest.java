@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.example.soroban.model.Event;
+import com.example.soroban.model.User;
+
 import java.util.Date;
 
 
@@ -46,7 +49,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User firstEntrant = mockUser();
-        firstEntrant.setName("Elmo");
+        firstEntrant.setFirstName("Elmo");
         assertTrue(newEvent.addToWaitingEntrants(firstEntrant));
 
         assertTrue(newEvent.getWaitingEntrants().contains(firstEntrant));
@@ -55,7 +58,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User secondEntrant = mockUser();
-        firstEntrant.setName("Oscar");
+        firstEntrant.setFirstName("Oscar");
         assertFalse(newEvent.addToWaitingEntrants(secondEntrant));
 
         assertFalse(newEvent.getWaitingEntrants().contains(secondEntrant));
@@ -73,7 +76,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User firstEntrant = mockUser();
-        firstEntrant.setName("Elmo");
+        firstEntrant.setFirstName("Elmo");
         newEvent.addToWaitingEntrants(firstEntrant);
 
         assertTrue(newEvent.removeFromWaitingEntrants(firstEntrant));
@@ -87,7 +90,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User firstEntrant = mockUser();
-        firstEntrant.setName("Elmo");
+        firstEntrant.setFirstName("Elmo");
         assertTrue(newEvent.addToWaitingEntrants(firstEntrant));
 
         assertTrue(newEvent.getWaitingEntrants().contains(firstEntrant));
@@ -96,7 +99,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User secondEntrant = mockUser();
-        firstEntrant.setName("Oscar");
+        firstEntrant.setFirstName("Oscar");
         assertFalse(newEvent.addToWaitingEntrants(secondEntrant));
 
         assertFalse(newEvent.getWaitingEntrants().contains(secondEntrant));
@@ -115,7 +118,7 @@ public class EventUnitTest {
 
         // Add a new entrant
         User firstEntrant = mockUser();
-        firstEntrant.setName("Elmo");
+        firstEntrant.setFirstName("Elmo");
         newEvent.addAttendee(firstEntrant);
 
         assertTrue(newEvent.removeAttendee(firstEntrant));
