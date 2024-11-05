@@ -4,7 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import android.provider.Settings;
+import com.example.soroban.model.Event;
+import com.example.soroban.model.Facility;
+import com.example.soroban.model.User;
 
 import java.util.Date;
 

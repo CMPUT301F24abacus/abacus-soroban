@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.soroban.R;
+import com.example.soroban.model.Event;
+import com.example.soroban.model.EventList;
 
 public class EventArrayAdapter extends ArrayAdapter<Event> {
     private EventList events;

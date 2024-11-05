@@ -4,7 +4,7 @@
  * References: ChatGPT, Stack Overflow, Android Documentation
  */
 
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.soroban.R;
 
 import java.util.ArrayList;
 import java.util.List;

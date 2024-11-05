@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.model;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -143,6 +143,16 @@ public class User implements Serializable {
     public Facility createFacility(){
         this.facility = new Facility(this);
         return this.facility;
+    }
+
+    /**
+     * Setter method for User's facility.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Param: facility.
+     */
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
 
     /**
