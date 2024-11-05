@@ -37,7 +37,7 @@
         android:layout_below="@id/toolbar"
         android:layout_marginTop="6dp"
         android:padding="16dp"
-        android:text="Your Facility"
+        android:text="My Facility"
         android:textColor="@color/background_light"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -66,7 +66,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorAccent"
         android:padding="12dp"
-        android:text="Go to Facility"
+        android:text="Manage My Facility"
         android:textColor="@color/material_dynamic_tertiary30"
         android:textSize="16sp" />
 

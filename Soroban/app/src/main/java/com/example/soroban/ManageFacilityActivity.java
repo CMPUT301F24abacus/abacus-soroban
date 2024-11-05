@@ -21,7 +21,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
         // Initialize views
         editTextFacilityName = findViewById(R.id.editTextFacilityName);
         editTextFacilityDetails = findViewById(R.id.editTextFacilityDetails);
-        buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
+        buttonSaveChanges = findViewById(R.id.buttonCreateFacility);
 
         // Retrieve the facility data from the intent
         Intent intent = getIntent();

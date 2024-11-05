@@ -26,6 +26,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.example.soroban.activity.CreateFacilityActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,13 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseController = new FireBaseController();
 
-        // Get Android Device Id.
-        // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
-        appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-        // Add the use into the Firebase Database
-        firebaseController.fetchUserDoc(appUser);
-        firebaseController.fetchWaitListDoc(appUser);
-        firebaseController.fetchRegisteredDoc(appUser);
+
+        Bundle args = getIntent().getExtras();
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+            }
+        }
+
+        if(args == null || appUser == null){
+            // Get Android Device Id.
+            // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
+            appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            // Add the user into the Firebase Database
+            firebaseController.fetchUserDoc(appUser);
+            firebaseController.fetchWaitListDoc(appUser);
+            firebaseController.fetchRegisteredDoc(appUser);
+        }
 
 
         // Ask for notification permissions
@@ -115,9 +128,18 @@ public class MainActivity extends AppCompatActivity {
         btnOpenOrganizerDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
-                intent.putExtra("appUser", appUser);
-                startActivity(intent);
+                // Navigate to OrganizerDashboardActivity
+                if(appUser.getFacility() != null){
+                    // The user already has a facility
+                    Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
+                    intent.putExtra("appUser", appUser);
+                    startActivity(intent);
+                }else{
+                    // The user must create their facility in order to organize events
+                    Intent intent = new Intent(MainActivity.this, CreateFacilityActivity.class);
+                    intent.putExtra("appUser", appUser);
+                    startActivity(intent);
+                }
             }
         });
 
