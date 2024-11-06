@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Stores any relevant information that is associated to a user.
  * @Author: Matthieu Larochelle
- * @Version: 1.2
+ * @Version: 1.3
  */
 
 public class User implements Serializable {
@@ -17,17 +17,19 @@ public class User implements Serializable {
     private long phoneNumber;
     private EventList waitList;
     private EventList registeredEvents;
+    private EventList hostedEvents;
     private Facility facility;
 
     /**
      * Constructor method for User.
      * @Author: Matthieu Larochelle
-     * @Version: 1.1
+     * @Version: 1.2
      */
     public User(String deviceId) {
         this.deviceId = deviceId;
         this.waitList = new EventList();
         this.registeredEvents = new EventList();
+        this.hostedEvents = new EventList();
     }
 
     /**
@@ -188,6 +190,17 @@ public class User implements Serializable {
     }
 
     /**
+     * Getter method for User's list of hosted events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: host events EventList.
+     */
+    public EventList getHostedEvents() {
+        return hostedEvents;
+    }
+
+
+    /**
      * Add an event to a User's waitlist.
      * @Author: Matthieu Larochelle
      * @Version: 1.2
@@ -229,6 +242,29 @@ public class User implements Serializable {
      */
     public Boolean removeRegisteredEvent(Event event){
         return registeredEvents.remove(event) && (event.getAttendees().contains(this) ? event.removeAttendee(this) : Boolean.TRUE);
+    }
+
+
+    /**
+     * Add an event to a User's hosted events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     * @return : Result of successful addition to User's list of hosted events.
+     */
+    public Boolean addHostedEvent(Event event){
+        return hostedEvents.addEvent(event);
+    }
+
+    /**
+     * Remove an event from a User's hosted events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     * @return : Result of successful removal from User's list of hosted events.
+     */
+    public Boolean removeHostedEvent(Event event){
+        return hostedEvents.remove(event);
     }
 
     /**

@@ -22,8 +22,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
@@ -446,6 +448,29 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
+
+    /**
+     * Update User document's hosted events in FireBase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which updating is required.
+     * @param event: Event for which is added.
+     */
+    public void updateUserHosted(User user, Event event) {
+        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getEventDate());
+        String formattedDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDrawDate());
+        Map<String, Object> data = new HashMap<>();
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", formattedEventDate);
+        data.put("drawDate", formattedDrawDate);
+        data.put("maxEntrants", event.getMaxEntrants());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("owner", event.getOwner().getDeviceId());
+        data.put("QRHash", event.getQRCode());
+        userRf.document(user.getDeviceId())
+                .collection("hostedEvents").document(event.getEventName()).set(data);
+    }
+
      /**
      * Store hash data of QR code in firebase
      * @Author: Edwin M
@@ -453,13 +478,13 @@ public class FireBaseController implements Serializable {
      * @param qrCodeHash: The hash generated for QRCode
      * @param event: details of event to be stored.
      */
-    public void addEventWithQRCodeHash(String qrCodeHash, OrganizerEvent event) {
+    public void addEventWithQRCodeHash(String qrCodeHash, Event event) {
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventName", event.getName());
-        eventData.put("eventDate", event.getDate());
+        eventData.put("eventName", event.getEventName());
+        eventData.put("eventDate", event.getEventDate());
         eventData.put("qrCodeHash", qrCodeHash);  // Store the hash in the event data
 
-        eventRf.document(event.getName()).set(eventData)
+        eventRf.document(event.getEventName()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Event with QR code hash successfully added!"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error adding event with QR code hash", e));
     }

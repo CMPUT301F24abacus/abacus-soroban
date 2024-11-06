@@ -2,6 +2,7 @@ package com.example.soroban.controller;
 
 
 import com.example.soroban.FireBaseController;
+import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 /**
@@ -36,6 +37,10 @@ public class UserController {
         user.setEmail(email.toString());
         long phoneNumber = Long.parseLong(number.toString().replaceAll("\\D", ""));
         user.setPhoneNumber(phoneNumber);
+    }
+
+    public boolean addHostedEvent(Event event){
+        return user.addHostedEvent(event);
     }
 
     /**
