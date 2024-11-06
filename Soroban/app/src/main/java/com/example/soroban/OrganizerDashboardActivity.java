@@ -1,6 +1,7 @@
 package com.example.soroban;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -8,11 +9,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.soroban.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrganizerDashboardActivity extends AppCompatActivity {
 
+    private User appUser;
     private TextView facilityNameTextView;
     private RecyclerView eventsRecyclerView;
     private Button createEventButton;
@@ -27,6 +32,28 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organizer_dashboard);
+
+        // Get arguments passed from previous activity.
+        // Reference: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
+        Bundle args = getIntent().getExtras();
+
+        // Initialize appUser for this activity.
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+            }
+
+            if(appUser == null ){
+                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
+            }
+
+
+        }else{
+            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
+        }
+
 
         // Initialize views
         facilityNameTextView = findViewById(R.id.facilityNameTextView);
@@ -51,6 +78,9 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         // Set up "Create Event" button click listener
         createEventButton.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerDashboardActivity.this, CreateEventActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
             startActivityForResult(intent, CREATE_EVENT_REQUEST_CODE);
         });
 
