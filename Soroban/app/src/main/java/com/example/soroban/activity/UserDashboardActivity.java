@@ -120,51 +120,5 @@ public class UserDashboardActivity extends AppCompatActivity {
         confirmedEventsListView.setAdapter(confirmedAdapter);
 
 
-        userRf.document(appUser.getDeviceId()).collection("waitList").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    waitlistedEventsListData.clear();
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-
-                        String eventName = doc.getString("eventName");
-                        Date eventDate = doc.getDate("eventDate");
-                        Date drawDate = doc.getDate("drawDate");
-                        Integer sampleSize = ((Long) doc.get("sampleSize")).intValue();
-                        Log.d("Firestore", "Event fetched");
-                        waitlistedEventsListData.add(new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize));
-                    }
-                    waitlistedAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
-        userRf.document(appUser.getDeviceId()).collection("registeredEvents").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    confirmedEventsListData.clear();
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-
-                        String eventName = doc.getString("eventName");
-                        Date eventDate = doc.getDate("eventDate");
-                        Date drawDate = doc.getDate("drawDate");
-                        Integer sampleSize = ((Long) doc.get("sampleSize")).intValue();
-                        Log.d("Firestore", "Event fetched");
-                        confirmedEventsListData.add(new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize));
-                    }
-                    confirmedAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
     }
 }
