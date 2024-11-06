@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -37,7 +38,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                     showCamera();
                 }
                 else {
-                    //Show why user need this permission
+                    Toast.makeText(this, "Camera permission is required to scan QR codes", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -45,18 +46,26 @@ public class QrCodeScanActivity extends AppCompatActivity {
         if (result.getContents() == null) {
             Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
         } else {
-            setResult(result.getContents());
+            retrieveEventDetails(result.getContents());
         }
     });
 
     // Action after scanning QRCode
-    private void setResult(String contents) {
-        Intent intent = new Intent(QrCodeScanActivity.this, EventRegistrationActivity.class);
-        intent.putExtra("qrResult", contents); // Pass the scanned QR code result to EventRegistrationActivity
-        // Retrieve using getIntent().getStringExtra("qrResult")
-        startActivity(intent);
+    private void retrieveEventDetails(String qrCodeHash) {
+        FireBaseController dbController = new FireBaseController();
+        dbController.getEventByQRCodeHash(qrCodeHash, event -> {
+            if (event != null) {
+                // Pass the event data to EventRegistrationActivity
+                Intent intent = new Intent(QrCodeScanActivity.this, EventRegistrationActivity.class);
+                intent.putExtra("eventName", event.getEventName());
+                intent.putExtra("eventDate", event.getEventDate().toString());
+                intent.putExtra("eventHash", qrCodeHash);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-    // Need to implement Passing QR Code Dara to EventRegistrationActivity (if needed)
 
 
     private void showCamera() {
