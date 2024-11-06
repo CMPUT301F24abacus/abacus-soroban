@@ -7,15 +7,17 @@
 
 package com.example.soroban.model;
 
+import java.util.Date;
+
 public class Notification {
     private String title;
-    private String time;
+    private Date time;
     private String event;
     private boolean isMuted;
     public enum NotificationType { BAD_NEWS, SPOT_CONFIRMED, REGISTRATION_OPEN }
     private NotificationType type;
 
-    public Notification(String title, String time, String event, NotificationType type) {;
+    public Notification(String title, Date time, String event, NotificationType type) {;
         this.title = title;
         this.time = time;
         this.event = event;
@@ -27,7 +29,7 @@ public class Notification {
         return title;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 

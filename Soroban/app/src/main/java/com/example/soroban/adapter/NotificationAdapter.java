@@ -34,7 +34,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
         holder.titleTextView.setText(notification.getTitle());
-        holder.timeTextView.setText(notification.getTime());
+        //holder.timeTextView.setText(notification.getTime());
         holder.eventTextView.setText(notification.getEvent());
 
         // Set background color based on notification type
