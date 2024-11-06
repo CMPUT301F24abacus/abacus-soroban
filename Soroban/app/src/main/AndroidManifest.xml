@@ -5,9 +5,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
@@ -46,9 +46,10 @@
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.NotificationActivity" />
-        <activity android:name=".OrganizerDashboardActivity" />
-        <activity android:name=".FacilityDisplayActivity" />
-        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".activity.OrganizerDashboardActivity" />
+        <activity android:name=".activity.FacilityDisplayActivity" />
+        <activity android:name=".activity.CreateEventActivity" />
+        <receiver android:process=":remote" android:name=".NotificationSystem">
 
         <receiver
             android:name=".NotificationSystem"

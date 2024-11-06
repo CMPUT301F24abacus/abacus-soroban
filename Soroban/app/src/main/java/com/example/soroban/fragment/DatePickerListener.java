@@ -1,4 +1,4 @@
-package com.example.soroban.activity;
+package com.example.soroban.fragment;
 
 import java.util.Date;
 
