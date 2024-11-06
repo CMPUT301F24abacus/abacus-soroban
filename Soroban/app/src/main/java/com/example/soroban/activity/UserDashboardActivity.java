@@ -11,9 +11,7 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.soroban.FacilityDisplayActivity;
 import com.example.soroban.FireBaseController;
-import com.example.soroban.OrganizerDashboardActivity;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;

@@ -49,11 +49,8 @@
         <activity android:name=".activity.OrganizerDashboardActivity" />
         <activity android:name=".activity.FacilityDisplayActivity" />
         <activity android:name=".activity.CreateEventActivity" />
-        <receiver android:process=":remote" android:name=".NotificationSystem">
+        <receiver android:process=":remote" android:name=".NotificationSystem"/>
 
-        <receiver
-            android:name=".NotificationSystem"
-            android:process=":remote"></receiver>
     </application>
 
 </manifest>
