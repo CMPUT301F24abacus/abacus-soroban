@@ -13,7 +13,7 @@ public class Facility implements Serializable {
     private final User owner;
     private String name;
     private EventList hostedEvents;
-    private CharSequence details;
+    private String details;
 
     /**
      * Constructor method for Facility.
@@ -77,10 +77,6 @@ public class Facility implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getEventDetails() { return eventDetails; }
-
-    public void setEventDetails(String eventDetails) { this.eventDetails = eventDetails; }
 
     /**
      * Add an event to a Facility's list of events.

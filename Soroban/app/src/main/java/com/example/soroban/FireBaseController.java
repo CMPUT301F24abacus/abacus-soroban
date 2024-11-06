@@ -72,14 +72,14 @@ public class FireBaseController implements Serializable {
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
                         }
-                        progressBar.setVisibility(View.GONE);
-                        layout.setVisibility(View.VISIBLE);
+                        fetchWaitListDoc(user);
+                        fetchRegisteredDoc(user);
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
-                        progressBar.setVisibility(View.GONE);
-                        layout.setVisibility(View.VISIBLE);
                     }
+                    progressBar.setVisibility(View.GONE);
+                    layout.setVisibility(View.VISIBLE);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
@@ -360,16 +360,16 @@ public class FireBaseController implements Serializable {
     /**
      * Update Facility document in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
      * @param facility: Facility for which updating is required.
      */
     public void facilityUpdate(Facility facility) {
         Map<String, Object> data = new HashMap<>();
         data.put("facility", facility.getName());
-        data.put("eventDetails", facility.getEventDetails());
+        data.put("details", facility.getDetails());
 
         facilityRf
-                .document(facility.getName() + ", " + facility.getOwner().getDeviceId())
+                .document(facility.getOwner().getDeviceId())
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -446,28 +446,7 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
-    /**
-     * Update Facility document in FireBase.
-     * @Author: Matthieu Larochelle, Kevin Li
-     * @Version: 1.0
-     * @param user: User for which facility updating is required.
-     */
-    public void updateFacility(User user) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", user.getFacility().getName());
-        data.put("details", user.getFacility().getDetails());
-
-        facilityRf
-                .document(user.getDeviceId())
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                });
-    }
-
+     /**
      * Store hash data of QR code in firebase
      * @Author: Edwin M
      * @Version: 1.0
