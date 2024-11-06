@@ -120,5 +120,28 @@ public class UserDashboardActivity extends AppCompatActivity {
         confirmedEventsListView.setAdapter(confirmedAdapter);
 
 
+        waitlistedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = waitlistedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+
+        });
+
+        confirmedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = confirmedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+
+        });
+
+
     }
 }
