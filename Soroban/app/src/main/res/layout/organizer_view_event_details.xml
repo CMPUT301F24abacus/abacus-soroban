@@ -47,7 +47,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/eventDetailsTitle"
+            android:id="@+id/eventDescriptionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description:"
@@ -55,7 +55,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/eventDetailsText"
+            android:id="@+id/eventDescriptionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum_paragraph" />
