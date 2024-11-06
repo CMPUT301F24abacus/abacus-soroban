@@ -24,6 +24,7 @@ public class Event implements Serializable {
     private final UserList notGoing;
     private Integer maxEntrants;
     private Integer sampleSize;
+    private String eventDetails;
     private Bitmap QRCode;
 
 
@@ -209,6 +210,14 @@ public class Event implements Serializable {
      */
     public void setQRCode(Bitmap QRCode) {
         this.QRCode = QRCode;
+    }
+
+    public String getEventDetails() {
+        return eventDetails;
+    }
+
+    public void setEventDetails(String eventDetails) {
+        this.eventDetails = eventDetails;
     }
 
     /**
