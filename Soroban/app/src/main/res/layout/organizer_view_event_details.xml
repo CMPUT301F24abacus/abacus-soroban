@@ -44,7 +44,7 @@
         android:id="@+id/eventDetailsTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Details:"
+        android:text="Description:"
         android:textSize="24sp"
         android:textStyle="bold" />
 
