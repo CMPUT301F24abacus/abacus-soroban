@@ -33,12 +33,6 @@ public class Facility implements Serializable {
 
     }
 
-    public Facility(String updatedFacilityName, String updatedFacilityDetails) {
-        this.name = updatedFacilityName;
-        this.owner = null;
-        this.hostedEvents = new EventList();
-
-    }
 
     /**
      * Destructor method for Facility.
@@ -83,6 +77,10 @@ public class Facility implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getEventDetails() { return eventDetails; }
+
+    public void setEventDetails(String eventDetails) { this.eventDetails = eventDetails; }
 
     /**
      * Add an event to a Facility's list of events.

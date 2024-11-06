@@ -1,5 +1,7 @@
 package com.example.soroban.model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -17,9 +19,13 @@ public class Event implements Serializable {
     private Date eventDate;
     private Date drawDate;
     private final UserList attendees;
+    private final UserList invitedEntrants;
     private final UserList waitingEntrants;
+    private final UserList notGoing;
     private Integer maxEntrants;
     private Integer sampleSize;
+    private String eventDetails;
+    private Bitmap QRCode;
 
 
     /**
@@ -40,7 +46,9 @@ public class Event implements Serializable {
         this.eventDate = eventDate;
         this.drawDate = drawDate;
         this.attendees = new UserList();
+        this.invitedEntrants = new UserList();
         this.waitingEntrants = new UserList();
+        this.notGoing = new UserList();
         this.sampleSize = sampleSize;
     }
 
@@ -185,6 +193,34 @@ public class Event implements Serializable {
     }
 
     /**
+     * Getter method for an Event's QR bitmap.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @return: bitmap
+     */
+    public Bitmap getQRCode() {
+        return QRCode;
+    }
+
+    /**
+     * Setter method for an Event's QR bitmap.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param QRCode: qrcode of event Bitmap.
+     */
+    public void setQRCode(Bitmap QRCode) {
+        this.QRCode = QRCode;
+    }
+
+    public String getEventDetails() {
+        return eventDetails;
+    }
+
+    public void setEventDetails(String eventDetails) {
+        this.eventDetails = eventDetails;
+    }
+
+    /**
      * Add a user to an Events's list of waiting entrants.
      * @Author: Matthieu Larochelle
      * @Version: 1.2
@@ -257,6 +293,62 @@ public class Event implements Serializable {
     public UserList getAttendees() {
         return attendees;
     }
+
+    /**
+     * Add a user to an Events's list of invited.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user : User.
+     */
+    public void addInvited(User user){
+        invitedEntrants.addUser(user);
+    }
+
+    /**
+     * Remove a user from an Events's list of invited.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user  User.
+     */
+    public void removeFromInvited(User user){
+        invitedEntrants.remove(user);
+    }
+
+    /**
+     * Getter method for Event's invited.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Return: invited UserList.
+     */
+    public UserList getInvitedEntrants() { return invitedEntrants; }
+
+    /**
+     * Add a user to an Events's list of not going entrants.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user : User.
+     */
+    public void addToNotGoing(User user){
+        notGoing.addUser(user);
+    }
+
+    /**
+     * Remove a user from an Events's list of not going.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user  User.
+     */
+    public void removeFromNotGoing(User user){
+        notGoing.remove(user);
+    }
+
+    /**
+     * Getter method for Event's entrants who are not going.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Return: not going UserList.
+     */
+    public UserList getNotGoing() { return notGoing; }
 
     /**
      * Checks if one Event object is equal to another..
