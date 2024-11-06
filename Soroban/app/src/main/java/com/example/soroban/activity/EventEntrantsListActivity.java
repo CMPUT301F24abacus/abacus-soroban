@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.soroban.R;
 
 public class EventEntrantsListActivity extends AppCompatActivity {
     private Button usersWaitlisted;
@@ -31,22 +33,22 @@ public class EventEntrantsListActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         usersWaitlisted.setOnClickListener(v -> {
-            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersWaitlisted.class);
+            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersWaitlistedActivity.class);
             startActivity(intent);
         });
 
         usersInvited.setOnClickListener(v -> {
-            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersInvited.class);
+            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersInvitedActivity.class);
             startActivity(intent);
         });
 
         usersCancelled.setOnClickListener(v -> {
-            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersCancelled.class);
+            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersCancelledActivity.class);
             startActivity(intent);
         });
 
         usersConfirmed.setOnClickListener(v -> {
-            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersConfirmed.class);
+            Intent intent = new Intent(EventEntrantsListActivity.this, EventUsersConfirmedActivity.class);
             startActivity(intent);
         });
 

@@ -62,6 +62,37 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    
+    /**
+     * Create a new Event document in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event for which updating is required.
+     */
+    public void createEventDb(Event event) {
+        Facility eventFacility = event.getFacility();
+        User owner = event.getOwner();
+        DocumentReference userDoc = userRf.document(event.getOwner().getDeviceId());
+        DocumentReference facilityDoc = facilityRf.document(eventFacility.getName() + ", " + owner.getDeviceId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("owner", userDoc);
+        data.put("facility", facilityDoc);
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("maxEntrants", event.getMaxEntrants());
+        data.put("QRHash", event.getQRCode());
+        eventRf
+                .document(event.getEventName() + ", " + owner.getDeviceId())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
+    }
 
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
@@ -239,6 +270,54 @@ public class FireBaseController implements Serializable {
 
         userRf
                 .document(user.getDeviceId())
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
+    }
+
+    /**
+     * Update Facility document in FireBase.
+     * @Author: Kevin Li, Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which updating is required.
+     */
+    public void facilityUpdate(Facility facility) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("facility", facility.getName());
+        data.put("eventDetails", facility.getEventDetails());
+
+        facilityRf
+                .document(facility.getName() + ", " + facility.getOwner().getDeviceId())
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
+    }
+
+    /**
+     * Update Event document in FireBase.
+     * @Author: Kevin Li, Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which updating is required.
+     */
+    public void eventUpdate(Event event) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("maxEntrants", event.getMaxEntrants());
+        data.put("QRHash", event.getQRCode());
+
+        eventRf
+                .document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,14 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import com.example.soroban.activity.DatePickerListener;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.fragment.DatePickerFragment;
+import com.example.soroban.fragment.DatePickerListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -201,13 +203,15 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Generate the QR code using the hash as content
         Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
+        DateFormat dateFormat = new SimpleDateFormat();
+
+        // Generate QR Code using QRCodeGenerator utility class
 
         if (qrCodeBitmap != null) {
             // Set the QR code bitmap to the ImageView and make it visible
             qrCodeImageView.setImageBitmap(qrCodeBitmap);
             qrCodeImageView.setVisibility(View.VISIBLE);
             qrCodeLabel.setVisibility(View.VISIBLE);
-
 
         } else {
             Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();

@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -7,8 +7,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.R;
 
-public class EventUsersWaitlisted extends AppCompatActivity {
+
+public class EventUsersWaitlistedActivity extends AppCompatActivity {
     private Button sendMessage;
     private Button rejectUsers;
     private Button inviteUsers;

@@ -18,10 +18,10 @@
         android:id="@+id/tv_facility_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sample Facility Name"
-        android:textSize="18sp"
         android:layout_marginTop="4dp"
-        android:textColor="#333333" />
+        android:text="My Facility"
+        android:textColor="#333333"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_facility_details_label"
@@ -36,10 +36,10 @@
         android:id="@+id/tv_facility_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sample Facility Details"
-        android:textSize="16sp"
         android:layout_marginTop="4dp"
-        android:textColor="#333333" />
+        android:text="About my facility"
+        android:textColor="#333333"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_edit_facility"

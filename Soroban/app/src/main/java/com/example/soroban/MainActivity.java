@@ -1,44 +1,28 @@
 package com.example.soroban;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.example.soroban.activity.CreateFacilityActivity;
+import com.example.soroban.activity.OrganizerDashboardActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,13 +44,25 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseController = new FireBaseController();
 
-        // Get Android Device Id.
-        // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
-        appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-        // Add the use into the Firebase Database
-        firebaseController.fetchUserDoc(appUser);
-        firebaseController.fetchWaitListDoc(appUser);
-        firebaseController.fetchRegisteredDoc(appUser);
+
+        Bundle args = getIntent().getExtras();
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+            }
+        }
+
+        if(args == null || appUser == null){
+            // Get Android Device Id.
+            // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
+            appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            // Add the user into the Firebase Database
+            firebaseController.fetchUserDoc(appUser);
+            firebaseController.fetchWaitListDoc(appUser);
+            firebaseController.fetchRegisteredDoc(appUser);
+        }
 
 
         // Ask for notification permissions
@@ -115,11 +111,18 @@ public class MainActivity extends AppCompatActivity {
         btnOpenOrganizerDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
-                Bundle args = new Bundle();
-                args.putSerializable("appUser",appUser);
-                intent.putExtras(args);
-                startActivity(intent);
+                // Navigate to OrganizerDashboardActivity
+                if(appUser.getFacility() != null){
+                    // The user already has a facility
+                    Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
+                    intent.putExtra("appUser", appUser);
+                    startActivity(intent);
+                }else{
+                    // The user must create their facility in order to organize events
+                    Intent intent = new Intent(MainActivity.this, CreateFacilityActivity.class);
+                    intent.putExtra("appUser", appUser);
+                    startActivity(intent);
+                }
             }
         });
 

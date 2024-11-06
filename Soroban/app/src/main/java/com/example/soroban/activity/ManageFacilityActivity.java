@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.soroban.R;
 
 public class ManageFacilityActivity extends AppCompatActivity {
 
@@ -21,7 +23,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
         // Initialize views
         editTextFacilityName = findViewById(R.id.editTextFacilityName);
         editTextFacilityDetails = findViewById(R.id.editTextFacilityDetails);
-        buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
+        buttonSaveChanges = findViewById(R.id.buttonCreateFacility);
 
         // Retrieve the facility data from the intent
         Intent intent = getIntent();

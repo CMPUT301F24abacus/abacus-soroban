@@ -22,6 +22,9 @@
         android:theme="@style/Theme.Soroban"
         tools:targetApi="31">
         <activity
+            android:name=".activity.CreateFacilityActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -29,30 +32,28 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- User Dashboard Activity -->
+        </activity> <!-- User Dashboard Activity -->
         <activity
             android:name=".activity.UserDashboardActivity"
             android:exported="false"
             android:label="@string/user_dashboard_title" />
-
-        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            tools:replace="android:screenOrientation"/>
-
+            tools:replace="android:screenOrientation" />
         <activity android:name=".activity.EventRegistrationActivity" />
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.NotificationActivity" />
-        <activity android:name=".OrganizerDashboardActivity" />
-        <activity android:name=".FacilityDisplayActivity" />
-        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".activity.OrganizerDashboardActivity" />
+        <activity android:name=".activity.FacilityDisplayActivity" />
+        <activity android:name=".activity.CreateEventActivity" />
         <receiver android:process=":remote" android:name=".NotificationSystem">
 
-        </receiver>
-
+        <receiver
+            android:name=".NotificationSystem"
+            android:process=":remote"></receiver>
     </application>
 
 </manifest>
