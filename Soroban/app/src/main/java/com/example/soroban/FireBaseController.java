@@ -369,6 +369,44 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Store hash data of QR code in firebase
+     * @Author: Edwin M
+     * @Version: 1.0
+     * @param qrCodeHash: The hash generated for QRCode
+     * @param event: details of event to be stored.
+     */
+    public void addEventWithQRCodeHash(String qrCodeHash, OrganizerEvent event) {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventName", event.getName());
+        eventData.put("eventDate", event.getDate());
+        eventData.put("qrCodeHash", qrCodeHash);  // Store the hash in the event data
+
+        eventRf.document(event.getName()).set(eventData)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Event with QR code hash successfully added!"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error adding event with QR code hash", e));
+    }
+
+    /**
+     * Fetch Event by QR Code Hash
+     * @Author: Edwin M
+     * @Version: 1.0
+     * @param qrCodeHash: The hash generated for QRCode
+     * @param onSuccessListener: Event handling if found/not found
+     */
+    public void getEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
+        eventRf.document(qrCodeHash)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Event event = documentSnapshot.toObject(Event.class);
+                        onSuccessListener.onSuccess(event);
+                    } else {
+                        onSuccessListener.onSuccess(null); // Event not found
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error fetching event by QR code hash", e));
+    }
+
      * Update Event document's waitlist in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -439,7 +477,4 @@ public class FireBaseController implements Serializable {
         eventRf.document(event.getEventName() + ", " + user.getDeviceId())
                 .collection("notGoing").document(user.getDeviceId()).set(data);
     }
-
-
-
 }

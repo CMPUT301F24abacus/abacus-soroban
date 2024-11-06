@@ -24,6 +24,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
 
@@ -36,7 +39,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private Date drawDate;
     private User appUser;
 
-    //QRCode
+    // QRCode
     private Button generateQrCodeButton;
     private TextView qrCodeLabel;
     private ImageView qrCodeImageView;
@@ -47,23 +50,20 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         setContentView(R.layout.activity_create_event);
 
         // Get arguments passed from previous activity.
-        // Reference: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
         Bundle args = getIntent().getExtras();
 
         // Initialize appUser for this activity.
-        if(args != null){
+        if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 appUser = args.getSerializable("appUser", User.class);
-            }else{
+            } else {
                 appUser = (User) args.getSerializable("appUser");
             }
 
-            if(appUser == null ){
+            if (appUser == null) {
                 throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
             }
-
-
-        }else{
+        } else {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
@@ -89,7 +89,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             public void onClick(View v) {
                 saveEvent();
             }
-
         });
 
         // Set up Generate QR Code button click listener
@@ -122,14 +121,13 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 dialogFragment.show(getSupportFragmentManager(), "Select draw date");
             }
         });
-
-
     }
+
     private void saveEvent() {
         // Get the entered data
         String eventName = eventNameEditText.getText().toString().trim();
         int eventSampleSize;
-        Facility userFacility =  appUser.getFacility();
+        Facility userFacility = appUser.getFacility();
 
         // Validate input
         if (eventName.isEmpty()) {
@@ -155,8 +153,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         if (sampleSizeEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please enter a sample size for your event.", Toast.LENGTH_SHORT).show();
             return;
-        }else{
-            eventSampleSize = Integer.parseInt(sampleSizeEditText.getText().toString());
+        } else {
+            eventSampleSize = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
         }
 
         if (eventSampleSize <= 0) {
@@ -173,10 +171,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         // Create a new Event object
         Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
 
-
-        // Add the event to the list or database (you can adjust this part as needed)
-        // For demonstration, we'll just pass the event data back to the previous activity
-
+        // Add the event to the list or database
         Intent resultIntent = new Intent();
         resultIntent.putExtra("eventName", eventName);
         resultIntent.putExtra("eventDate", eventDate);
@@ -184,41 +179,59 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         finish(); // Close the activity and return to the previous screen
     }
 
+    @Override
+    public void setDate(Date targetDate, Date givenDate) {
+        if (eventDate.equals(targetDate)) {
+            eventDate = givenDate;
+        } else {
+            drawDate = givenDate;
+        }
+    }
 
-    //QRCode
+    // QRCode
     private void generateAndDisplayQRCode() {
         String eventName = eventNameEditText.getText().toString().trim();
+        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(eventDate);
 
-        if (eventName.isEmpty() ) {
+        if (eventName.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields before generating QR code", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Generate a unique hash for the QR code content
+        String qrCodeHash = generateHash(eventName + formattedEventDate);
+
+        // Generate the QR code using the hash as content
+        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
         DateFormat dateFormat = new SimpleDateFormat();
 
         // Generate QR Code using QRCodeGenerator utility class
-        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(eventName + ":" + dateFormat.format(eventDate));
 
         if (qrCodeBitmap != null) {
             // Set the QR code bitmap to the ImageView and make it visible
             qrCodeImageView.setImageBitmap(qrCodeBitmap);
             qrCodeImageView.setVisibility(View.VISIBLE);
             qrCodeLabel.setVisibility(View.VISIBLE);
+
         } else {
             Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
         }
     }
 
-        // Save event to firebase
-        // FireBaseController dbController = new FireBaseController();
-        // dbController.addEvent(newOrganizerEvent, qrCodeBitmap);
-  
-    @Override
-    public void setDate(Date targetDate,Date givenDate) {
-        if(eventDate.equals(targetDate)){
-            eventDate = givenDate;
-        }else{
-            drawDate = givenDate;
+    private String generateHash(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

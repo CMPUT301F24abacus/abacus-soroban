@@ -11,9 +11,7 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.soroban.FacilityDisplayActivity;
 import com.example.soroban.FireBaseController;
-import com.example.soroban.OrganizerDashboardActivity;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
@@ -90,11 +88,11 @@ public class UserDashboardActivity extends AppCompatActivity {
         ImageView profileIcon = findViewById(R.id.icon_profile);
         ImageView notificationsIcon = findViewById(R.id.icon_notifications);
 
-//        // Set up click listeners for buttons
-//        scanQrCode.setOnClickListener(v -> {
-//            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
-//            startActivity(intent);
-//        });
+        // Set up click listeners for buttons
+        scanQrCode.setOnClickListener(v -> {
+            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
+            startActivity(intent);
+        });
 
         profileIcon.setOnClickListener(v -> {
             //Action for Profile Icon
