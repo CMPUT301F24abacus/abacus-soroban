@@ -94,7 +94,7 @@ public class ManageProfileFragment extends DialogFragment {
                 userController = new UserController(appUser);
 
                 // Set up the FireBaseController to update Firestore database
-                fireBaseController = new FireBaseController();
+                fireBaseController = new FireBaseController(this.getContext());
 
                 // Populate fields with user information
 

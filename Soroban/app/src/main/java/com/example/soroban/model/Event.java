@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * Stores any relevant information that is related to an event.
@@ -349,6 +351,25 @@ public class Event implements Serializable {
      * @Return: not going UserList.
      */
     public UserList getNotGoing() { return notGoing; }
+
+
+    /**
+     * Randomly samples the Event's sample size number of entrants to be invited
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     */
+    public void sampleEntrants(){
+        Random random = new Random();
+        int newRand = random.nextInt(sampleSize);
+        for(int i = 0; i < sampleSize; i++) {
+            addInvited(invitedEntrants.get(newRand));
+            int prevRand = newRand;
+            while(newRand == prevRand){
+                newRand = random.nextInt(sampleSize);
+            }
+        }
+    }
+
 
     /**
      * Checks if one Event object is equal to another..
