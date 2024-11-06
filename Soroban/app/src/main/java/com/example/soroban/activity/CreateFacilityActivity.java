@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.MainActivity;
 import com.example.soroban.R;
 import com.example.soroban.model.Facility;
@@ -59,10 +60,16 @@ public class CreateFacilityActivity extends AppCompatActivity {
                 return;
             }
 
+            // Set up FireBase functionality
+            FireBaseController fireBaseController = new FireBaseController();
+
             Facility newFacility = appUser.createFacility();
             newFacility.setName(updatedFacilityName);
             newFacility.setDetails(updatedFacilityDetails);
-            Intent intent = new Intent(CreateFacilityActivity.this, MainActivity.class);
+
+            fireBaseController.createFacilityDb(newFacility);
+
+            Intent intent = new Intent(CreateFacilityActivity.this, OrganizerDashboardActivity.class);
             intent.putExtra("appUser", appUser);
             startActivity(intent);
         });
