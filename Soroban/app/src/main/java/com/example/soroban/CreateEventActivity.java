@@ -203,6 +203,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         } else {
             Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
         }
+    }
 
         // Save event to firebase
         // FireBaseController dbController = new FireBaseController();
