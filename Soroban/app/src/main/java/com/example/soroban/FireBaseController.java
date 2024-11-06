@@ -468,6 +468,7 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+     /**
      * Store hash data of QR code in firebase
      * @Author: Edwin M
      * @Version: 1.0
