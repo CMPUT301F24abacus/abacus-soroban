@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import com.example.soroban.activity.DatePickerListener;
+import com.example.soroban.R;
 import com.example.soroban.fragment.DatePickerFragment;
+import com.example.soroban.fragment.DatePickerListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;

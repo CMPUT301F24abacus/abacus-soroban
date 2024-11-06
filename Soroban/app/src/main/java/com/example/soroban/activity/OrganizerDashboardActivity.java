@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.soroban.OrganizerEvent;
+import com.example.soroban.OrganizerEventAdapter;
+import com.example.soroban.R;
 import com.example.soroban.model.User;
 
 import java.util.ArrayList;
