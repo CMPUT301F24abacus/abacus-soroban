@@ -11,7 +11,9 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FacilityDisplayActivity;
 import com.example.soroban.FireBaseController;
+import com.example.soroban.OrganizerDashboardActivity;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
@@ -85,8 +87,6 @@ public class UserDashboardActivity extends AppCompatActivity {
 
         // Initialize buttons and
         Button scanQrCode = findViewById(R.id.btn_scan_qr_code);
-        Button joinWaitingList = findViewById(R.id.btn_join_waiting_list);
-        Button manageFacility = findViewById(R.id.btn_manage_facility);
         ImageView profileIcon = findViewById(R.id.icon_profile);
         ImageView notificationsIcon = findViewById(R.id.icon_notifications);
 
@@ -95,14 +95,6 @@ public class UserDashboardActivity extends AppCompatActivity {
 //            Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
 //            startActivity(intent);
 //        });
-
-        joinWaitingList.setOnClickListener(v -> {
-            // Action for Join Waiting List
-        });
-
-        manageFacility.setOnClickListener(v -> {
-            // Action for Manage Facility
-        });
 
         profileIcon.setOnClickListener(v -> {
             //Action for Profile Icon
