@@ -142,7 +142,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/eventEntrantLimitText"
+            android:id="@+id/eventEditEntrantLimit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
