@@ -283,7 +283,7 @@ public class FireBaseController implements Serializable {
      * Update Facility document in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
      * @Version: 1.0
-     * @param event: Event for which updating is required.
+     * @param facility: Facility for which updating is required.
      */
     public void facilityUpdate(Facility facility) {
         Map<String, Object> data = new HashMap<>();
