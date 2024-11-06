@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class CreateEventActivity extends AppCompatActivity {
 
     private EditText eventNameEditText;
@@ -90,20 +93,41 @@ public class CreateEventActivity extends AppCompatActivity {
             return;
         }
 
-        // Generate QR Code using QRCodeGenerator utility class
-        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(eventName + ":" + eventDate);
+        // Generate a unique hash for the QR code content (using event details)
+        String qrCodeHash = generateHash(eventName + eventDate);
+
+        // Generate the QR code using the hash as content
+        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
 
         if (qrCodeBitmap != null) {
             // Set the QR code bitmap to the ImageView and make it visible
             qrCodeImageView.setImageBitmap(qrCodeBitmap);
             qrCodeImageView.setVisibility(View.VISIBLE);
             qrCodeLabel.setVisibility(View.VISIBLE);
+
+            // Create and save the event with QR code hash
+            OrganizerEvent newOrganizerEvent = new OrganizerEvent(eventName, eventDate);
+            FireBaseController dbController = new FireBaseController();
+            dbController.addEventWithQRCodeHash(qrCodeHash, newOrganizerEvent);
+
         } else {
             Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
         }
-
-        // Save event to firebase
-        // FireBaseController dbController = new FireBaseController();
-        // dbController.addEvent(newOrganizerEvent, qrCodeBitmap);
+    }
+    private String generateHash(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
