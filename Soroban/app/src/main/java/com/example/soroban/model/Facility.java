@@ -13,6 +13,7 @@ public class Facility implements Serializable {
     private final User owner;
     private String name;
     private EventList hostedEvents;
+    private CharSequence details;
 
     /**
      * Constructor method for Facility.
@@ -147,15 +148,13 @@ public class Facility implements Serializable {
     }
 
 
-    // idk what details to add specifically so we just make it as a placeholder function
-
-    public boolean getDetails() {
-        return true;
+    public CharSequence getDetails() {
+        return this.details;
     }
 
     public void setDetails(String updatedFacilityDetails) {
         if (updatedFacilityDetails != null) {
-            this.name = updatedFacilityDetails;
+            this.details = updatedFacilityDetails;
         }
     }
 }

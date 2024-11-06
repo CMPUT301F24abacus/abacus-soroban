@@ -6,13 +6,16 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -42,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        ConstraintLayout buttons = findViewById(R.id.dashboardButtons);
         firebaseController = new FireBaseController();
-
 
         Bundle args = getIntent().getExtras();
         if(args != null){
@@ -58,10 +62,9 @@ public class MainActivity extends AppCompatActivity {
             // Get Android Device Id.
             // Reference: https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
             appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
             // Add the user into the Firebase Database
-            firebaseController.fetchUserDoc(appUser);
-            firebaseController.fetchWaitListDoc(appUser);
-            firebaseController.fetchRegisteredDoc(appUser);
+            firebaseController.initialize(progressBar,buttons, appUser);
         }
 
 
@@ -74,13 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         askNotificationPermission();
-
-        // SIMPLE TEST, TO BE REMOVED
-        //NotificationSystem notificationSystem = NotificationSystem.newInstance( (AlarmManager) this.getSystemService(Context.ALARM_SERVICE), this);
-        //Calendar time = Calendar.getInstance();
-        //time.add(Calendar.SECOND, 3);
-        //notificationSystem.setNotification(1, "Hello World", "Hello World", time);
-        // SIMPLE TEST, TO BE REMOVED
 
         // Set window insets for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -112,17 +108,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to OrganizerDashboardActivity
-                if(appUser.getFacility() != null){
-                    // The user already has a facility
-                    Intent intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
-                    intent.putExtra("appUser", appUser);
-                    startActivity(intent);
-                }else{
-                    // The user must create their facility in order to organize events
-                    Intent intent = new Intent(MainActivity.this, CreateFacilityActivity.class);
-                    intent.putExtra("appUser", appUser);
-                    startActivity(intent);
-                }
+                Intent intent;
+                intent = new Intent(MainActivity.this, OrganizerDashboardActivity.class);
+                intent.putExtra("appUser", appUser);
+                startActivity(intent);
             }
         });
 

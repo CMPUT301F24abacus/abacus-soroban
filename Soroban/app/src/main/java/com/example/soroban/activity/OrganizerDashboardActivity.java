@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.soroban.MainActivity;
 import com.example.soroban.OrganizerEvent;
 import com.example.soroban.OrganizerEventAdapter;
 import com.example.soroban.R;
@@ -51,8 +52,6 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             if(appUser == null ){
                 throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
             }
-
-
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
@@ -80,18 +79,32 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
 
         // Set up "Create Event" button click listener
         createEventButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerDashboardActivity.this, CreateEventActivity.class);
+            Intent intent;
+            if(appUser.getFacility() != null){
+                intent = new Intent(OrganizerDashboardActivity.this, CreateEventActivity.class);
+            }else{
+                // The user must create their facility in order to organize events
+                intent = new Intent(OrganizerDashboardActivity.this, CreateFacilityActivity.class);
+            }
             Bundle newArgs = new Bundle();
             newArgs.putSerializable("appUser",appUser);
             intent.putExtras(newArgs);
-            startActivityForResult(intent, CREATE_EVENT_REQUEST_CODE);
+            startActivity(intent);
         });
 
         // Set up "Go to My Facility" button click listener
         goToFacilityButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerDashboardActivity.this, FacilityDisplayActivity.class);
-            intent.putExtra("facilityName", facilityNameTextView.getText().toString());  // Pass current facility name
-            startActivityForResult(intent, EDIT_FACILITY_REQUEST_CODE); // Start for result to receive updated name
+            Intent intent;
+            if(appUser.getFacility() != null){
+                intent = new Intent(OrganizerDashboardActivity.this, FacilityDisplayActivity.class);
+            }else{
+                // The user must first create their facility
+                intent = new Intent(OrganizerDashboardActivity.this, CreateFacilityActivity.class);
+            }
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
         });
     }
 

@@ -1,8 +1,11 @@
 package com.example.soroban;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -10,6 +13,7 @@ import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +25,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 public class FireBaseController implements Serializable {
     FirebaseFirestore db;
@@ -38,10 +44,55 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Intializes the app's data that is retrieved from Firebase.
+     * Ensures that the user can't move forward until data has been retrieved.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param progressBar: Progress bar which will be made invisible upon data retrieval.
+     * @param layout: Layout which will be made visible upon data retrieval.
+     * @param user: User for which creating is required.
+     */
+    public void initialize(ProgressBar progressBar, ConstraintLayout layout, User user){
+        DocumentReference docRef = userRf.document(user.getDeviceId());
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.d("Firestore", "User document found.");
+                        Map<String, Object> userData = document.getData();
+                        assert userData != null;
+                        user.setEmail((String) userData.get("email"));
+                        user.setFirstName((String) userData.get("firstName"));
+                        user.setLastName((String) userData.get("lastName"));
+                        user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
+                        if (facilityDocRef != null) {
+                            fetchFacilityDoc(user, facilityDocRef);
+                        }
+                        progressBar.setVisibility(View.GONE);
+                        layout.setVisibility(View.VISIBLE);
+                    }else{
+                        Log.d("Firestore", "User document not found.");
+                        createUserDb(user);
+                        progressBar.setVisibility(View.GONE);
+                        layout.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    Log.d("Firestore", "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
+
+    /**
      * Create a new User document in Firebase.
      * @Author: Kevin Li
      * @Version: 1.0
-     * @param user: User for which updating is required.
+     * @param user: User for which creating is required.
      */
     public void createUserDb(User user) {
         Map<String, Object> data = new HashMap<>();
@@ -60,6 +111,30 @@ public class FireBaseController implements Serializable {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 });
+    }
+
+    /**
+     * Create a new Facility document in Firebase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param facility: Facility for which creating is required.
+     */
+    public void createFacilityDb(Facility facility) {
+        DocumentReference userDoc = userRf.document(facility.getOwner().getDeviceId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", facility.getName());
+        data.put("owner", userDoc);
+        data.put("details", facility.getDetails().toString());
+        facilityRf
+                .document(facility.getOwner().getDeviceId())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
+        updateUserFacility(facility.getOwner());
     }
 
 
@@ -87,7 +162,9 @@ public class FireBaseController implements Serializable {
                         user.setLastName((String) userData.get("lastName"));
                         user.setPhoneNumber((long) userData.get("phoneNumber"));
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
-                        if (facilityDocRef != null) { fetchFacilityDoc(user, facilityDocRef); }
+                        if (facilityDocRef != null) {
+                            fetchFacilityDoc(user, facilityDocRef);
+                        }
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
@@ -113,11 +190,15 @@ public class FireBaseController implements Serializable {
                 if(task.isSuccessful()){
                     DocumentSnapshot documentFacility = task.getResult();
                     if(documentFacility.exists()){
+                        Log.d("Firestore", "User facility found.");
                         Map<String, Object> facilityData = documentFacility.getData();
                         assert facilityData != null;
                         user.createFacility();
                         String name = (String) facilityData.get("name");
+                        String details = (String) facilityData.get("details");
                         user.getFacility().setName(name);
+                        user.getFacility().setDetails(details);
+                        Log.d("Firestore", user.getFacility().getName());
                     }else{
                         Log.d("Firestore", "User facility not found.");
                     }
@@ -193,8 +274,7 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
-                                user.addRegisteredEvent(event);
-                            }
+                                user.addRegisteredEvent(event);}
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
                         }
@@ -204,12 +284,12 @@ public class FireBaseController implements Serializable {
 
     /**
      * Update User document's facility field in FireBase.
-     * @Author: Kevin Li
-     * @Version: 1.0
+     * @Author: Kevin Li, Matthieu Larochelle
+     * @Version: 1.1
      * @param user: User for which updating is required.
      */
     public void updateUserFacility(User user) {
-        DocumentReference ufRf = facilityRf.document(user.getFacility().getName() + ", " + user.getDeviceId());
+        DocumentReference ufRf = facilityRf.document(user.getDeviceId());
         ufRf
                 .get()
                 .addOnSuccessListener(facilityDoc -> {
@@ -283,6 +363,28 @@ public class FireBaseController implements Serializable {
         data.put("owner", event.getOwner().getDeviceId());
         userRf.document(user.getDeviceId())
                 .collection("registeredEvents").document(event.getEventName()).set(data);
+    }
+
+    /**
+     * Update Facility document in FireBase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which facility updating is required.
+     */
+    public void updateFacility(User user) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", user.getFacility().getName());
+        data.put("details", user.getFacility().getDetails());
+
+        facilityRf
+                .document(user.getDeviceId())
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
     }
 
 
