@@ -62,6 +62,35 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    
+    /**
+     * Create a new Event document in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event for which updating is required.
+     */
+    public void createEventDb(Event event) {
+        Facility eventFacility = event.getFacility();
+        DocumentReference userDoc = userRf.document(event.getOwner().getDeviceId());
+        DocumentReference facilityDoc = facilityRf.document(eventFacility.getName() + ", " + event.getOwner().getDeviceId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("owner", userDoc);
+        data.put("facility", facilityDoc);
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("maxEntrants", event.getMaxEntrants());
+        eventRf
+                .document(event.getEventName() + ", " + eventFacility.getName())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                });
+    }
 
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
