@@ -406,7 +406,7 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error fetching event by QR code hash", e));
     }
-
+    /**
      * Update Event document's waitlist in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
