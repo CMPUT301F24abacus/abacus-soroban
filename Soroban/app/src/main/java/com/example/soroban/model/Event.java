@@ -1,5 +1,7 @@
 package com.example.soroban.model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -20,6 +22,7 @@ public class Event implements Serializable {
     private final UserList waitingEntrants;
     private Integer maxEntrants;
     private Integer sampleSize;
+    private Bitmap QRCode;
 
 
     /**
@@ -182,6 +185,14 @@ public class Event implements Serializable {
      */
     public void setSampleSize(Integer sampleSize) {
         this.sampleSize = sampleSize;
+    }
+
+    public Bitmap getQRCode() {
+        return QRCode;
+    }
+
+    public void setQRCode(Bitmap QRCode) {
+        this.QRCode = QRCode;
     }
 
     /**
