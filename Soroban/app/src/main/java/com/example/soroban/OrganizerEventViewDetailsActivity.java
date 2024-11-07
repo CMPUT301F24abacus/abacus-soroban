@@ -102,6 +102,10 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         viewEntrants.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsListActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
             startActivity(intent);
         });
 

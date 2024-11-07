@@ -71,7 +71,11 @@ public class UserEventActivity extends AppCompatActivity {
         eventQR = findViewById(R.id.event_qr_code);
 
         // Change the text
-        unregisterButton.setText("Unregister");
+        if(Objects.equals(listType, "waitList")){
+            unregisterButton.setText("Leave wait list");
+        }else if(Objects.equals(listType, "registeredEvents")){
+            unregisterButton.setText("Unregister");
+        }
         eventNameTV.setText(selectedEvent.getEventName());
         String eventDetails = "Event Date: " + selectedEvent.getEventDate().toString() + "\nEvent Details: " + selectedEvent.getEventDetails();
         eventDetailsTV.setText(eventDetails);
