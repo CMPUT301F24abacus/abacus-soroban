@@ -9,13 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.soroban.model.Event;
-import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,8 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 public class FireBaseController implements Serializable {
     FirebaseFirestore db;
@@ -474,6 +470,19 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Remove event from User document's waitlist in FireBase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which is deleted.
+     */
+    public void deleteFromUserWaitList(User user, Event event) {
+        Log.d("Firestore", event.getEventName() + ", " + event.getOwner().getDeviceId());
+        userRf.document(user.getDeviceId())
+                .collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .delete();
+    }
+
+    /**
      * Update User document's registeredevents in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -491,6 +500,19 @@ public class FireBaseController implements Serializable {
         data.put("QRHash", event.getQRCode());
         userRf.document(user.getDeviceId())
                 .collection("registeredEvents").document(event.getEventName()).set(data);
+    }
+
+    /**
+     * Remove event from User document's registeredevents in FireBase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param user: User for which updating is required.
+     * @param event: Event for which is deleted.
+     */
+    public void deleteFromUserRegistered(User user, Event event) {
+        userRf.document(user.getDeviceId())
+                .collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .delete();
     }
 
 

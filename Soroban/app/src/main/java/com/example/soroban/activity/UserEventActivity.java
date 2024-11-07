@@ -1,7 +1,9 @@
 package com.example.soroban.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,13 +14,8 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Objects;
 
 public class UserEventActivity extends AppCompatActivity {
     private Event selectedEvent;
@@ -45,12 +42,18 @@ public class UserEventActivity extends AppCompatActivity {
                 selectedEvent = args.getSerializable("selectedEvent", Event.class);
                 appUser = args.getSerializable("appUser", User.class);
             }else{
-                selectedEvent = (Event) args.getSerializable("selectedEvent");
                 appUser = (User) args.getSerializable("appUser");
+                selectedEvent = (Event) args.getSerializable("selectedEvent");
             }
 
             if(appUser == null || selectedEvent == null){
                 throw new IllegalArgumentException("Must pass object of type User and Event to initialize appUser.");
+            }
+
+            if(Objects.equals(listType, "waitList")){
+                selectedEvent = appUser.getWaitList().find(selectedEvent);
+            }else if(Objects.equals(listType, "registeredEvents")){
+                selectedEvent = appUser.getRegisteredEvents().find(selectedEvent);
             }
 
         }else{
@@ -79,21 +82,23 @@ public class UserEventActivity extends AppCompatActivity {
         // Finish when event posters are uploadable
         // FirebaseDatabase.getInstance().getReference("events").child(...).get()
 
-        // Button currently does not remove the event
+        // Initialize controllers to update User
+        FireBaseController fireBaseController = new FireBaseController(this);
+
+        // Remove Event from User waitlist
         unregisterButton.setOnClickListener( v -> {
             if (listType.equals("waitList")) {
-                appUser.removeFromWaitlist(selectedEvent);
-                firebaseController.removeFromWaitListDoc(selectedEvent, appUser);
-                selectedEvent.addToNotGoing(appUser);
-                firebaseController.updateThoseNotGoing(selectedEvent, appUser);
-                finish();
+                appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+                fireBaseController.deleteFromUserWaitList(appUser,selectedEvent);
             } else if (listType.equals("registeredEvents")) {
-                appUser.removeRegisteredEvent(selectedEvent);
-                firebaseController.removeAttendeeDoc(selectedEvent, appUser);
-                selectedEvent.addToNotGoing(appUser);
-                firebaseController.updateThoseNotGoing(selectedEvent, appUser);
-                finish();
+                appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+                fireBaseController.deleteFromUserRegistered(appUser,selectedEvent);
             }
+            Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
 
         });
     }

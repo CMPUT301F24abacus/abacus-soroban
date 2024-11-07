@@ -15,11 +15,13 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     private EditText eventTitle;
+    private EditText eventDate;
     private EditText eventDescription;
     private ImageView eventPoster;
     private ImageView eventPosterUpload;
     private ImageView eventPosterDelete;
-    private EditText eventEntrantLimit;
+    private EditText eventSampleSize;
+    private EditText eventDrawDate;
     private Button geoReq;
     private Button autoReplace;
 
@@ -38,11 +40,12 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
 
         // Assign button variables to views
         eventTitle = findViewById(R.id.eventEditName);
+        eventDate = findViewById(R.id.eventEditDate);
         eventDescription = findViewById(R.id.eventEditDescription);
         eventPoster = findViewById(R.id.eventPosterImage);
         eventPosterUpload = findViewById(R.id.eventPosterUpload);
         eventPosterDelete = findViewById(R.id.eventPosterDelete);
-        eventEntrantLimit = findViewById(R.id.eventEditEntrantLimit);
+        eventSampleSize = findViewById(R.id.eventEditSampleSize);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
         autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 

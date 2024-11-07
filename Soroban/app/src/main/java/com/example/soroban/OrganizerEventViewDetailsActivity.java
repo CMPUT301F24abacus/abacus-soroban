@@ -12,12 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.activity.EventEntrantsListActivity;
 
+import java.util.Date;
+
 public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private ImageView viewQRcode;
     private ImageView eventGeolocation;
     private TextView eventTitle;
+    private TextView eventDate;
     private TextView eventDescription;
     private ImageView eventPoster;
+    private TextView eventSampleSize;
     private TextView eventEntrantLimit;
     private Button geoReq;
     private Button autoReplace;
@@ -39,9 +43,10 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         viewQRcode = findViewById(R.id.buttonScanQRCode);
         eventGeolocation = findViewById(R.id.buttonEventGeolocation);
         eventTitle = findViewById(R.id.eventNameTitle);
+        eventDate = findViewById(R.id.eventDateTitle);
         eventDescription = findViewById(R.id.eventDescriptionText);
         eventPoster = findViewById(R.id.eventPosterImage);
-        eventEntrantLimit = findViewById(R.id.eventEntrantLimitText);
+        eventSampleSize = findViewById(R.id.eventSampleSizeText);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
         autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 
