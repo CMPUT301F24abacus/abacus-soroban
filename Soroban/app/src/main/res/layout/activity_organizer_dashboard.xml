@@ -44,8 +44,8 @@
 
     <!-- Create Event Button -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventsRecyclerView"
+    <ListView
+        android:id="@+id/eventsListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@id/createEventButton"

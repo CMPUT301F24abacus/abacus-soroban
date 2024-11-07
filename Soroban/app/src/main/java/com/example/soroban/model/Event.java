@@ -120,8 +120,8 @@ public class Event implements Serializable {
      * @Version: 1.0
      * @return: event's date.
      */
-    public CharSequence getEventDate() {
-        return (CharSequence) eventDate;
+    public Date getEventDate() {
+        return eventDate;
     }
 
     /**

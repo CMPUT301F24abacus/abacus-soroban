@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -16,17 +15,8 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
-import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Date;
 
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
@@ -37,8 +27,6 @@ public class UserDashboardActivity extends AppCompatActivity {
     private ListView confirmedEventsListView;
     private EventList confirmedEventsListData;
     private EventArrayAdapter confirmedAdapter;
-    private FirebaseFirestore db;
-    private CollectionReference userRf;
 
     /**
      * Called when the activity is first created.
@@ -51,8 +39,6 @@ public class UserDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_dashboard);
 
-        db = FirebaseFirestore.getInstance();
-        userRf = db.collection("users");
 
         // Get arguments passed from previous activity.
         // Reference: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter

@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
+import com.example.soroban.controller.UserController;
 import com.example.soroban.fragment.DatePickerFragment;
 import com.example.soroban.fragment.DatePickerListener;
 import com.example.soroban.model.Event;
@@ -171,12 +173,18 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         // Create a new Event object
         Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
 
-        // Add the event to the list or database
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("eventName", eventName);
-        resultIntent.putExtra("eventDate", eventDate);
-        setResult(RESULT_OK, resultIntent);
-        finish(); // Close the activity and return to the previous screen
+        // Add the event to the list and database
+        UserController userController = new UserController(appUser);
+        FireBaseController fireBaseController = new FireBaseController();
+        userController.addHostedEvent(newOrganizerEvent);
+        fireBaseController.createEventDb(newOrganizerEvent);
+        fireBaseController.updateUserHosted(appUser, newOrganizerEvent);
+
+        Intent intent = new Intent(CreateEventActivity.this, OrganizerDashboardActivity.class);
+        Bundle newArgs = new Bundle();
+        newArgs.putSerializable("appUser",appUser);
+        intent.putExtras(newArgs);
+        startActivity(intent);
     }
 
     @Override
