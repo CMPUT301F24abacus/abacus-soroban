@@ -244,6 +244,7 @@ public class FireBaseController implements Serializable {
         });
     }
 
+
     /**
      * Fetches a User's WaitList collection in Firebase.
      * @Author: Kevin Li
@@ -337,14 +338,16 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                                User owner = new User((String) eventData.get("owner"));
-                                fetchUserDoc(owner);
-                                Facility facility = owner.getFacility();
-                                Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                Facility facility = user.getFacility();
+                                Event event = new Event(user, facility, eventName, eventDate, drawDate,sampleSize);
                                 if (eventData.get("maxEntrants") != null) {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                fetchEventWaitlistDoc(event);
+                                fetchEventCancelledDoc(event);
+                                fetchEventInvitedDoc(event);
+                                fetchEventAttendeeDoc(event);
                                 user.addHostedEvent(event);}
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
@@ -585,6 +588,115 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error fetching event by QR code hash", e));
     }
+
+
+    /**
+     * Fetches an Event's Wailist of users collection in Firebase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which fetching is required.
+     */
+    public void fetchEventWaitlistDoc(Event event) {
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("waitList");
+        colRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                fetchUserDoc(user);
+                                event.addToWaitingEntrants(user);}
+                        } else {
+                            Log.e("Firestore", "Didn't find user list!");
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * Fetches an Event's Invited users collection in Firebase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which fetching is required.
+     */
+    public void fetchEventInvitedDoc(Event event) {
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("invitedEntrants");
+        colRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                fetchUserDoc(user);
+                                event.addInvited(user);}
+                        } else {
+                            Log.e("Firestore", "Didn't find user list!");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Fetches an Event's Cancelled users collection in Firebase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which fetching is required.
+     */
+    public void fetchEventCancelledDoc(Event event) {
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("cancelled");
+        colRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                fetchUserDoc(user);
+                                event.addToNotGoing(user);}
+                        } else {
+                            Log.e("Firestore", "Didn't find user list!");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Fetches an Event's Attendees collection in Firebase.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param event: Event for which fetching is required.
+     */
+    public void fetchEventAttendeeDoc(Event event) {
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("attendee");
+        colRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                fetchUserDoc(user);
+                                event.addAttendee(user);}
+                        } else {
+                            Log.e("Firestore", "Didn't find user list!");
+                        }
+                    }
+                });
+    }
+
+
+
     /**
      * Update Event document's waitlist in FireBase.
      * @Author: Kevin Li
