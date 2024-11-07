@@ -26,6 +26,7 @@ public class UserEventActivity extends AppCompatActivity {
     private Button unregisterButton;
     private ImageView eventPoster;
     private ImageView eventQR;
+    private FireBaseController firebaseController;
     String listType;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class UserEventActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
+
+        firebaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
         notifyButton = findViewById(R.id.btn_notify_me);
