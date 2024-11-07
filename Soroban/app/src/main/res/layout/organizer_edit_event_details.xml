@@ -28,6 +28,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
         <TextView
@@ -47,6 +48,30 @@
             android:ems="10"
             android:hint="Lorem ipsum"
             android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/eventDateTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Date:"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/eventEditDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="10/10/2024"
+            android:ems="10"
+            android:inputType="date" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -129,25 +154,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="8dp">
+        android:layout_marginBottom="8dp">
 
         <TextView
-            android:id="@+id/eventEntrantLimitTitle"
+            android:id="@+id/eventSampleSizeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Entrant Limit:"
+            android:text="Sample Size:"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/eventEditEntrantLimit"
+            android:id="@+id/eventEditSampleSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:ems="10"
-            android:gravity="center"
+            android:gravity="left"
             android:hint="0"
             android:inputType="number" />
 
@@ -156,8 +180,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/eventDrawDateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Draw Date:"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/eventEditDrawDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="left"
+            android:hint="11/11/2024"
+            android:inputType="date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="8dp">
+        android:layout_marginBottom="8dp">
 
         <TextView
             android:id="@+id/eventGeoReqTitle"

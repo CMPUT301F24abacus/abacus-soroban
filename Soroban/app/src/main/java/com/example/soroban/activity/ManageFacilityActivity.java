@@ -72,7 +72,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
             }
 
             // Set up FireBase functionality
-            FireBaseController fireBaseController = new FireBaseController();
+            FireBaseController fireBaseController = new FireBaseController(this);
 
             // Set up FacilityController
             FacilityController facilityController = new FacilityController(appUser.getFacility());

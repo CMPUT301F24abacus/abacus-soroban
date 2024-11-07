@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -13,7 +14,6 @@ import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,12 +23,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 public class FireBaseController implements Serializable {
     FirebaseFirestore db;
@@ -36,8 +35,10 @@ public class FireBaseController implements Serializable {
     CollectionReference eventRf;
     CollectionReference facilityRf;
     CollectionReference imageRf;
+    Context context;
 
-    public FireBaseController(){
+    public FireBaseController(Context context){
+        this.context = context;
         db = FirebaseFirestore.getInstance();
         userRf = db.collection("users");
         eventRf = db.collection("events");
@@ -76,6 +77,7 @@ public class FireBaseController implements Serializable {
                         }
                         fetchWaitListDoc(user);
                         fetchRegisteredDoc(user);
+                        fetchNotificationDoc(user);
                         fetchHostedDoc(user);
                     }else{
                         Log.d("Firestore", "User document not found.");
@@ -170,6 +172,7 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
+
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
      * @Author: Matthieu Larochelle
@@ -350,6 +353,44 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+
+    /**
+     * Fetches a User's notifications collection in Firebase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchNotificationDoc(User user) {
+        CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
+        notifcationRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> notificationData = document.getData();
+                                String notificationTitle = (String) notificationData.get("title");
+                                Integer notificationNumber = ((Long) notificationData.get("number")).intValue();
+                                String notificationMessage = (String) notificationData.get("message");
+                                Date notificationDate = document.getDate("date");
+                                String notificationEventName = (String) document.get("eventName");
+                                assert notificationDate != null;
+                                // Notify user if current time is after notification date
+                                if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
+                                    Log.e("Firestore", notificationEventName + notificationTitle + notificationMessage);
+                                    NotificationSystem notificationSystem = new NotificationSystem(context);
+                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationTitle + " : " + notificationEventName, notificationMessage);
+                                }
+                            }
+                        } else {
+                            Log.e("Firestore", "Something went wrong.");
+                        }
+                    }
+                });
+    }
+
+
     /**
      * Update User document's facility field in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
@@ -404,7 +445,7 @@ public class FireBaseController implements Serializable {
      */
     public void facilityUpdate(Facility facility) {
         Map<String, Object> data = new HashMap<>();
-        data.put("name", facility.getName());
+        data.put("facility", facility.getName());
         data.put("details", facility.getDetails());
 
         facilityRf
@@ -615,4 +656,103 @@ public class FireBaseController implements Serializable {
         eventRf.document(event.getEventName() + ", " + user.getDeviceId())
                 .collection("notGoing").document(user.getDeviceId()).set(data);
     }
+
+    /**
+     * Remove Event document from waitlist, while Removing User document as well.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeFromWaitListDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, waitlist may not include event.", e));
+
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("waitingEntrants").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove Event document from attendee list, while Removing User document as well.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeAttendeeDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, attendee list may not include event.", e));
+
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("attendees").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove User document from Invited.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeInvitedDoc(Event event, User user) {
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("invitedEntrants").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove User document from NotGoing.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeThoseNotGoingDoc(Event event, User user) {
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("notGoing").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+
+
 }

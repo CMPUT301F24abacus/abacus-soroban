@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +34,13 @@ import java.security.NoSuchAlgorithmException;
 public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
 
     private EditText eventNameEditText;
+    private EditText eventDescriptionEditText;
     private EditText sampleSizeEditText;
     private Button eventDateSelectButton;
+    private ImageButton eventPosterUploadButton;
     private Button drawDateSelectButton;
+    private Button geoReqButton;
+    private Button autoReplaceButton;
     private Button saveEventButton;
     private Date eventDate;
     private Date drawDate;
@@ -75,15 +80,23 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Initialize views
         eventNameEditText = findViewById(R.id.eventNameEditText);
+        eventDescriptionEditText = findViewById(R.id.eventDescriptionEditText);
         sampleSizeEditText = findViewById(R.id.sampleSizeEditText);
+        eventPosterUploadButton = findViewById(R.id.buttonUploadPoster);
         eventDateSelectButton = findViewById(R.id.eventDateSelectButton);
         drawDateSelectButton = findViewById(R.id.drawDateSelectButton);
+        geoReqButton = findViewById(R.id.eventGeoReqSwitch);
+        autoReplaceButton = findViewById(R.id.eventAutoReplaceSwitch);
         saveEventButton = findViewById(R.id.saveEventButton);
 
         // QRCode
         generateQrCodeButton = findViewById(R.id.generateQrCodeButton);
         qrCodeLabel = findViewById(R.id.qrCodeLabel);
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
+
+        eventPosterUploadButton.setOnClickListener(v -> {
+            Toast.makeText(this, "WIP - Implement upload image prompt", Toast.LENGTH_SHORT).show();
+        });
 
         // Set up Save button click listener
         saveEventButton.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +188,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Add the event to the list and database
         UserController userController = new UserController(appUser);
-        FireBaseController fireBaseController = new FireBaseController();
+        FireBaseController fireBaseController = new FireBaseController(this);
         userController.addHostedEvent(newOrganizerEvent);
         fireBaseController.createEventDb(newOrganizerEvent);
         fireBaseController.updateUserHosted(appUser, newOrganizerEvent);
