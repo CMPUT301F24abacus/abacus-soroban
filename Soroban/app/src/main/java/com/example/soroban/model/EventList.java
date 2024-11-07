@@ -47,4 +47,20 @@ public class EventList extends ArrayList<Event> implements Serializable {
         }
     }
 
+
+    /**
+     * Find event in EventList.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: Null if no matching event was found; the matching event otherwise
+     */
+    public Event find(Event event){
+        for(int i = 0; i < this.size(); i++){
+            if(this.get(i).equals(event)){
+                return event;
+            }
+        }
+        return null;
+    }
+
 }
