@@ -476,7 +476,6 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which is deleted.
      */
     public void deleteFromUserWaitList(User user, Event event) {
-        Log.d("Firestore", event.getEventName() + ", " + event.getOwner().getDeviceId());
         userRf.document(user.getDeviceId())
                 .collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete();
@@ -656,7 +655,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -685,7 +684,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
