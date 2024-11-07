@@ -89,10 +89,10 @@ public class UserEventActivity extends AppCompatActivity {
         unregisterButton.setOnClickListener( v -> {
             if (listType.equals("waitList")) {
                 appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-                fireBaseController.deleteFromUserWaitList(appUser,selectedEvent);
+                fireBaseController.removeFromWaitListDoc(selectedEvent,appUser);
             } else if (listType.equals("registeredEvents")) {
                 appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-                fireBaseController.deleteFromUserRegistered(appUser,selectedEvent);
+                fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
             }
             Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
             Bundle newArgs = new Bundle();

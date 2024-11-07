@@ -128,7 +128,6 @@ public class UserDashboardActivity extends AppCompatActivity {
             newArgs.putString("listType", "registeredEvents");
             intent.putExtras(newArgs);
             startActivity(intent);
-
         });
 
 

@@ -78,6 +78,7 @@ public class FireBaseController implements Serializable {
                         fetchWaitListDoc(user);
                         fetchRegisteredDoc(user);
                         fetchNotificationDoc(user);
+                        fetchHostedDoc(user);
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
@@ -151,7 +152,7 @@ public class FireBaseController implements Serializable {
         Facility eventFacility = event.getFacility();
         User owner = event.getOwner();
         DocumentReference userDoc = userRf.document(event.getOwner().getDeviceId());
-        DocumentReference facilityDoc = facilityRf.document(eventFacility.getName() + ", " + owner.getDeviceId());
+        DocumentReference facilityDoc = facilityRf.document(owner.getDeviceId());
         Map<String, Object> data = new HashMap<>();
         data.put("owner", userDoc);
         data.put("facility", facilityDoc);
@@ -316,6 +317,42 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    /**
+     * Fetches a User's HostedEvents collection in Firebase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchHostedDoc(User user) {
+        CollectionReference RegRef = userRf.document(user.getDeviceId()).collection("hostedEvents");
+        RegRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                User owner = new User((String) eventData.get("owner"));
+                                fetchUserDoc(owner);
+                                Facility facility = owner.getFacility();
+                                Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                if (eventData.get("maxEntrants") != null) {
+                                    Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                                    event.setMaxEntrants(maxEntrants);
+                                }
+                                user.addHostedEvent(event);}
+                        } else {
+                            Log.e("Firestore", "Didn't find eventList!");
+                        }
+                    }
+                });
+    }
+
 
     /**
      * Fetches a User's notifications collection in Firebase.
@@ -470,19 +507,6 @@ public class FireBaseController implements Serializable {
     }
 
     /**
-     * Remove event from User document's waitlist in FireBase.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @param event: Event for which is deleted.
-     */
-    public void deleteFromUserWaitList(User user, Event event) {
-        Log.d("Firestore", event.getEventName() + ", " + event.getOwner().getDeviceId());
-        userRf.document(user.getDeviceId())
-                .collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .delete();
-    }
-
-    /**
      * Update User document's registeredevents in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -502,19 +526,6 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
-    /**
-     * Remove event from User document's registeredevents in FireBase.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @param user: User for which updating is required.
-     * @param event: Event for which is deleted.
-     */
-    public void deleteFromUserRegistered(User user, Event event) {
-        userRf.document(user.getDeviceId())
-                .collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .delete();
-    }
-
 
     /**
      * Update User document's hosted events in FireBase.
@@ -524,12 +535,10 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which is added.
      */
     public void updateUserHosted(User user, Event event) {
-        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getEventDate());
-        String formattedDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDrawDate());
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
-        data.put("eventDate", formattedEventDate);
-        data.put("drawDate", formattedDrawDate);
+        data.put("eventDate", event.getEventDate());
+        data.put("drawDate", event.getEventDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
