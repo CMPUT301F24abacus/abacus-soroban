@@ -15,6 +15,7 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
+import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
@@ -104,6 +105,31 @@ public class UserDashboardActivity extends AppCompatActivity {
 
         waitlistedEventsListView.setAdapter(waitlistedAdapter);
         confirmedEventsListView.setAdapter(confirmedAdapter);
+
+
+        waitlistedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = waitlistedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            newArgs.putString("listType", "registeredEvents");
+            intent.putExtras(newArgs);
+            startActivity(intent);
+
+        });
+
+        confirmedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = confirmedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            newArgs.putString("listType", "registeredEvents");
+            intent.putExtras(newArgs);
+            startActivity(intent);
+
+        });
 
 
     }
