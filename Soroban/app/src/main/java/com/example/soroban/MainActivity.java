@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
         ConstraintLayout buttons = findViewById(R.id.dashboardButtons);
-        firebaseController = new FireBaseController();
+        firebaseController = new FireBaseController(this);
 
         Bundle args = getIntent().getExtras();
         if(args != null){
