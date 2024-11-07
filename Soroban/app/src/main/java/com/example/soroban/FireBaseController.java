@@ -470,18 +470,6 @@ public class FireBaseController implements Serializable {
     }
 
     /**
-     * Remove event from User document's waitlist in FireBase.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @param event: Event for which is deleted.
-     */
-    public void deleteFromUserWaitList(User user, Event event) {
-        userRf.document(user.getDeviceId())
-                .collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .delete();
-    }
-
-    /**
      * Update User document's registeredevents in FireBase.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -501,18 +489,6 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
-    /**
-     * Remove event from User document's registeredevents in FireBase.
-     * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @param user: User for which updating is required.
-     * @param event: Event for which is deleted.
-     */
-    public void deleteFromUserRegistered(User user, Event event) {
-        userRf.document(user.getDeviceId())
-                .collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .delete();
-    }
 
 
     /**
