@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,8 +24,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
@@ -34,8 +39,10 @@ public class FireBaseController implements Serializable {
     CollectionReference eventRf;
     CollectionReference facilityRf;
     CollectionReference imageRf;
+    Context context;
 
-    public FireBaseController(){
+    public FireBaseController(Context context){
+        this.context = context;
         db = FirebaseFirestore.getInstance();
         userRf = db.collection("users");
         eventRf = db.collection("events");
@@ -74,6 +81,7 @@ public class FireBaseController implements Serializable {
                         }
                         fetchWaitListDoc(user);
                         fetchRegisteredDoc(user);
+                        fetchNotificationDoc(user);
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
@@ -167,6 +175,7 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
+
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
      * @Author: Matthieu Larochelle
@@ -311,6 +320,44 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+
+    /**
+     * Fetches a User's notifications collection in Firebase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchNotificationDoc(User user) {
+        CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
+        notifcationRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> notificationData = document.getData();
+                                String notificationTitle = (String) notificationData.get("title");
+                                Integer notificationNumber = ((Long) notificationData.get("number")).intValue();
+                                String notificationMessage = (String) notificationData.get("message");
+                                Date notificationDate = document.getDate("date");
+                                String notificationEventName = (String) document.get("eventName");
+                                assert notificationDate != null;
+                                // Notify user if current time is after notification date
+                                if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
+                                    Log.e("Firestore", notificationEventName + notificationTitle + notificationMessage);
+                                    NotificationSystem notificationSystem = new NotificationSystem(context);
+                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationTitle + " : " + notificationEventName, notificationMessage);
+                                }
+                            }
+                        } else {
+                            Log.e("Firestore", "Something went wrong.");
+                        }
+                    }
+                });
+    }
+
+
     /**
      * Update User document's facility field in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
@@ -446,6 +493,29 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
+
+    /**
+     * Update User document's hosted events in FireBase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which updating is required.
+     * @param event: Event for which is added.
+     */
+    public void updateUserHosted(User user, Event event) {
+        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getEventDate());
+        String formattedDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDrawDate());
+        Map<String, Object> data = new HashMap<>();
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", formattedEventDate);
+        data.put("drawDate", formattedDrawDate);
+        data.put("maxEntrants", event.getMaxEntrants());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("owner", event.getOwner().getDeviceId());
+        data.put("QRHash", event.getQRCode());
+        userRf.document(user.getDeviceId())
+                .collection("hostedEvents").document(event.getEventName()).set(data);
+    }
+
      /**
      * Store hash data of QR code in firebase
      * @Author: Edwin M
@@ -453,13 +523,13 @@ public class FireBaseController implements Serializable {
      * @param qrCodeHash: The hash generated for QRCode
      * @param event: details of event to be stored.
      */
-    public void addEventWithQRCodeHash(String qrCodeHash, OrganizerEvent event) {
+    public void addEventWithQRCodeHash(String qrCodeHash, Event event) {
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventName", event.getName());
-        eventData.put("eventDate", event.getDate());
+        eventData.put("eventName", event.getEventName());
+        eventData.put("eventDate", event.getEventDate());
         eventData.put("qrCodeHash", qrCodeHash);  // Store the hash in the event data
 
-        eventRf.document(event.getName()).set(eventData)
+        eventRf.document(event.getEventName()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Event with QR code hash successfully added!"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error adding event with QR code hash", e));
     }

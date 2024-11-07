@@ -51,9 +51,6 @@
         <activity android:name=".activity.ManageFacilityActivity" />
         <activity android:name=".activity.CreateEventActivity" />
         <activity android:name=".activity.UserEventActivity" />
-        <receiver android:name=".NotificationSystem"
-            android:process=":remote">
-        </receiver>
     </application>
 
 </manifest>

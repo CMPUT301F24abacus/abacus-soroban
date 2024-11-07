@@ -52,7 +52,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     // Action after scanning QRCode
     private void retrieveEventDetails(String qrCodeHash) {
-        FireBaseController dbController = new FireBaseController();
+        FireBaseController dbController = new FireBaseController(this);
         dbController.getEventByQRCodeHash(qrCodeHash, event -> {
             if (event != null) {
                 // Pass the event data to EventRegistrationActivity
