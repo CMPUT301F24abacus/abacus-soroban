@@ -3,12 +3,14 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.OrganizerEventViewDetailsActivity;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.model.Event;
@@ -71,6 +73,17 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         // Set up RecyclerView
         eventAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventAdapter);
+
+        // Set up click listener for organizer's events
+        eventsListView.setOnItemClickListener((parent,view,position,id)->{
+            Intent intent = new Intent(OrganizerDashboardActivity.this, OrganizerEventViewDetailsActivity.class);
+            Event selectedEvent = events.get(position);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser", appUser);
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+        });
 
         // Set up "Create Event" button click listener
         createEventButton.setOnClickListener(v -> {
