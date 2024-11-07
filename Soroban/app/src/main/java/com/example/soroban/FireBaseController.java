@@ -526,7 +526,6 @@ public class FireBaseController implements Serializable {
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
 
-
     /**
      * Update User document's hosted events in FireBase.
      * @Author: Matthieu Larochelle, Kevin Li
@@ -665,7 +664,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -694,7 +693,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
