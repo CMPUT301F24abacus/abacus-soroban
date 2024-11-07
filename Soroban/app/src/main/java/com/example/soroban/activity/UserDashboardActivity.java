@@ -15,6 +15,7 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
+import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
