@@ -2,228 +2,104 @@
 <!-- res/layout/activity_create_event.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/moon"
     android:padding="16dp">
 
-    <LinearLayout
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/eventCreateTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Create Event"
-            android:textColor="@color/color_registration_open"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:title="Create Event"
+        android:titleTextColor="#FFFFFF"/>
 
     <!-- Event Name Input -->
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Event Name"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/eventNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Name:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/eventNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter event name (max x chars)"
-            android:inputType="text"
-            android:textColor="@color/background_light"
-            android:textColorHint="@color/text_secondary" />
-    </LinearLayout>
+        android:hint="Enter event name"
+        android:inputType="text"
+        android:textColor="@color/background_light"
+        android:textColorHint="@color/text_secondary" />
 
     <!-- Event Date Input -->
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Event Date"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/eventDateSelectButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Date:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/eventDateSelectButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_background_green"
-            android:text="Select Event Date" />
-    </LinearLayout>
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/button_background_green"
+        android:text="Select Event Date" />
 
     <!-- Draw Date Input -->
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Draw Date"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/drawDateSelectButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Description:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/eventNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter event description (max x chars)"
-            android:inputType="textMultiLine"
-            android:textColor="@color/background_light"
-            android:textColorHint="@color/text_secondary" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Event Poster:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/buttonUploadPoster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_background_green"
-            app:srcCompat="@android:drawable/ic_menu_upload" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Draw Date:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/drawDateSelectButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_background_green"
-            android:text="Select Draw Date" />
-    </LinearLayout>
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/button_background_green"
+        android:text="Select Draw Date" />
 
     <!-- Sample Size Input -->
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Sample size"
+        android:textColor="@color/color_registration_open"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/sampleSizeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sample Size:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/sampleSizeEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter sample size"
-            android:inputType="number"
-            android:textColor="@color/background_light"
-            android:textColorHint="@color/text_secondary" />
-    </LinearLayout>
+        android:hint="Enter sample size"
+        android:inputType="number"
+        android:textColor="@color/background_light"
+        android:textColorHint="@color/text_secondary" />
 
 
     <!-- Save Button -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/eventGeoReqTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Geological Requirement:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Switch
-            android:id="@+id/eventGeoReqSwitch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/eventAutoReplaceTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Automatic Replacement:"
-            android:textColor="@color/color_registration_open"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Switch
-            android:id="@+id/eventAutoReplaceSwitch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true" />
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/saveEventButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/notification_positive_background"
         android:text="Save Event"
         android:textColor="#FFFFFF" />
@@ -234,6 +110,7 @@
         android:id="@+id/generateQrCodeButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/notification_positive_background"
         android:text="Generate QR Code"
         android:textColor="#FFFFFF" />
