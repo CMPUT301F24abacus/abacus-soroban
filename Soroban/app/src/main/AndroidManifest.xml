@@ -51,6 +51,7 @@
         <activity android:name=".activity.ManageFacilityActivity" />
         <activity android:name=".activity.CreateEventActivity" />
         <activity android:name=".activity.UserEventActivity" />
+        <activity android:name=".activity.AdminDashboardActivity" />
     </application>
 
 </manifest>
