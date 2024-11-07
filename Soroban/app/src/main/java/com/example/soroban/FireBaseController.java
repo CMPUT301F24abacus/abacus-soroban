@@ -625,4 +625,103 @@ public class FireBaseController implements Serializable {
         eventRf.document(event.getEventName() + ", " + user.getDeviceId())
                 .collection("notGoing").document(user.getDeviceId()).set(data);
     }
+
+    /**
+     * Remove Event document from waitlist, while Removing User document as well.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeFromWaitListDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, waitlist may not include event.", e));
+
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("waitingEntrants").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove Event document from attendee list, while Removing User document as well.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeAttendeeDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, attendee list may not include event.", e));
+
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("attendees").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove User document from Invited.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeInvitedDoc(Event event, User user) {
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("invitedEntrants").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove User document from NotGoing.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User to be removed.
+     */
+    public void removeThoseNotGoingDoc(Event event, User user) {
+        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("notGoing").document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "User Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+
+
 }
