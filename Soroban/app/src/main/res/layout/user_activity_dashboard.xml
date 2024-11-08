@@ -7,15 +7,14 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activity.UserDashboardActivity"
-    android:background="#FFFFFF">
+    android:background="@drawable/moon"> <!-- Set background image -->
 
     <!-- Top Dashboard title and Icons -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp">
+        android:layout_height="61dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/tv_dashboard"
@@ -24,94 +23,89 @@
             android:text="Dashboard"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <!-- Notification, Profile, and Settings Icons -->
         <ImageView
             android:id="@+id/icon_settings"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginStart="8dp"
             android:contentDescription="Settings"
             android:src="@drawable/ic_settings"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@android:color/transparent"
+
+            android:layout_marginStart="8dp" />
 
         <ImageView
             android:id="@+id/icon_notifications"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:contentDescription="Notifications"
-            android:src="@drawable/ic_notifications"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_notifications1"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@id/icon_settings"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp" />
 
         <ImageView
             android:id="@+id/icon_profile"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginEnd="8dp"
             android:contentDescription="Profile"
             android:src="@drawable/ic_profile"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/icon_notifications"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Events Wait-listed For -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:text="Waitlisted Events:"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <ListView
-            android:id="@+id/list_waitlisted_events"
-            android:layout_width="match_parent"
-            android:layout_height="196dp"
-            android:background="@color/light_gray"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp" />
-    </LinearLayout>
+        android:text="Events Wait-listed For:"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"/>
 
     <!-- Confirmed Events -->
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/list_waitlisted_events"
+        android:layout_width="match_parent"
+        android:layout_height="191dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:background="#33334F"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
+        android:paddingBottom="8dp"
+        android:text="Confirmed Events:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="2dp"
-            android:text="Confirmed Registrations:"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <ListView
-            android:id="@+id/list_confirmed_events"
-            android:layout_width="match_parent"
-            android:layout_height="196dp"
-            android:background="@color/light_gray"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp" />
-    </LinearLayout>
+    <ListView
+        android:id="@+id/list_confirmed_events"
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:background="#33334F"/>
 
     <!-- Action Buttons -->
     <LinearLayout
@@ -122,13 +116,13 @@
 
         <Button
             android:id="@+id/btn_scan_qr_code"
+            style="@style/AppButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#A1CDA8"
-            android:text="Scan QR Code"
-            android:textColor="#000000" />
-
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Scan QR Code" />
     </LinearLayout>
 
-    <!-- Create/Manage Facility Button -->
 </LinearLayout>
