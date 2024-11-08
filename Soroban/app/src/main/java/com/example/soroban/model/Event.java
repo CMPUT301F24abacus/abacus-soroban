@@ -28,7 +28,7 @@ public class Event implements Serializable {
     private Integer sampleSize;
     private String eventDetails;
     private Bitmap QRCode;
-
+    private String qrCodeHash;
 
     /**
      * Constructor method for an Event.
@@ -53,7 +53,6 @@ public class Event implements Serializable {
         this.notGoing = new UserList();
         this.sampleSize = sampleSize;
     }
-
 
     /**
      * Destructor method for Event.
@@ -357,17 +356,22 @@ public class Event implements Serializable {
      * Randomly samples the Event's sample size number of entrants to be invited
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @return: Number of sampled users.
      */
-    public void sampleEntrants(){
+    public int sampleEntrants(){
         Random random = new Random();
-        int newRand = random.nextInt(sampleSize);
-        for(int i = 0; i < sampleSize; i++) {
-            addInvited(invitedEntrants.get(newRand));
-            int prevRand = newRand;
-            while(newRand == prevRand){
-                newRand = random.nextInt(sampleSize);
+        int sampleNumber = Math.min(sampleSize, waitingEntrants.size()); // Either sample specified number or all waitingEntrants
+        int newRand = random.nextInt(waitingEntrants.size());
+        for(int i = 0; i < sampleNumber; i++) {
+            addInvited(waitingEntrants.get(newRand));
+            removeFromWaitingEntrants(waitingEntrants.get(newRand));
+            if(waitingEntrants.size() <= 1){
+                newRand = 0;
+            }else{
+                newRand = random.nextInt(waitingEntrants.size());
             }
         }
+        return sampleNumber;
     }
 
 
@@ -389,6 +393,20 @@ public class Event implements Serializable {
         }
         Event mockEvent = (Event) o;
         return Objects.equals(owner, mockEvent.getOwner()) && Objects.equals(eventName, mockEvent.getEventName()) && Objects.equals(eventDate,  mockEvent.getEventDate()) && Objects.equals(drawDate,  mockEvent.getDrawDate()) && Objects.equals(sampleSize,  mockEvent.getSampleSize()) && Objects.equals(maxEntrants,  mockEvent.getMaxEntrants());
+    }
+
+    /**
+     * Getter and Setter for the QR code hash
+     * @Author: Edwin M
+     * @Version: 1.0
+     */
+    //
+    public String getQrCodeHash() {
+        return qrCodeHash;
+    }
+
+    public void setQrCodeHash(String qrCodeHash) {
+        this.qrCodeHash = qrCodeHash;
     }
 
 

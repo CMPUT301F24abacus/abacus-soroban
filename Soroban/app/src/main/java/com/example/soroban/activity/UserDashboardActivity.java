@@ -113,7 +113,7 @@ public class UserDashboardActivity extends AppCompatActivity {
             Bundle newArgs = new Bundle();
             newArgs.putSerializable("selectedEvent", selectedEvent);
             newArgs.putSerializable("appUser", appUser);
-            newArgs.putString("listType", "registeredEvents");
+            newArgs.putString("listType", "waitList");
             intent.putExtras(newArgs);
             startActivity(intent);
 
@@ -128,7 +128,6 @@ public class UserDashboardActivity extends AppCompatActivity {
             newArgs.putString("listType", "registeredEvents");
             intent.putExtras(newArgs);
             startActivity(intent);
-
         });
 
 

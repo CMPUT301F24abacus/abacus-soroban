@@ -44,6 +44,8 @@ public class CreateFacilityActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
+        Toast.makeText(this, "Set up your facility profile in order to organize events", Toast.LENGTH_SHORT).show();
+
         // Initialize views
         EditText editTextFacilityName = findViewById(R.id.editTextFacilityName);
         EditText editTextFacilityDetails = findViewById(R.id.editTextFacilityDetails);
