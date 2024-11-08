@@ -31,6 +31,24 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        browseProfileBtn.setOnClickListener( v -> {
+            Intent intent;
+            intent = new Intent(AdminDashboardActivity.this, AdminBrowseProfileActivity.class);
+            startActivity(intent);
+        });
+
+        browseFacilityBtn.setOnClickListener( v -> {
+            Intent intent;
+            intent = new Intent(AdminDashboardActivity.this, AdminBrowseFacilityActivity.class);
+            startActivity(intent);
+        });
+
+        browseImageBtn.setOnClickListener( v -> {
+            Intent intent;
+            intent = new Intent(AdminDashboardActivity.this, AdminBrowseImagesActivity.class);
+            startActivity(intent);
+        });
+
 
     }
 
