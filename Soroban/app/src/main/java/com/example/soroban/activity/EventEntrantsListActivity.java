@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -16,6 +17,7 @@ import com.example.soroban.model.User;
 public class EventEntrantsListActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
+    private FireBaseController fireBaseController;
     private Button usersWaitlisted;
     private Button usersInvited;
     private Button usersCancelled;
@@ -54,6 +56,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
+        fireBaseController = new FireBaseController(this);
 
         // Assign button variables to views
         usersWaitlisted = findViewById(R.id.buttonWaitlistedUsers);
@@ -102,6 +105,11 @@ public class EventEntrantsListActivity extends AppCompatActivity {
         sampleEntrants.setOnClickListener(v ->{
             int numberSampled = selectedEvent.sampleEntrants();
             Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
+            // Update Firebase to recognize invited users
+            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
+                fireBaseController.updateInvited(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+                fireBaseController.removeFromWaitListDoc(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+            }
         });
 
     }
