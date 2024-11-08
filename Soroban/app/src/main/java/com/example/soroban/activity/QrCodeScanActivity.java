@@ -53,12 +53,10 @@ public class QrCodeScanActivity extends AppCompatActivity {
     // Action after scanning QRCode
     private void retrieveEventDetails(String qrCodeHash) {
         FireBaseController dbController = new FireBaseController(this);
-        dbController.getEventByQRCodeHash(qrCodeHash, event -> {
+        dbController.fetchQRCodeHash(qrCodeHash, event -> {
             if (event != null) {
                 // Pass the event data to EventRegistrationActivity
                 Intent intent = new Intent(QrCodeScanActivity.this, EventRegistrationActivity.class);
-                intent.putExtra("eventName", event.getEventName());
-                intent.putExtra("eventDate", event.getEventDate().toString());
                 intent.putExtra("eventHash", qrCodeHash);
                 startActivity(intent);
             } else {
