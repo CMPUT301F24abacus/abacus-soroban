@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/browse_profile_text"
+        android:layout_width="216dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="32dp"
+        android:text="Browse Profiles"
+        android:textAlignment="textStart"
+        android:textSize="25sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_admin_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="?android:attr/dividerVertical"
+        android:dividerHeight="8dp"
+        tools:listitem="@layout/user_item"/>
+
+</LinearLayout>

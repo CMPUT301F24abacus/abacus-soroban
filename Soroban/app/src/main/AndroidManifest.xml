@@ -51,6 +51,11 @@
         <activity android:name=".activity.ManageFacilityActivity" />
         <activity android:name=".activity.CreateEventActivity" />
         <activity android:name=".activity.UserEventActivity" />
+        <activity android:name=".activity.AdminDashboardActivity" />
+        <activity android:name=".activity.AdminBrowseEventActivity" />
+        <activity android:name=".activity.AdminBrowseFacilityActivity" />
+        <activity android:name=".activity.AdminBrowseProfileActivity" />
+        <activity android:name=".activity.AdminBrowseImagesActivity" />
         <activity android:name=".OrganizerEventViewDetailsActivity"/>
         <activity android:name=".activity.EventEntrantsListActivity"/>
         <activity android:name=".activity.EventUsersWaitlistedActivity"/>

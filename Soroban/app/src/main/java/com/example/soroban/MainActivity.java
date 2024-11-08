@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.example.soroban.activity.AdminDashboardActivity;
 import com.example.soroban.activity.CreateFacilityActivity;
 import com.example.soroban.activity.OrganizerDashboardActivity;
 import com.example.soroban.activity.UserDashboardActivity;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         // Get reference to the button
         Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
         Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
+        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
 
         // Set up a click listener to navigate to UserDashboardActivity
         btnOpenDashboard.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("appUser", appUser);
                 startActivity(intent);
             }
+        });
+
+        btnOpenAdminDashboard.setOnClickListener( v -> {
+            Intent intent;
+            intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
+            startActivity(intent);
         });
 
     }
