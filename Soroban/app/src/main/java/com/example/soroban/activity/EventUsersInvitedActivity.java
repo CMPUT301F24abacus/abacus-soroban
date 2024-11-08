@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.UserArrayAdapter;
+import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
@@ -76,7 +77,8 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Send message popup", Toast.LENGTH_SHORT).show();
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "invited");
+            fragment.show(getSupportFragmentManager(), "Send Message");
         });
 
         withdrawInvite.setOnClickListener(v -> {
