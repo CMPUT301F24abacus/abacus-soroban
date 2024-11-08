@@ -28,6 +28,7 @@ public class Event implements Serializable {
     private Integer sampleSize;
     private String eventDetails;
     private Bitmap QRCode;
+    private int numberOfNotifications = 0; // Does not need to be stored in Firebase.
 
 
     /**
@@ -220,6 +221,30 @@ public class Event implements Serializable {
 
     public void setEventDetails(String eventDetails) {
         this.eventDetails = eventDetails;
+    }
+
+    /**
+     * Getter method for an Event's Number of Notifications.
+     * This is the current number of scheduled notifications an Event is outputting during this app's runtime.
+     * It is not stored in Firebase and is reset when the app is reloaded.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: Number of currently scheduled notifications.
+     */
+    public int getNumberOfNotifications() {
+        return numberOfNotifications;
+    }
+
+    /**
+     * Adds one an Event's Number of Notifications.
+     * This is the current number of scheduled notifications an Event is outputting during this app's runtime.
+     * It is not stored in Firebase and is reset when the app is reloaded.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: Number of currently scheduled notifications.
+     */
+    public void addNumberOfNotifications() {
+        this.numberOfNotifications  += 1;
     }
 
     /**

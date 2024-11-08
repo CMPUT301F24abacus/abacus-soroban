@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -172,6 +173,7 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
+
 
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
@@ -383,7 +385,8 @@ public class FireBaseController implements Serializable {
                                 if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
                                     Log.e("Firestore", notificationEventName + notificationTitle + notificationMessage);
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
-                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationTitle + " : " + notificationEventName, notificationMessage);
+                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationEventName + " : " + notificationTitle, notificationMessage);
+                                    removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
                                 }
                             }
                         } else {
@@ -392,7 +395,6 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
-
 
     /**
      * Update User document's facility field in FireBase.
@@ -414,6 +416,25 @@ public class FireBaseController implements Serializable {
                         Log.e("Firestore", "Didn't find Facility!");
                     }
                 });
+    }
+
+    /**
+     * Update User's notifications collection.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param user: User for which the notification is being added.
+     * @param notification: Notification which is being added.
+     */
+    public void updateUserNotifications(User user, Notification notification) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("title", notification.getTitle());
+        data.put("date", notification.getTime());
+        data.put("message", notification.getMessage());
+        data.put("eventName", notification.getEvent().getEventName());
+        data.put("number", notification.getNumber());
+        userRf.document(user.getDeviceId())
+                .collection("notifications").document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + notification.getNumber())
+                .set(data);
     }
 
     /**
@@ -826,6 +847,26 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
     }
+
+    /**
+     * Remove Notifcation document from User's notifications collection.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param notificationRef: Document name of the notification to be removed.
+     * @param user: User who's notification is being removed.
+     */
+    public void removeNotificationDoc(String notificationRef, User user) {
+        userRf.document(user.getDeviceId()).collection("notifications").document(notificationRef)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Notification Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting notification.", e));
+    }
+
 
     /**
      * Remove User document from Invited.

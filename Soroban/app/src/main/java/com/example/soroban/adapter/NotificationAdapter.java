@@ -34,7 +34,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
         holder.titleTextView.setText(notification.getTitle());
-        //holder.timeTextView.setText(notification.getTime());
+        /*holder.timeTextView.setText(notification.getTime());
         holder.eventTextView.setText(notification.getEvent());
 
         // Set background color based on notification type
@@ -50,7 +50,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 break;
         }
 
-        // Set the icon based on the muted state
+         Set the icon based on the muted state
         if (notification.isMuted()) {
             holder.muteIcon.setImageResource(R.drawable.ic_mute);
         } else {
@@ -70,7 +70,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notificationList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, notificationList.size()); // Notify range change to update the list
-        });
+        });*/
     }
 
     @Override
@@ -81,7 +81,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     // Method to mute all notifications
     public void muteAllNotifications() {
         for (Notification notification : notificationList) {
-            notification.setMuted(true);
+            //notification.setMuted(true);
         }
         notifyDataSetChanged();
     }
