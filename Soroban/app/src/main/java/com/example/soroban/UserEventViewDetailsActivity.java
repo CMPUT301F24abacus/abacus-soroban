@@ -1,6 +1,7 @@
 package com.example.soroban;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,12 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.model.Event;
+import com.example.soroban.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class UserEventViewDetailsActivity extends AppCompatActivity {
+    private User appUser;
     private Event event;
+    private FireBaseController firebaseController;
     private TextView eventName;
     private TextView eventDate;
     private ImageView eventPoster;
@@ -28,12 +33,24 @@ public class UserEventViewDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_event_view_details);
 
-        // Retrieve event data from intent
-        event = (Event) getIntent().getSerializableExtra("eventData");
-        if (event == null) {
-            Toast.makeText(this, "Event data not available", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+        Bundle args = getIntent().getExtras();
+
+        // Initialize appUser and selected Event for this activity.
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                event = args.getSerializable("event", Event.class);
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+                event = (Event) args.getSerializable("event");
+            }
+
+            if(appUser == null || event == null){
+                throw new IllegalArgumentException("Must pass object of type User and Event to initialize appUser.");
+            }
+
+        }else{
+            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
         // Initialize views
@@ -54,9 +71,16 @@ public class UserEventViewDetailsActivity extends AppCompatActivity {
 
         // Handle Join Waiting List button click
         joinWaitingList.setOnClickListener(v -> {
+            // If there is room for user to join event
+            if(event.getMaxEntrants() > event.getWaitingEntrants().size()){
+                appUser.addToWaitlist(event);
+                firebaseController.updateUserWaitList(appUser,event);
+                firebaseController.updateEventWaitList(event,appUser);
+                Toast.makeText(this, "Added to " + event.getEventName() + " wait list.", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Sorry, this event has reached its maximum number of entrants", Toast.LENGTH_SHORT).show();
+            }
 
-            // implementation in progress, update Firebase
-            Toast.makeText(this, "Added to waiting list", Toast.LENGTH_SHORT).show();
         });
     }
 }
