@@ -21,11 +21,6 @@
             android:text="Waitlisted Users"
             android:textSize="24sp" />
 
-        <CheckBox
-            android:id="@+id/selectAllUsersCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
     </LinearLayout>
 
     <ListView
@@ -40,26 +35,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/buttonRejectUsers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Reject"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSendMessageToUsers" />
-
-        <Button
-            android:id="@+id/buttonInviteUsers"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:text="Invite"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSendMessageToUsers" />
 
         <Button
             android:id="@+id/buttonSendMessageToUsers"
