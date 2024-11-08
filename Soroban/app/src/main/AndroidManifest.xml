@@ -57,6 +57,8 @@
         <activity android:name=".activity.EventUsersConfirmedActivity"/>
         <activity android:name=".activity.EventUsersCancelledActivity"/>
         <activity android:name=".activity.EventUsersInvitedActivity"/>
+        <activity android:name=".EventDetailsActivity" />
+
     </application>
 
 </manifest>

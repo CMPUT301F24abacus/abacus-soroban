@@ -72,7 +72,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
 
-
     private void showCamera() {
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);

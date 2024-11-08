@@ -157,6 +157,7 @@ public class FireBaseController implements Serializable {
         data.put("owner", userDoc);
         data.put("facility", facilityDoc);
         data.put("eventName", event.getEventName());
+        data.put("eventDetails", event.getEventDetails());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
@@ -573,22 +574,37 @@ public class FireBaseController implements Serializable {
     }
 
     public void fetchEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
-    eventRf.whereEqualTo("QRHash", qrCodeHash)
-        .get()
-        .addOnSuccessListener(querySnapshot -> {
-            if (!querySnapshot.isEmpty()) {
-                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                Event event = document.toObject(Event.class);
-                onSuccessListener.onSuccess(event);
-            } else {
-                onSuccessListener.onSuccess(null); // Event not found
-            }
-        })
-        .addOnFailureListener(e -> {
-            Log.e("Firestore", "Error fetching event by QR code hash", e);
-            onSuccessListener.onSuccess(null);
-        });
+        eventRf.whereEqualTo("QRHash", qrCodeHash)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
+                        // Manually retrieve specific fields
+                        String eventName = document.getString("eventName");
+                        String qrHash = document.getString("QRHash");
+                        Date eventDate = document.getDate("eventDate");
+                        String eventDetails = document.getString("eventDetails");
+
+
+                        // Create a new Event object with only the necessary data
+                        Event event = new Event();
+                        event.setEventName(eventName);
+                        event.setQrCodeHash(qrHash);
+                        event.setEventDate(eventDate);
+                        event.setEventDetails(eventDetails);
+
+                        onSuccessListener.onSuccess(event);
+                    } else {
+                        onSuccessListener.onSuccess(null); // Event not found
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching event by QR code hash", e);
+                    onSuccessListener.onSuccess(null);
+                });
     }
+
 
 
     /**
