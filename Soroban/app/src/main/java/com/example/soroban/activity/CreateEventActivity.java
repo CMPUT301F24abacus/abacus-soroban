@@ -89,11 +89,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         autoReplaceButton = findViewById(R.id.eventAutoReplaceSwitch);
         saveEventButton = findViewById(R.id.saveEventButton);
 
-        // QRCode
-        generateQrCodeButton = findViewById(R.id.generateQrCodeButton);
-        qrCodeLabel = findViewById(R.id.qrCodeLabel);
-        qrCodeImageView = findViewById(R.id.qrCodeImageView);
-
         eventPosterUploadButton.setOnClickListener(v -> {
             Toast.makeText(this, "WIP - Implement upload image prompt", Toast.LENGTH_SHORT).show();
         });
@@ -103,14 +98,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             @Override
             public void onClick(View v) {
                 saveEvent();
-            }
-        });
-
-        // Set up Generate QR Code button click listener
-        generateQrCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateAndDisplayQRCode();
             }
         });
 
@@ -183,8 +170,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             return;
         }
 
-        // Create a new Event object
+        // Generate QR code hash
+        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(eventDate);
+        String uniqueIdentifier = eventName + formattedEventDate + appUser.getDeviceId();
+        String qrCodeHash = generateHash(uniqueIdentifier);
+
+        // Create a new Event object and set QR code hash
         Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        newOrganizerEvent.setQrCodeHash(qrCodeHash);
 
         // Add the event to the list and database
         UserController userController = new UserController(appUser);
@@ -206,36 +199,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             eventDate = givenDate;
         } else {
             drawDate = givenDate;
-        }
-    }
-
-    // QRCode
-    private void generateAndDisplayQRCode() {
-        String eventName = eventNameEditText.getText().toString().trim();
-        String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(eventDate);
-
-        if (eventName.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields before generating QR code", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Generate a unique hash for the QR code content
-        String qrCodeHash = generateHash(eventName + formattedEventDate);
-
-        // Generate the QR code using the hash as content
-        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
-        DateFormat dateFormat = new SimpleDateFormat();
-
-        // Generate QR Code using QRCodeGenerator utility class
-
-        if (qrCodeBitmap != null) {
-            // Set the QR code bitmap to the ImageView and make it visible
-            qrCodeImageView.setImageBitmap(qrCodeBitmap);
-            qrCodeImageView.setVisibility(View.VISIBLE);
-            qrCodeLabel.setVisibility(View.VISIBLE);
-
-        } else {
-            Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
         }
     }
 

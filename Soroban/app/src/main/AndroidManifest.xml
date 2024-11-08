@@ -52,6 +52,11 @@
         <activity android:name=".activity.CreateEventActivity" />
         <activity android:name=".activity.UserEventActivity" />
         <activity android:name=".OrganizerEventViewDetailsActivity"/>
+        <activity android:name=".activity.EventEntrantsListActivity"/>
+        <activity android:name=".activity.EventUsersWaitlistedActivity"/>
+        <activity android:name=".activity.EventUsersConfirmedActivity"/>
+        <activity android:name=".activity.EventUsersCancelledActivity"/>
+        <activity android:name=".activity.EventUsersInvitedActivity"/>
     </application>
 
 </manifest>

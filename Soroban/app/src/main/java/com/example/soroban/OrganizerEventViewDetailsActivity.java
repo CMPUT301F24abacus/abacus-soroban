@@ -1,14 +1,17 @@
 package com.example.soroban;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.activity.EventEntrantsListActivity;
@@ -93,8 +96,33 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement viewing event QR code", Toast.LENGTH_SHORT).show();
+            FireBaseController firebaseController = new FireBaseController(this);
+
+            firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+                if (qrCodeHash != null) {
+                    // Generate the QR code bitmap using the hash from firebase
+                    Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
+                    if (qrCodeBitmap != null) {
+                        // Inflate the custom dialog layout
+                        View dialogView = getLayoutInflater().inflate(R.layout.activity_view_qr_code, null);
+                        ImageView qrCodeImageView = dialogView.findViewById(R.id.qrCodeImageView);
+                        qrCodeImageView.setImageBitmap(qrCodeBitmap); // Set the QR code bitmap
+                        // Pop-up the QRCode Image
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setView(dialogView);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        // Dismiss QRCode Image when touching outside or pressing the back button
+                        dialog.setCanceledOnTouchOutside(true);
+                    } else {
+                        Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "QR code not available", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
 
         eventGeolocation.setOnClickListener(v -> {
             Toast.makeText(this, "WIP - Implement viewing where entrants are located", Toast.LENGTH_SHORT).show();
@@ -102,6 +130,10 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         viewEntrants.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsListActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
             startActivity(intent);
         });
 
