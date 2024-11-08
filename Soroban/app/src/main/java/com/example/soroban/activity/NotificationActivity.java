@@ -21,13 +21,14 @@ import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.adapter.NotificationAdapter;
 import com.example.soroban.fragment.AcceptInviteFragment;
+import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
 import java.util.ArrayList;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements DialogFragmentListener {
     private User appUser;
     private FireBaseController fireBaseController;
     private ListView notififcationsView;
@@ -76,5 +77,10 @@ public class NotificationActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void updateAdapter() {
+        adapter.notifyDataSetChanged();
     }
 }

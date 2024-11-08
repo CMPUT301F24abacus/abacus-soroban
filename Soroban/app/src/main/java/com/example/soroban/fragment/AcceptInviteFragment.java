@@ -2,6 +2,7 @@ package com.example.soroban.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ public class AcceptInviteFragment extends DialogFragment {
     private Event selectedEvent;
     private User appUser;
     private FireBaseController fireBaseController;
+    private DialogFragmentListener listener;
 
     public static AcceptInviteFragment newInstance(Event selectedEvent, User appUser) {
 
@@ -37,6 +39,16 @@ public class AcceptInviteFragment extends DialogFragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof DialogFragmentListener){
+            listener = (DialogFragmentListener) context;
+        }else{
+            throw new RuntimeException(context + "must implement DialogFragmentListener");
+        }
+    }
 
     @NonNull
     @Override
@@ -79,25 +91,27 @@ public class AcceptInviteFragment extends DialogFragment {
             //User rejects invitation
 
             // Perform local changes
-            selectedEvent.removeFromInvited(appUser);
-            selectedEvent.addToNotGoing(appUser);
+            selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
+            selectedEvent.addToNotGoing(selectedEvent.getInvitedEntrants().find(appUser));
+            listener.updateAdapter();
 
             // Perform Firebase changes
-            fireBaseController.updateUserRegistered(appUser, selectedEvent);
-            fireBaseController.updateAttendees(selectedEvent, appUser);
-            fireBaseController.removeAttendeeDoc(selectedEvent, appUser);
+            fireBaseController.updateThoseNotGoing(selectedEvent, appUser);
+            fireBaseController.removeInvitedDoc(selectedEvent, appUser);
         });
         builder.setPositiveButton("Accept", (dialog, which) -> {
             //User accepts invitation
 
             // Perform local changes
-            selectedEvent.removeFromInvited(appUser);
-            selectedEvent.addAttendee(appUser);
+            selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
+            selectedEvent.addAttendee(selectedEvent.getInvitedEntrants().find(appUser));
+            listener.updateAdapter();
 
             // Perform Firebase changes
             fireBaseController.updateUserRegistered(appUser, selectedEvent);
             fireBaseController.updateAttendees(selectedEvent, appUser);
             fireBaseController.removeInvitedDoc(selectedEvent, appUser);
+            listener.updateAdapter();
         });
 
         return builder.create();
