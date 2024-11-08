@@ -39,4 +39,14 @@
         android:layout_margin="8dp"
         android:backgroundTint="@color/color_spot_confirmed"
         android:text="Confirmed Entrants" />
+
+    <Button
+        android:id="@+id/buttonSampleUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="Sample Entrants" />
+
+
 </LinearLayout>

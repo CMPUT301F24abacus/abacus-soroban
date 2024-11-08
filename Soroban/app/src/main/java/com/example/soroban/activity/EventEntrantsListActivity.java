@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,11 +20,12 @@ public class EventEntrantsListActivity extends AppCompatActivity {
     private Button usersInvited;
     private Button usersCancelled;
     private Button usersConfirmed;
+    private Button sampleEntrants;
 
     /**
      * Called when this activity is first created.
      * @param savedInstanceState
-     * Author: Aaryan Shetty
+     * Author: Matthieu Larochelle, Aaryan Shetty
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
         usersInvited = findViewById(R.id.buttonInvitedUsers);
         usersCancelled = findViewById(R.id.buttonCancelledUsers);
         usersConfirmed = findViewById(R.id.buttonConfirmedUsers);
+        sampleEntrants = findViewById(R.id.buttonSampleUsers);
 
         // Set up reactions for when the buttons are clicked
         usersWaitlisted.setOnClickListener(v -> {
@@ -94,6 +97,11 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             newArgs.putSerializable("appUser", appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
+        });
+
+        sampleEntrants.setOnClickListener(v ->{
+            int numberSampled = selectedEvent.sampleEntrants();
+            Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
         });
 
     }
