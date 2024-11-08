@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.soroban.FireBaseController;
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
