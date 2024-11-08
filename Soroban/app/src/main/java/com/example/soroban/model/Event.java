@@ -327,8 +327,8 @@ public class Event implements Serializable {
      * @Version: 1.0
      * @param user : User.
      */
-    public void addInvited(User user){
-        invitedEntrants.addUser(user);
+    public Boolean addInvited(User user){
+        return invitedEntrants.addUser(user);
     }
 
     /**
@@ -337,8 +337,8 @@ public class Event implements Serializable {
      * @Version: 1.0
      * @param user  User.
      */
-    public void removeFromInvited(User user){
-        invitedEntrants.remove(user);
+    public Boolean removeFromInvited(User user){
+        return invitedEntrants.remove(user);
     }
 
     /**

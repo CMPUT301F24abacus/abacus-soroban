@@ -91,6 +91,9 @@ public class UserDashboardActivity extends AppCompatActivity {
         notificationsIcon.setOnClickListener(v -> {
             // Action for notification Icon
             Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
             startActivity(intent);
         });
 
