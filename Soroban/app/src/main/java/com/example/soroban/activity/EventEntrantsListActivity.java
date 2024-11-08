@@ -12,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
+
+import java.util.Calendar;
 
 public class EventEntrantsListActivity extends AppCompatActivity {
     private Event selectedEvent;
@@ -105,11 +108,25 @@ public class EventEntrantsListActivity extends AppCompatActivity {
         sampleEntrants.setOnClickListener(v ->{
             int numberSampled = selectedEvent.sampleEntrants();
             Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
+            // Schedule a new notification for all relevant users
+            selectedEvent.addNumberOfNotifications();
+
             // Update Firebase to recognize invited users
             for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
                 fireBaseController.updateInvited(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
                 fireBaseController.removeFromWaitListDoc(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+
+                // Notify those invited entrants that they have been sampled
+                Notification newNotif = new Notification("You won the draw!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                fireBaseController.updateUserNotifications(selectedEvent.getInvitedEntrants().get(i), newNotif);
             }
+
+            // Notify those still on waiting list that they have not been sampled
+            for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
+                Notification newNotif = new Notification("You have no been chosen.", "", Calendar.getInstance().getTime(), selectedEvent,selectedEvent.getNumberOfNotifications());
+                fireBaseController.updateUserNotifications(selectedEvent.getWaitingEntrants().get(i), newNotif);
+            }
+
         });
 
     }

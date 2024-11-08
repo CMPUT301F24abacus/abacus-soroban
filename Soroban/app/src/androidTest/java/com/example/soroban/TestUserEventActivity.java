@@ -20,9 +20,11 @@ import android.os.Bundle;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.filters.LargeTest;
 
 import com.example.soroban.activity.OrganizerDashboardActivity;
 import com.example.soroban.activity.UserDashboardActivity;
+import com.example.soroban.activity.UserEventActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
@@ -35,6 +37,7 @@ import org.junit.runners.JUnit4;
 import java.util.Date;
 
 @RunWith(JUnit4.class)
+@LargeTest
 public class TestUserEventActivity {
 
     private User mockUser(){
@@ -65,7 +68,7 @@ public class TestUserEventActivity {
     public void testUserEventActivityDisplayed() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
         // Check if the unregister button is displayed
         onView(withId(R.id.btn_register)).check(matches(withText("Unregister")));
     }
@@ -76,7 +79,7 @@ public class TestUserEventActivity {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
         mockEvent.setEventDetails("Read A Certain Magical Index");
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
         // Check if details are correctly displayed
         onView(withId(R.id.event_name)).check(matches(withText(mockEvent.getEventName())));
         String eventDetails = "Event Date: " + mockEvent.getEventDate().toString() + "\nEvent Details: " + mockEvent.getEventDetails();
@@ -90,7 +93,7 @@ public class TestUserEventActivity {
         Event mockEvent = mockEvent(appUser);
         appUser.addToWaitlist(mockEvent);
         mockEvent.setEventDetails("Read A Certain Magical Index");
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "waitList"));
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "waitList"));
 
         onView(withId(R.id.btn_register)).perform(click());
         onView(withText("MockEvent")).check(doesNotExist());

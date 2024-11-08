@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -74,10 +78,11 @@ public class ManageProfileFragment extends DialogFragment {
         );
 
         // Get references to all views that will display a profile's information.
-        TextView firstNameEdit = view.findViewById(R.id.user_firstNameEdit);
-        TextView lastNameEdit = view.findViewById(R.id.user_lastNameEdit);
-        TextView emailEdit = view.findViewById(R.id.user_emailAddressEdit);
-        TextView phoneNumberEdit = view.findViewById(R.id.user_PhoneNumberEdit);
+        EditText firstNameEdit = view.findViewById(R.id.user_firstNameEdit);
+        EditText lastNameEdit = view.findViewById(R.id.user_lastNameEdit);
+        EditText emailEdit = view.findViewById(R.id.user_emailAddressEdit);
+        EditText phoneNumberEdit = view.findViewById(R.id.user_PhoneNumberEdit);
+        phoneNumberEdit.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         Bundle args = getArguments();
         if (args != null) {
@@ -144,12 +149,37 @@ public class ManageProfileFragment extends DialogFragment {
 
                 Button confirmButton = view.findViewById(R.id.confirmChangesButton);
                 confirmButton.setOnClickListener(v -> {
+
+                    String firstName = firstNameEdit.getText().toString();
+                    String lastName = lastNameEdit.getText().toString();
+                    String email = emailEdit.getText().toString();
+                    String phoneNumber = phoneNumberEdit.getText().toString();
+
+                    // Validate Input
+
+                    // If the user has chosen to enter a phone number
+                    if(!phoneNumber.isEmpty()){
+                        if (phoneNumber.replaceAll("\\D", "").length() < 10) {
+                            Toast.makeText(getContext(), "Please enter a 10 digit phone number.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    // If the user has chosen to enter an email
+                    if(!email.isEmpty()){
+                        if (!(email.contains("@")) || !(email.endsWith(".com"))) {
+                            Toast.makeText(getContext(), "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+
                     // Update user information through the UserController
                     userController.updateUser(
-                            firstNameEdit.getText().toString(),
-                            lastNameEdit.getText().toString(),
-                            emailEdit.getText().toString(),
-                            phoneNumberEdit.getText().toString()
+                            firstName,
+                            lastName,
+                            email,
+                            phoneNumber
                     );
                     fireBaseController.userUpdate(appUser);
 

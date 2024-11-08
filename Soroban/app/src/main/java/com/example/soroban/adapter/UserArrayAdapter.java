@@ -31,12 +31,12 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.user_item, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.organizer_event_entrant_item, parent,false);
         }
 
         User user = users.get(position);
 
-        TextView eventName = view.findViewById(R.id.tv_user_name);
+        TextView eventName = view.findViewById(R.id.userUsername);
 
         eventName.setText(user.getFirstName());
 
