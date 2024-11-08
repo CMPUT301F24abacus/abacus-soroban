@@ -32,6 +32,16 @@
         android:text="Event details and description go here."
         android:textColor="@color/white" />
 
+    <TextView
+        android:id="@+id/eventRegistrationStatusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="<Registration Status for Event>"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/event_qr_code"
         android:layout_width="120dp"
