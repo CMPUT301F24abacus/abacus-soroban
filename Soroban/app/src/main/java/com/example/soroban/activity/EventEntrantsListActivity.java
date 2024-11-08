@@ -114,6 +114,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             // Update Firebase to recognize invited users
             for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
                 fireBaseController.updateInvited(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+                fireBaseController.updateUserInvited(selectedEvent.getInvitedEntrants().get(i), selectedEvent);
                 fireBaseController.removeFromWaitListDoc(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
 
                 // Notify those invited entrants that they have been sampled
