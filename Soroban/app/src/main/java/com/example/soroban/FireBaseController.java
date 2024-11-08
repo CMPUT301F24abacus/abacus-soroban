@@ -466,10 +466,8 @@ public class FireBaseController implements Serializable {
      * @param notification: Notification which is being added.
      */
     public void updateUserNotifications(User user, Notification notification) {
-        final int[] numNotifs = {0};
 
         CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
-
         // Count current number of notifications
         notifcationRef
                 .get()
@@ -477,23 +475,24 @@ public class FireBaseController implements Serializable {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            int numNotifs = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                numNotifs[0]++;
+                                numNotifs++;
                             }
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("title", notification.getTitle());
+                            data.put("date", notification.getTime());
+                            data.put("message", notification.getMessage());
+                            data.put("eventName", notification.getEvent().getEventName());
+                            data.put("number", notification.getNumber());
+                            notifcationRef.document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + numNotifs)
+                                    .set(data);
                         } else {
                             Log.e("Firestore", "Something went wrong.");
                         }
                     }
                 });
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", notification.getTitle());
-        data.put("date", notification.getTime());
-        data.put("message", notification.getMessage());
-        data.put("eventName", notification.getEvent().getEventName());
-        data.put("number", notification.getNumber());
-        notifcationRef.document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + numNotifs[0])
-                .set(data);
     }
 
     /**
