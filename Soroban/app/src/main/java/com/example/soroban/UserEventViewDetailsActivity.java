@@ -38,11 +38,11 @@ public class UserEventViewDetailsActivity extends AppCompatActivity {
         // Initialize appUser and selected Event for this activity.
         if(args != null){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                event = args.getSerializable("selectedEvent", Event.class);
+                event = args.getSerializable("event", Event.class);
                 appUser = args.getSerializable("appUser", User.class);
             }else{
                 appUser = (User) args.getSerializable("appUser");
-                event = (Event) args.getSerializable("selectedEvent");
+                event = (Event) args.getSerializable("event");
             }
 
             if(appUser == null || event == null){
