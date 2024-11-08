@@ -24,7 +24,7 @@ public class FacilityControllerTest {
         FacilityController FacilityController = new FacilityController(newFacility);
         Date newDate = new Date(System.currentTimeMillis());
 
-        FacilityController.updateFacility("Sesame street library");
+        FacilityController.updateFacility("Sesame street library", "Library for Sesame Street");
 
         assertEquals("Sesame street library", newFacility.getName());
     }

@@ -469,8 +469,8 @@ public class FireBaseController implements Serializable {
      */
     public void facilityUpdate(Facility facility) {
         Map<String, Object> data = new HashMap<>();
-        data.put("facility", facility.getName());
-        data.put("details", facility.getDetails());
+        data.put("name", facility.getName());
+        data.put("details", facility.getDetails().toString());
 
         facilityRf
                 .document(facility.getOwner().getDeviceId())
