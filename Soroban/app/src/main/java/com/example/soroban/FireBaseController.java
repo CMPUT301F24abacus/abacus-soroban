@@ -158,7 +158,6 @@ public class FireBaseController implements Serializable {
         data.put("facility", facilityDoc);
         data.put("eventName", event.getEventName());
         data.put("eventDetails", event.getEventDetails());
-        data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
@@ -580,12 +579,11 @@ public class FireBaseController implements Serializable {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
 
-                        // Manually retrieve specific fields
+                        // Only retrieve specific fields
                         String eventName = document.getString("eventName");
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
                         String eventDetails = document.getString("eventDetails");
-
 
                         // Create a new Event object with only the necessary data
                         Event event = new Event();
@@ -604,8 +602,6 @@ public class FireBaseController implements Serializable {
                     onSuccessListener.onSuccess(null);
                 });
     }
-
-
 
     /**
      * Fetches an Event's Wailist of users collection in Firebase.
