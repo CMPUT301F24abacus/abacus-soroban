@@ -11,18 +11,17 @@ import java.util.Date;
 
 public class Notification {
     private String title;
+    private String message;
     private Date time;
-    private String event;
-    private boolean isMuted;
-    public enum NotificationType { BAD_NEWS, SPOT_CONFIRMED, REGISTRATION_OPEN }
-    private NotificationType type;
+    private Event event;
+    private int number;
 
-    public Notification(String title, Date time, String event, NotificationType type) {;
+    public Notification(String title, String message, Date time, Event event, int number) {;
         this.title = title;
+        this.message = message;
         this.time = time;
         this.event = event;
-        this.type = type;
-        this.isMuted = false; // Default to not muted
+        this.number = number;
     }
 
     public String getTitle() {
@@ -33,21 +32,15 @@ public class Notification {
         return time;
     }
 
-    public String getEvent() {
+    public Event getEvent() {
         return event;
     }
 
-    public NotificationType getType() {
-        return type;
+    public String getMessage() {
+        return message;
     }
 
-    public boolean isMuted() {
-        return isMuted;
+    public int getNumber() {
+        return number;
     }
-
-    public void setMuted(boolean muted) {
-        this.isMuted = muted;
-    }
-
-
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,6 +80,7 @@ public class FireBaseController implements Serializable {
                         fetchRegisteredDoc(user);
                         fetchNotificationDoc(user);
                         fetchHostedDoc(user);
+                        fetchInvitedDoc(user);
                     }else{
                         Log.d("Firestore", "User document not found.");
                         createUserDb(user);
@@ -172,6 +174,7 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
+
 
     /**
      * Fetches a User's document in Firebase. If its does not exist, creates a new one.
@@ -319,6 +322,45 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Fetches a User's InvitedEvents collection in Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: User for which fetching is required.
+     */
+    public void fetchInvitedDoc(User user) {
+        CollectionReference RegRef = userRf.document(user.getDeviceId()).collection("invitedEvents");
+        RegRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                User owner = new User((String) eventData.get("owner"));
+                                fetchUserDoc(owner);
+                                Facility facility = owner.getFacility();
+                                Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                if (eventData.get("maxEntrants") != null) {
+                                    Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                                    event.setMaxEntrants(maxEntrants);
+                                }
+                                fetchEventCancelledDoc(event);
+                                fetchEventInvitedDoc(event);
+                                fetchEventAttendeeDoc(event);
+                                user.addInvitedEvent(event);}
+                        } else {
+                            Log.e("Firestore", "Didn't find eventList!");
+                        }
+                    }
+                });
+    }
+
+    /**
      * Fetches a User's HostedEvents collection in Firebase.
      * @Author: Matthieu Larochelle, Kevin Li
      * @Version: 1.0
@@ -383,7 +425,8 @@ public class FireBaseController implements Serializable {
                                 if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
                                     Log.e("Firestore", notificationEventName + notificationTitle + notificationMessage);
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
-                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationTitle + " : " + notificationEventName, notificationMessage);
+                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationEventName + " : " + notificationTitle, notificationMessage);
+                                    removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
                                 }
                             }
                         } else {
@@ -392,7 +435,6 @@ public class FireBaseController implements Serializable {
                     }
                 });
     }
-
 
     /**
      * Update User document's facility field in FireBase.
@@ -414,6 +456,25 @@ public class FireBaseController implements Serializable {
                         Log.e("Firestore", "Didn't find Facility!");
                     }
                 });
+    }
+
+    /**
+     * Update User's notifications collection.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param user: User for which the notification is being added.
+     * @param notification: Notification which is being added.
+     */
+    public void updateUserNotifications(User user, Notification notification) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("title", notification.getTitle());
+        data.put("date", notification.getTime());
+        data.put("message", notification.getMessage());
+        data.put("eventName", notification.getEvent().getEventName());
+        data.put("number", notification.getNumber());
+        userRf.document(user.getDeviceId())
+                .collection("notifications").document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + notification.getNumber())
+                .set(data);
     }
 
     /**
@@ -448,8 +509,8 @@ public class FireBaseController implements Serializable {
      */
     public void facilityUpdate(Facility facility) {
         Map<String, Object> data = new HashMap<>();
-        data.put("facility", facility.getName());
-        data.put("details", facility.getDetails());
+        data.put("name", facility.getName());
+        data.put("details", facility.getDetails().toString());
 
         facilityRf
                 .document(facility.getOwner().getDeviceId())
@@ -505,7 +566,7 @@ public class FireBaseController implements Serializable {
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
-                .collection("waitList").document(event.getEventName()).set(data);
+                .collection("waitList").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
 
     }
 
@@ -526,7 +587,7 @@ public class FireBaseController implements Serializable {
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
-                .collection("registeredEvents").document(event.getEventName()).set(data);
+                .collection("registeredEvents").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
     }
 
     /**
@@ -546,7 +607,27 @@ public class FireBaseController implements Serializable {
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
-                .collection("hostedEvents").document(event.getEventName()).set(data);
+                .collection("hostedEvents").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
+    }
+
+    /**
+     * Update User document's invited events in FireBase.
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 1.0
+     * @param user: User for which updating is required.
+     * @param event: Event for which is added.
+     */
+    public void updateUserInvited(User user, Event event) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("eventName", event.getEventName());
+        data.put("eventDate", event.getEventDate());
+        data.put("drawDate", event.getEventDate());
+        data.put("maxEntrants", event.getMaxEntrants());
+        data.put("sampleSize", event.getSampleSize());
+        data.put("owner", event.getOwner().getDeviceId());
+        data.put("QRHash", event.getQrCodeHash());
+        userRf.document(user.getDeviceId())
+                .collection("invitedEvents").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
     }
 
     /**
@@ -724,7 +805,7 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .collection("waitingEntrants").document(user.getDeviceId()).set(data);
     }
 
@@ -742,7 +823,7 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .collection("attendees").document(user.getDeviceId()).set(data);
     }
 
@@ -779,7 +860,7 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .collection("notGoing").document(user.getDeviceId()).set(data);
     }
 
@@ -830,7 +911,7 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, attendee list may not include event.", e));
 
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("attendees").document(user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("attendees").document(user.getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -842,14 +923,44 @@ public class FireBaseController implements Serializable {
     }
 
     /**
-     * Remove User document from Invited.
-     * @Author: Kevin Li
+     * Remove Notifcation document from User's notifications collection.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param notificationRef: Document name of the notification to be removed.
+     * @param user: User who's notification is being removed.
+     */
+    public void removeNotificationDoc(String notificationRef, User user) {
+        userRf.document(user.getDeviceId()).collection("notifications").document(notificationRef)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Notification Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting notification.", e));
+    }
+
+
+    /**
+     * Remove User document from Invited, while Removing User document as well.
+     * @Author: Kevin Li, Matthieu Larochelle
      * @Version: 1.0
      * @param event: Event to be removed.
      * @param user: User to be removed.
      */
     public void removeInvitedDoc(Event event, User user) {
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("invitedEntrants").document(user.getDeviceId())
+        userRf.document(user.getDeviceId()).collection("invitedEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, waitlist may not include event.", e));
+
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("invitedEntrants").document(user.getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

@@ -28,6 +28,7 @@ public class Event implements Serializable {
     private Integer sampleSize;
     private String eventDetails;
     private Bitmap QRCode;
+    private int numberOfNotifications = 0; // Does not need to be stored in Firebase.
     private String qrCodeHash;
 
     // No-argument constructor required by Firestore
@@ -230,6 +231,30 @@ public class Event implements Serializable {
     }
 
     /**
+     * Getter method for an Event's Number of Notifications.
+     * This is the current number of scheduled notifications an Event is outputting during this app's runtime.
+     * It is not stored in Firebase and is reset when the app is reloaded.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: Number of currently scheduled notifications.
+     */
+    public int getNumberOfNotifications() {
+        return numberOfNotifications;
+    }
+
+    /**
+     * Adds one an Event's Number of Notifications.
+     * This is the current number of scheduled notifications an Event is outputting during this app's runtime.
+     * It is not stored in Firebase and is reset when the app is reloaded.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: Number of currently scheduled notifications.
+     */
+    public void addNumberOfNotifications() {
+        this.numberOfNotifications  += 1;
+    }
+
+    /**
      * Add a user to an Events's list of waiting entrants.
      * @Author: Matthieu Larochelle
      * @Version: 1.2
@@ -309,8 +334,8 @@ public class Event implements Serializable {
      * @Version: 1.0
      * @param user : User.
      */
-    public void addInvited(User user){
-        invitedEntrants.addUser(user);
+    public Boolean addInvited(User user){
+        return invitedEntrants.addUser(user);
     }
 
     /**
@@ -319,8 +344,8 @@ public class Event implements Serializable {
      * @Version: 1.0
      * @param user  User.
      */
-    public void removeFromInvited(User user){
-        invitedEntrants.remove(user);
+    public Boolean removeFromInvited(User user){
+        return invitedEntrants.remove(user);
     }
 
     /**

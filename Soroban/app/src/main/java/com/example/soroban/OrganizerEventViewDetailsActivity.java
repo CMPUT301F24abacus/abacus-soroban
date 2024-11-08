@@ -33,7 +33,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private TextView eventDescription;
     private ImageView eventPoster;
     private TextView eventSampleSize;
-    private TextView eventEntrantLimit;
+    private TextView eventDrawDate;
     private Button geoReq;
     private Button autoReplace;
 
@@ -77,10 +77,11 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         viewQRcode = findViewById(R.id.buttonScanQRCode);
         eventGeolocation = findViewById(R.id.buttonEventGeolocation);
         eventTitle = findViewById(R.id.eventNameTitle);
-        eventDate = findViewById(R.id.eventDateTitle);
+        eventDate = findViewById(R.id.eventDateText);
         eventDescription = findViewById(R.id.eventDescriptionText);
         eventPoster = findViewById(R.id.eventPosterImage);
         eventSampleSize = findViewById(R.id.eventSampleSizeText);
+        eventDrawDate = findViewById(R.id.eventDrawDateText);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
         autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 
@@ -93,6 +94,9 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
         eventDate.setText(formattedEventDate);
         eventSampleSize.setText(selectedEvent.getSampleSize().toString());
+        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+        // geoReq.setActivated();
+        // autoReplace.setActivated();
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {

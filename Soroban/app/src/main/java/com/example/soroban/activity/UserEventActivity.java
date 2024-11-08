@@ -97,6 +97,7 @@ public class UserEventActivity extends AppCompatActivity {
             } else if (listType.equals("registeredEvents")) {
                 appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                 fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
+                fireBaseController.updateThoseNotGoing(selectedEvent,appUser);
             }
             Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
             Bundle newArgs = new Bundle();

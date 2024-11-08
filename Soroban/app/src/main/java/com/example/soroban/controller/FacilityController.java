@@ -25,7 +25,8 @@ public class FacilityController {
      * @Version: 1.1
      * @param newFacilityName: New Facility name.
      */
-    public void updateFacility(String newFacilityName) {
+    public void updateFacility(String newFacilityName, String newFacilityDetails) {
         facility.setName(newFacilityName);
+        facility.setDetails(newFacilityDetails);
     }
 }

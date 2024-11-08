@@ -77,7 +77,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
             // Set up FacilityController
             FacilityController facilityController = new FacilityController(appUser.getFacility());
 
-            facilityController.updateFacility(updatedFacilityName);
+            facilityController.updateFacility(updatedFacilityName, updatedFacilityDetails);
             fireBaseController.facilityUpdate(appUser.getFacility());
 
             Intent intent = new Intent(ManageFacilityActivity.this, OrganizerDashboardActivity.class);
