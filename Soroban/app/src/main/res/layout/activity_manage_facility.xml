@@ -4,30 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="center">
 
     <EditText
         android:id="@+id/editTextFacilityName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="My Facility"
-        android:padding="8dp"
+        android:layout_height="48dp"
+        android:hint="Facility name"
+        android:textColorHint="@color/white"
+        android:layout_marginBottom="8dp"
         android:textSize="18sp" />
 
     <EditText
         android:id="@+id/editTextFacilityDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="About my facility"
-        android:padding="8dp"
+        android:layout_height="48dp"
+        android:hint="Facility information"
+        android:textColorHint="@color/white"
+        android:layout_marginBottom="16dp"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonCreateFacility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Changes"
-        android:layout_gravity="end"
-        android:layout_marginTop="24dp" />
+        android:text="Confirm Changes"
+        android:layout_gravity="center"/>
 </LinearLayout>
