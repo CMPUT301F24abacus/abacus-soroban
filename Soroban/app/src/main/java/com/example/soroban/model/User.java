@@ -18,6 +18,7 @@ public class User implements Serializable {
     private EventList waitList;
     private EventList registeredEvents;
     private EventList hostedEvents;
+    private EventList invitedEvents;
     private Facility facility;
 
     /**
@@ -30,6 +31,7 @@ public class User implements Serializable {
         this.waitList = new EventList();
         this.registeredEvents = new EventList();
         this.hostedEvents = new EventList();
+        this.invitedEvents = new EventList();
     }
 
     /**
@@ -190,6 +192,17 @@ public class User implements Serializable {
     }
 
     /**
+     * Getter method for User's list of invited events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: invited events EventList.
+     */
+    public EventList getInvitedEvents() {
+        return invitedEvents;
+    }
+
+
+    /**
      * Getter method for User's list of hosted events.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
@@ -221,6 +234,30 @@ public class User implements Serializable {
     public Boolean removeFromWaitlist(Event event){
         return waitList.remove(event) && (event.getWaitingEntrants().contains(this) ? event.removeFromWaitingEntrants(this) : Boolean.TRUE);
     }
+
+
+    /**
+     * Add an event to a User's invited events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     * @return : Result of successful addition to User's list of invited events.
+     */
+    public Boolean addInvitedEvent(Event event){
+        return invitedEvents.addEvent(event) && (event.getInvitedEntrants().contains(this) ? Boolean.TRUE : event.addInvited(this));
+    }
+
+    /**
+     * Remove an event from a User's invited events.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: Event.
+     * @return : Result of successful removal from User's list of invited events.
+     */
+    public Boolean removeInvitedEvent(Event event){
+        return invitedEvents.remove(event) && (event.getInvitedEntrants().contains(this) ? event.removeFromInvited(this) : Boolean.TRUE);
+    }
+
 
     /**
      * Add an event to a User's registered events.

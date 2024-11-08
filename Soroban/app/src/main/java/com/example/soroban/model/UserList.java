@@ -44,5 +44,21 @@ public class UserList extends ArrayList<User> implements Serializable {
         }
     }
 
+
+    /**
+     * Find event in UserList.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: Null if no matching user was found; the matching user otherwise
+     */
+    public User find(User user){
+        for(int i = 0; i < this.size(); i++){
+            if(this.get(i).equals(user)){
+                return user;
+            }
+        }
+        return null;
+    }
+
 }
 

@@ -38,8 +38,8 @@
     </LinearLayout>
 
     <!-- RecyclerView for notifications -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notifications_recycler_view"
+    <ListView
+        android:id="@+id/notifications_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
