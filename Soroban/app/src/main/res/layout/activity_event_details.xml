@@ -12,6 +12,7 @@
         android:id="@+id/event_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="Event Image"
         android:src="@drawable/ic_event_image" />
 
@@ -20,31 +21,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Event Name"
+        android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingTop="16dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/event_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Event details and description go here."
-        android:paddingTop="8dp" />
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/event_qr_code"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/ic_qr_code"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="Event QR Code"
-        android:layout_marginTop="16dp" />
+        android:src="@drawable/ic_qr_code" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="24dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_notify_me"
