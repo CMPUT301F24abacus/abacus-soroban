@@ -744,7 +744,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which fetching is required.
      */
     public void fetchEventCancelledDoc(Event event) {
-        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("cancelled");
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("notGoing");
         colRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
