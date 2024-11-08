@@ -556,21 +556,51 @@ public class FireBaseController implements Serializable {
      */
     public void fetchQRCodeHash(String eventName, OnSuccessListener<String> onSuccessListener) {
         eventRf.whereEqualTo("eventName", eventName)
+        .get()
+        .addOnSuccessListener(querySnapshot -> {
+            if (!querySnapshot.isEmpty()) {
+                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                String qrCodeHash = document.getString("QRHash");
+                onSuccessListener.onSuccess(qrCodeHash);
+            } else {
+                onSuccessListener.onSuccess(null); // Event not found
+            }
+        })
+        .addOnFailureListener(e -> {
+            Log.e("Firestore", "Error fetching QR code hash", e);
+            onSuccessListener.onSuccess(null);
+        });
+    }
+
+    public void fetchEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
+        Log.d("Firestore", "Starting fetchEventByQRCodeHash with QRHash: " + qrCodeHash); // Log the input hash
+
+        eventRf.whereEqualTo("QRHash", qrCodeHash)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                        String qrCodeHash = document.getString("QRHash");
-                        onSuccessListener.onSuccess(qrCodeHash);
+                        Log.d("Firestore", "Event found with QRHash: " + qrCodeHash); // Log that an event was found
+
+                        Event event = document.toObject(Event.class);
+
+                        // Log the details of the event if it's found
+                        if (event != null) {
+                            Log.d("Firestore", "Fetched Event Details: " + event.getEventName() + ", Owner ID: " + event.getOwner().getDeviceId());
+                        }
+
+                        onSuccessListener.onSuccess(event);
                     } else {
-                        onSuccessListener.onSuccess(null); // Event not found
+                        Log.d("Firestore", "No event found with QRHash: " + qrCodeHash); // Log when no event is found
+                        onSuccessListener.onSuccess(null);
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching QR code hash", e);
+                    Log.e("Firestore", "Error fetching event by QR code hash: " + e.getMessage(), e); // Log error details
                     onSuccessListener.onSuccess(null);
                 });
     }
+
 
     /**
      * Fetches an Event's Wailist of users collection in Firebase.

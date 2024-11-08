@@ -15,20 +15,28 @@ import java.util.stream.IntStream;
  */
 
 public class Event implements Serializable {
-    private final User owner;
-    private final Facility facility;
+    private User owner;
+    private Facility facility;
     private String eventName;
     private Date eventDate;
     private Date drawDate;
-    private final UserList attendees;
-    private final UserList invitedEntrants;
-    private final UserList waitingEntrants;
-    private final UserList notGoing;
+    private UserList attendees;
+    private UserList invitedEntrants;
+    private UserList waitingEntrants;
+    private UserList notGoing;
     private Integer maxEntrants;
     private Integer sampleSize;
     private String eventDetails;
     private Bitmap QRCode;
     private String qrCodeHash;
+
+    // No-argument constructor required by Firestore
+    public Event() {
+        this.attendees = new UserList();
+        this.invitedEntrants = new UserList();
+        this.waitingEntrants = new UserList();
+        this.notGoing = new UserList();
+    }
 
     /**
      * Constructor method for an Event.
