@@ -774,7 +774,7 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .collection("waitingEntrants").document(user.getDeviceId()).set(data);
     }
 
