@@ -28,7 +28,7 @@ public class Event implements Serializable {
     private Integer sampleSize;
     private String eventDetails;
     private Bitmap QRCode;
-
+    private String qrCodeHash;
 
     /**
      * Constructor method for an Event.
@@ -53,7 +53,6 @@ public class Event implements Serializable {
         this.notGoing = new UserList();
         this.sampleSize = sampleSize;
     }
-
 
     /**
      * Destructor method for Event.
@@ -394,6 +393,20 @@ public class Event implements Serializable {
         }
         Event mockEvent = (Event) o;
         return Objects.equals(owner, mockEvent.getOwner()) && Objects.equals(eventName, mockEvent.getEventName()) && Objects.equals(eventDate,  mockEvent.getEventDate()) && Objects.equals(drawDate,  mockEvent.getDrawDate()) && Objects.equals(sampleSize,  mockEvent.getSampleSize()) && Objects.equals(maxEntrants,  mockEvent.getMaxEntrants());
+    }
+
+    /**
+     * Getter and Setter for the QR code hash
+     * @Author: Edwin M
+     * @Version: 1.0
+     */
+    //
+    public String getQrCodeHash() {
+        return qrCodeHash;
+    }
+
+    public void setQrCodeHash(String qrCodeHash) {
+        this.qrCodeHash = qrCodeHash;
     }
 
 

@@ -161,7 +161,7 @@ public class FireBaseController implements Serializable {
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
         eventRf
                 .document(event.getEventName() + ", " + owner.getDeviceId())
                 .set(data)
