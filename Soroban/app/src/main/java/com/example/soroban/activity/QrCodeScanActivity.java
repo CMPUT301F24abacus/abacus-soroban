@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.soroban.FireBaseController;
+import com.example.soroban.UserEventViewDetailsActivity;
 import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -50,23 +52,23 @@ public class QrCodeScanActivity extends AppCompatActivity {
         }
     });
 
-    // Action after scanning QRCode
+    // Action after scanning QR Code
     private void retrieveEventDetails(String qrCodeHash) {
+        // (testing) print QR code hash being scanned in logcat
+        Log.d("QRCodeScan", "Scanned QR Code Hash: " + qrCodeHash);
+
         FireBaseController dbController = new FireBaseController(this);
-        dbController.getEventByQRCodeHash(qrCodeHash, event -> {
+        dbController.fetchQRCodeHash(qrCodeHash, event -> {
             if (event != null) {
-                // Pass the event data to EventRegistrationActivity
-                Intent intent = new Intent(QrCodeScanActivity.this, EventRegistrationActivity.class);
-                intent.putExtra("eventName", event.getEventName());
-                intent.putExtra("eventDate", event.getEventDate().toString());
-                intent.putExtra("eventHash", qrCodeHash);
+                // Start UserEventViewDetailsActivity with event data
+                Intent intent = new Intent(QrCodeScanActivity.this, UserEventViewDetailsActivity.class);
+                intent.putExtra("eventData", event);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     private void showCamera() {
         ScanOptions options = new ScanOptions();

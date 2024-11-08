@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activity.UserDashboardActivity"
-    android:background="#FFFFFF">
+    android:background="@drawable/moon"> <!-- Set background image -->
 
     <!-- Top Dashboard title and Icons -->
 
@@ -23,6 +23,7 @@
             android:text="Dashboard"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -37,6 +38,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@android:color/transparent"
+
             android:layout_marginStart="8dp" />
 
         <ImageView
@@ -44,10 +47,12 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:contentDescription="Notifications"
-            android:src="@drawable/ic_notifications"
+            android:src="@drawable/ic_notifications1"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@id/icon_settings"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp" />
 
@@ -58,9 +63,11 @@
             android:contentDescription="Profile"
             android:src="@drawable/ic_profile"
             app:layout_constraintEnd_toStartOf="@id/icon_notifications"
+            android:background="@android:color/transparent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Events Wait-listed For -->
@@ -70,7 +77,8 @@
         android:text="Events Wait-listed For:"
         android:textStyle="bold"
         android:paddingBottom="8dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@android:color/white"/>
 
     <!-- Confirmed Events -->
 
@@ -79,7 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="191dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:background="#33334F"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -87,14 +96,16 @@
         android:paddingBottom="8dp"
         android:text="Confirmed Events:"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@android:color/white" />
 
     <ListView
         android:id="@+id/list_confirmed_events"
         android:layout_width="match_parent"
         android:layout_height="196dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:background="#33334F"/>
 
     <!-- Action Buttons -->
     <LinearLayout
@@ -105,16 +116,13 @@
 
         <Button
             android:id="@+id/btn_scan_qr_code"
+            style="@style/AppButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:backgroundTint="#A1CDA8"
-            android:text="Scan QR Code"
-            android:textColor="#000000" />
-
+            android:text="Scan QR Code" />
     </LinearLayout>
 
-    <!-- Create/Manage Facility Button -->
 </LinearLayout>

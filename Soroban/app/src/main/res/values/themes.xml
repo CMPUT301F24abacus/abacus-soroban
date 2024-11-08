@@ -1,9 +1,65 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme with Material3 and your background image. -->
     <style name="Base.Theme.Soroban" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Set a custom background -->
+        <item name="android:windowBackground">@drawable/moon</item>
+
+        <!-- Customize theme colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!-- Customize text colors -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#CCCCCC</item>
     </style>
 
+    <!-- Inherit from the base theme -->
     <style name="Theme.Soroban" parent="Base.Theme.Soroban" />
+
+    <!-- Button Style -->
+    <style name="AppButton">
+        <item name="android:backgroundTint">@color/accent</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">8dp</item>
+
+    </style>
+
+    <!-- List View Style -->
+    <style name="AppListView">
+        <item name="android:divider">#DDDDDD</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">#33334F</item>
+    </style>
+
+    <!-- Dashboard Card Style -->
+    <style name="DashboardCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#444466</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_margin">8dp</item>
+
+        <item name="android:elevation">4dp</item>
+    </style>
+
+<!--This is how i can use the theme objects in my xml files.-->
+<!--    <Button-->
+<!--        style="@style/AppButton"-->
+<!--        android:text="Click Me"/>-->
+
+<!--    <ListView-->
+<!--        style="@style/AppListView"-->
+<!--        android:id="@+id/list_view"/>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        style="@style/DashboardCard">-->
+<!--        &lt;!&ndash; Card content here &ndash;&gt;-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+
 </resources>

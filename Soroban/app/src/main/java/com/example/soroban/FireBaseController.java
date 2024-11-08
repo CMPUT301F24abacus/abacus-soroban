@@ -162,7 +162,7 @@ public class FireBaseController implements Serializable {
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
         eventRf
                 .document(event.getEventName() + ", " + owner.getDeviceId())
                 .set(data)
@@ -496,7 +496,7 @@ public class FireBaseController implements Serializable {
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
 
         eventRf
                 .document(event.getEventName() + ", " + event.getOwner().getDeviceId())
@@ -524,7 +524,7 @@ public class FireBaseController implements Serializable {
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
                 .collection("waitList").document(event.getEventName()).set(data);
 
@@ -545,7 +545,7 @@ public class FireBaseController implements Serializable {
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
                 .collection("registeredEvents").document(event.getEventName()).set(data);
     }
@@ -565,50 +565,33 @@ public class FireBaseController implements Serializable {
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
-        data.put("QRHash", event.getQRCode());
+        data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
                 .collection("hostedEvents").document(event.getEventName()).set(data);
-    }
-
-     /**
-     * Store hash data of QR code in firebase
-     * @Author: Edwin M
-     * @Version: 1.0
-     * @param qrCodeHash: The hash generated for QRCode
-     * @param event: details of event to be stored.
-     */
-    public void addEventWithQRCodeHash(String qrCodeHash, Event event) {
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventName", event.getEventName());
-        eventData.put("eventDate", event.getEventDate());
-        eventData.put("qrCodeHash", qrCodeHash);  // Store the hash in the event data
-
-        eventRf.document(event.getEventName()).set(eventData)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Event with QR code hash successfully added!"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error adding event with QR code hash", e));
     }
 
     /**
      * Fetch Event by QR Code Hash
      * @Author: Edwin M
      * @Version: 1.0
-     * @param qrCodeHash: The hash generated for QRCode
-     * @param onSuccessListener: Event handling if found/not found
      */
-    public void getEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
-        eventRf.document(qrCodeHash)
+    public void fetchQRCodeHash(String eventName, OnSuccessListener<String> onSuccessListener) {
+        eventRf.whereEqualTo("eventName", eventName)
                 .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Event event = documentSnapshot.toObject(Event.class);
-                        onSuccessListener.onSuccess(event);
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                        String qrCodeHash = document.getString("QRHash");
+                        onSuccessListener.onSuccess(qrCodeHash);
                     } else {
                         onSuccessListener.onSuccess(null); // Event not found
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error fetching event by QR code hash", e));
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching QR code hash", e);
+                    onSuccessListener.onSuccess(null);
+                });
     }
-
 
     /**
      * Fetches an Event's Wailist of users collection in Firebase.
