@@ -3,7 +3,7 @@
     <!-- Base application theme with Material3 and your background image. -->
     <style name="Base.Theme.Soroban" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Set a custom background -->
-        <item name="android:windowBackground">@drawable/moon</item>
+        <item name="android:windowBackground">@drawable/background_drawable</item>
 
         <!-- Customize theme colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
