@@ -21,8 +21,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
-import com.example.soroban.UserEventViewDetailsActivity;
 import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -54,14 +54,15 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     // Action after scanning QR Code
     private void retrieveEventDetails(String qrCodeHash) {
-        // (testing) print QR code hash being scanned in logcat
+
+        // check to see if hash is scanned properly
         Log.d("QRCodeScan", "Scanned QR Code Hash: " + qrCodeHash);
 
         FireBaseController dbController = new FireBaseController(this);
-        dbController.fetchQRCodeHash(qrCodeHash, event -> {
+        dbController.fetchEventByQRCodeHash(qrCodeHash, event -> {
             if (event != null) {
-                // Start UserEventViewDetailsActivity with event data
-                Intent intent = new Intent(QrCodeScanActivity.this, UserEventViewDetailsActivity.class);
+                // Start EventDetailsActivity with event data
+                Intent intent = new Intent(QrCodeScanActivity.this, EventDetailsActivity.class);
                 intent.putExtra("eventData", event);
                 startActivity(intent);
             } else {
@@ -69,6 +70,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void showCamera() {
         ScanOptions options = new ScanOptions();
