@@ -57,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="@string/usernameText"
+            android:textColor="@color/text_secondary"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -72,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/firstNameText"
+                android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
 
             <EditText
@@ -81,7 +83,8 @@
                 android:ems="10"
                 android:hint="@string/firstNameField"
                 android:inputType="text"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/text_secondary"
+                android:textColorHint="@color/text_secondary" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/lastNameText"
+                android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
 
             <EditText
@@ -105,7 +109,8 @@
                 android:ems="10"
                 android:hint="@string/lastNameField"
                 android:inputType="text"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/text_secondary"
+                android:textColorHint="@color/text_secondary" />
         </LinearLayout>
 
         <LinearLayout
@@ -120,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/emailAddressText"
+                android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
 
             <EditText
@@ -129,7 +135,8 @@
                 android:ems="10"
                 android:hint="@string/emailAddressField"
                 android:inputType="text|textEmailAddress"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/text_secondary"
+                android:textColorHint="@color/text_secondary" />
         </LinearLayout>
 
         <LinearLayout
@@ -144,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/phoneNumberText"
+                android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
 
             <EditText
@@ -153,7 +161,8 @@
                 android:ems="10"
                 android:hint="@string/phoneNumberField"
                 android:inputType="phone"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/text_secondary"
+                android:textColorHint="@color/text_secondary" />
         </LinearLayout>
 
         <LinearLayout
