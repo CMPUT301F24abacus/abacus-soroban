@@ -8,7 +8,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 
-import com.example.soroban.activity.EventUsersCancelledActivity;
 import com.example.soroban.activity.EventUsersInvitedActivity;
 
 import org.junit.Rule;
@@ -18,7 +17,7 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 @LargeTest
-public class TestUsersInvitedActivity {
+public class TestEventUsersInvitedActivity {
 
     @Rule
     public ActivityScenarioRule<EventUsersInvitedActivity> scenario = new
