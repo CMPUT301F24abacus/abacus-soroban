@@ -675,7 +675,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which fetching is required.
      */
     public void fetchEventAttendeeDoc(Event event) {
-        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("attendee");
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("attendees");
         colRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -746,8 +746,9 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId())
-                .collection("invitedEntrants").document(user.getDeviceId()).set(data);
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .collection("invitedEntrants").document(user.getDeviceId())
+                .set(data);
     }
 
     /**
@@ -786,7 +787,7 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, waitlist may not include event.", e));
 
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("waitingEntrants").document(user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("waitList").document(user.getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

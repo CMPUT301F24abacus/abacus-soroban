@@ -357,17 +357,22 @@ public class Event implements Serializable {
      * Randomly samples the Event's sample size number of entrants to be invited
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @return: Number of sampled users.
      */
-    public void sampleEntrants(){
+    public int sampleEntrants(){
         Random random = new Random();
-        int newRand = random.nextInt(sampleSize);
-        for(int i = 0; i < sampleSize; i++) {
-            addInvited(invitedEntrants.get(newRand));
-            int prevRand = newRand;
-            while(newRand == prevRand){
-                newRand = random.nextInt(sampleSize);
+        int sampleNumber = Math.min(sampleSize, waitingEntrants.size()); // Either sample specified number or all waitingEntrants
+        int newRand = random.nextInt(waitingEntrants.size());
+        for(int i = 0; i < sampleNumber; i++) {
+            addInvited(waitingEntrants.get(newRand));
+            removeFromWaitingEntrants(waitingEntrants.get(newRand));
+            if(waitingEntrants.size() <= 1){
+                newRand = 0;
+            }else{
+                newRand = random.nextInt(waitingEntrants.size());
             }
         }
+        return sampleNumber;
     }
 
 

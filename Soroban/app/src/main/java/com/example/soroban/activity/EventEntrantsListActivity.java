@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -15,15 +17,17 @@ import com.example.soroban.model.User;
 public class EventEntrantsListActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
+    private FireBaseController fireBaseController;
     private Button usersWaitlisted;
     private Button usersInvited;
     private Button usersCancelled;
     private Button usersConfirmed;
+    private Button sampleEntrants;
 
     /**
      * Called when this activity is first created.
      * @param savedInstanceState
-     * Author: Aaryan Shetty
+     * Author: Matthieu Larochelle, Aaryan Shetty
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,12 +56,14 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
+        fireBaseController = new FireBaseController(this);
 
         // Assign button variables to views
         usersWaitlisted = findViewById(R.id.buttonWaitlistedUsers);
         usersInvited = findViewById(R.id.buttonInvitedUsers);
         usersCancelled = findViewById(R.id.buttonCancelledUsers);
         usersConfirmed = findViewById(R.id.buttonConfirmedUsers);
+        sampleEntrants = findViewById(R.id.buttonSampleUsers);
 
         // Set up reactions for when the buttons are clicked
         usersWaitlisted.setOnClickListener(v -> {
@@ -94,6 +100,16 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             newArgs.putSerializable("appUser", appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
+        });
+
+        sampleEntrants.setOnClickListener(v ->{
+            int numberSampled = selectedEvent.sampleEntrants();
+            Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
+            // Update Firebase to recognize invited users
+            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
+                fireBaseController.updateInvited(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+                fireBaseController.removeFromWaitListDoc(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+            }
         });
 
     }
