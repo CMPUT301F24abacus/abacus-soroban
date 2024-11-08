@@ -5,10 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -19,8 +16,6 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
-
-import java.io.Serializable;
 
 public class AcceptInviteFragment extends DialogFragment {
     private Event selectedEvent;
@@ -78,7 +73,7 @@ public class AcceptInviteFragment extends DialogFragment {
         }
 
         fireBaseController = new FireBaseController(getContext());
-        ImageButton cancel = view.findViewById(R.id.closeInvite);
+        ImageButton cancel = view.findViewById(R.id.closeInvitation);
 
         cancel.setOnClickListener(v -> {
             this.dismiss();
