@@ -413,20 +413,20 @@ public class FireBaseController implements Serializable {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            int notifCounter = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> notificationData = document.getData();
                                 String notificationTitle = (String) notificationData.get("title");
-                                Integer notificationNumber = ((Long) notificationData.get("number")).intValue();
                                 String notificationMessage = (String) notificationData.get("message");
                                 Date notificationDate = document.getDate("date");
                                 String notificationEventName = (String) document.get("eventName");
                                 assert notificationDate != null;
                                 // Notify user if current time is after notification date
                                 if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
-                                    Log.e("Firestore", notificationEventName + notificationTitle + notificationMessage);
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
-                                    notificationSystem.setNotification(notificationNumber+notificationEventName.hashCode(),notificationEventName + " : " + notificationTitle, notificationMessage);
+                                    notificationSystem.setNotification(notifCounter,notificationEventName + " : " + notificationTitle, notificationMessage);
                                     removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
+                                    notifCounter++;
                                 }
                             }
                         } else {
@@ -461,20 +461,38 @@ public class FireBaseController implements Serializable {
     /**
      * Update User's notifications collection.
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 2.0
      * @param user: User for which the notification is being added.
      * @param notification: Notification which is being added.
      */
     public void updateUserNotifications(User user, Notification notification) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", notification.getTitle());
-        data.put("date", notification.getTime());
-        data.put("message", notification.getMessage());
-        data.put("eventName", notification.getEvent().getEventName());
-        data.put("number", notification.getNumber());
-        userRf.document(user.getDeviceId())
-                .collection("notifications").document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + notification.getNumber())
-                .set(data);
+
+        CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
+        // Count current number of notifications
+        notifcationRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int numNotifs = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                numNotifs++;
+                            }
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("title", notification.getTitle());
+                            data.put("date", notification.getTime());
+                            data.put("message", notification.getMessage());
+                            data.put("eventName", notification.getEvent().getEventName());
+                            data.put("number", notification.getNumber());
+                            notifcationRef.document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + numNotifs)
+                                    .set(data);
+                        } else {
+                            Log.e("Firestore", "Something went wrong.");
+                        }
+                    }
+                });
     }
 
     /**
@@ -744,7 +762,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which fetching is required.
      */
     public void fetchEventCancelledDoc(Event event) {
-        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("cancelled");
+        CollectionReference colRef = eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("notGoing");
         colRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -13,6 +13,7 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.adapter.UserArrayAdapter;
+import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
@@ -78,21 +79,13 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
 
         // Assign button variables to views
         sendMessage = findViewById(R.id.buttonSendMessageToUsers);
-        rejectUsers = findViewById(R.id.buttonRejectUsers);
-        inviteUsers = findViewById(R.id.buttonInviteUsers);
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Send message popup", Toast.LENGTH_SHORT).show();
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "waitList");
+            fragment.show(getSupportFragmentManager(), "Send Message");
         });
 
-        rejectUsers.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement rejecting users from event", Toast.LENGTH_SHORT).show();
-        });
-
-        inviteUsers.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement sending users an invite", Toast.LENGTH_SHORT).show();
-        });
 
     }
 }
