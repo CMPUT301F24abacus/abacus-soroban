@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomDatePickerTheme" parent="Theme.Material3.Light.Dialog">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryVariant">#3700B3</item>
+        <item name="colorAccent">#03DAC5</item>
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+    <style name="CustomDatePickerDialog" parent="ThemeOverlay.Material3.MaterialCalendar">
+        <!-- Button text color -->
+        <item name="colorPrimary">@color/black</item> <!-- For the "OK" and "Cancel" buttons -->
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+</resources>
