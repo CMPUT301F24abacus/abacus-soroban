@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class User implements Serializable {
     private final String deviceId;
+    private String username;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,6 +21,7 @@ public class User implements Serializable {
     private EventList hostedEvents;
     private EventList invitedEvents;
     private Facility facility;
+    private Boolean adminCheck;
 
     /**
      * Constructor method for User.
@@ -57,6 +59,26 @@ public class User implements Serializable {
      */
     public String getDeviceId() {
         return deviceId;
+    }
+
+    /**
+     * Getter method for User's username.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Return: username string.
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Setter method for User's username.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Param: username string.
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -138,6 +160,21 @@ public class User implements Serializable {
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    /**
+     * Setter method for User's admin boolean check.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @Param: admin boolean
+     */
+    public void setAdminCheck(boolean check) { this.adminCheck = check; }
+
+    /**
+     * Getter method for User's admin boolean.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     */
+    public Boolean getAdminCheck() { return adminCheck; }
 
     /**
      * Creates a User's facility. This allows the User to become an organizer and create events.

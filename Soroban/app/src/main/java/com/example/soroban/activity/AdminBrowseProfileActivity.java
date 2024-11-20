@@ -113,6 +113,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
+                // this will be updated to use profile_item eventually...
                 userNameTV = itemView.findViewById(R.id.tv_user_name);
             }
         }

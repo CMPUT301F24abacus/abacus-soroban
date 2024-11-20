@@ -91,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
         Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
         Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
 
+        appUser.setAdminCheck(true);
+        if (appUser.getAdminCheck() != null && appUser.getAdminCheck()) {
+            btnOpenAdminDashboard.setVisibility(View.VISIBLE);
+        }
+
         // Set up a click listener to navigate to UserDashboardActivity
         btnOpenDashboard.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -72,6 +72,7 @@ public class FireBaseController implements Serializable {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        user.setUsername((String) userData.get("username"));
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
@@ -109,6 +110,7 @@ public class FireBaseController implements Serializable {
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         data.put("facility", user.getFacility());
+        data.put("username", user.getDeviceId());
         userRf
                 .document(user.getDeviceId())
                 .set(data)
@@ -890,7 +892,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -919,7 +921,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
