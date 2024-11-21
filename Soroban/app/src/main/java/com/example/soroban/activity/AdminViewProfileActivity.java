@@ -26,6 +26,7 @@ public class AdminViewProfileActivity extends AppCompatActivity {
     private TextView userLastName;
     private TextView userEmail;
     private TextView userPhoneNumber;
+    private Button deleteProfile;
     private FloatingActionButton button1;
     private FloatingActionButton button2;
     private ImageView userProfilePic;
@@ -63,6 +64,8 @@ public class AdminViewProfileActivity extends AppCompatActivity {
         button1.setVisibility(View.INVISIBLE);
         button2 = findViewById(R.id.floatingBackButton);
         button2.setVisibility(View.INVISIBLE);
+        deleteProfile = findViewById(R.id.delete_profile_btn);
+        deleteProfile.setVisibility(View.VISIBLE);
         userFirstName = findViewById(R.id.user_FirstNameField);
         userLastName = findViewById(R.id.user_LastNameField);
         userEmail = findViewById(R.id.user_emailAddressField);
