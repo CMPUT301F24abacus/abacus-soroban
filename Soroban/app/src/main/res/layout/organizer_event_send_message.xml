@@ -19,22 +19,8 @@
     <EditText
         android:id="@+id/organizerMessageEdit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/messageInputText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:hint="Enter message.."
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Your message"
-        android:inputType="text"
-        android:textColor="@color/text_secondary"
-        android:textColorHint="@color/text_primary" />
+        android:hint="Enter Message Here"/>
 
     <Button
         android:id="@+id/buttonSendMessage"
