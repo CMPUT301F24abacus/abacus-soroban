@@ -173,6 +173,7 @@ public class FireBaseController implements Serializable {
         data.put("facility", facilityDoc);
         data.put("eventName", event.getEventName());
         data.put("eventDetails", event.getEventDetails());
+        data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
@@ -696,6 +697,7 @@ public class FireBaseController implements Serializable {
                         String eventName = document.getString("eventName");
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
                         String eventDetails = document.getString("eventDetails");
 
                         // Create a new Event object with only the necessary data
@@ -703,6 +705,7 @@ public class FireBaseController implements Serializable {
                         event.setEventName(eventName);
                         event.setQrCodeHash(qrHash);
                         event.setEventDate(eventDate);
+                        event.setDrawDate(drawDate);
                         event.setEventDetails(eventDetails);
 
                         onSuccessListener.onSuccess(event);
