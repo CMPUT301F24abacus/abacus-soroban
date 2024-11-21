@@ -25,6 +25,7 @@ import com.example.soroban.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -43,6 +44,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private BrowseEventsAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<Event> browseEventList;
+    private FireBaseController firebaseController;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
 
 
         CollectionReference eventRf = db.collection("events");
+        firebaseController = new FireBaseController(this);
         eventSearch = findViewById(R.id.event_search_bar);
         eventSearch.clearFocus();
         eventRecycler = findViewById(R.id.event_admin_recycler);
@@ -94,10 +97,12 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        User owner = new User("temp"); // temporary for now
+                        User owner = new User(((DocumentReference) document.get("owner")).getPath().replace("users/",""));
+                        firebaseController.fetchUserDoc(owner);
                         owner.createFacility();
-                        //fetchUserDoc(owner);
+                        DocumentReference facilityRef = (DocumentReference) document.get("facility");
                         Facility facility = owner.getFacility();
+                        firebaseController.fetchFacilityDoc(owner, facilityRef);
                         Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
@@ -167,6 +172,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                 Bundle newArgs = new Bundle();
                 newArgs.putSerializable("selectedEvent", selectedEvent);
                 newArgs.putSerializable("appUser", appUser);
+                intent.putExtras(newArgs);
                 startActivity(intent);
             });
         }

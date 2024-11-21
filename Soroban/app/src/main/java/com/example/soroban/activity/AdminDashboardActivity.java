@@ -61,6 +61,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
         browseProfileBtn.setOnClickListener( v -> {
             Intent intent;
             intent = new Intent(AdminDashboardActivity.this, AdminBrowseProfileActivity.class);
+            Bundle argsPr = new Bundle();
+            argsPr.putSerializable("appUser",appUser);
+            intent.putExtras(argsPr);
             startActivity(intent);
         });
 
