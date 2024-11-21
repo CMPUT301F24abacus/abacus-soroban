@@ -1,11 +1,8 @@
 package com.example.soroban;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,18 +18,14 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
 import android.content.Intent;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.soroban.activity.OrganizerDashboardActivity;
 import com.example.soroban.activity.UserDashboardActivity;
-import com.example.soroban.activity.UserEventActivity;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
@@ -94,7 +87,7 @@ public class UserDashboardTest {
 
         onView(withId(R.id.icon_notifications)).check(matches(isDisplayed()));
         onView(withId(R.id.icon_notifications)).perform(click());
-        onView(withId(R.id.tv_notifications)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_invitations)).check(matches(isDisplayed()));
     }
 
     @Test

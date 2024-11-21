@@ -3,7 +3,6 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -75,6 +74,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         Button scanQrCode = findViewById(R.id.btn_scan_qr_code);
         ImageView profileIcon = findViewById(R.id.icon_profile);
         ImageView notificationsIcon = findViewById(R.id.icon_notifications);
+        ImageView preferencesIcon = findViewById(R.id.icon_settings);
 
         // Set up click listeners for buttons
         scanQrCode.setOnClickListener(v -> {
@@ -90,13 +90,21 @@ public class UserDashboardActivity extends AppCompatActivity {
 
         notificationsIcon.setOnClickListener(v -> {
             // Action for notification Icon
-            Intent intent = new Intent(UserDashboardActivity.this, NotificationActivity.class);
+            Intent intent = new Intent(UserDashboardActivity.this, InvitationActivity.class);
             Bundle newArgs = new Bundle();
             newArgs.putSerializable("appUser", appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
         });
 
+        preferencesIcon.setOnClickListener(v->{
+            // Action for settings Icon
+            Intent intent = new Intent(UserDashboardActivity.this, PreferencesActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+        });
 
         // References for waitlisted and confirmed events ListViews
         waitlistedEventsListView = findViewById(R.id.list_waitlisted_events);
