@@ -27,7 +27,10 @@
         android:id="@+id/usersFinalListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:background="@color/primary" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
