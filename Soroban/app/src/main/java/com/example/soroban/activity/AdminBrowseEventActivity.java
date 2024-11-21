@@ -1,15 +1,18 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,8 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 public class AdminBrowseEventActivity extends AppCompatActivity {
-
+    private User appUser;
     private RecyclerView eventRecycler;
+    private SearchView eventSearch;
     private BrowseEventsAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<Event> browseEventList;
@@ -44,7 +48,30 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_browse_events);
 
+        // Get arguments passed from previous activity.
+        // Reference: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
+        Bundle args = getIntent().getExtras();
+
+        // Initialize appUser for this activity.
+        if(args != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            }else{
+                appUser = (User) args.getSerializable("appUser");
+            }
+
+            if(appUser == null ){
+                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
+            }
+
+        }else{
+            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
+        }
+
+
         CollectionReference eventRf = db.collection("events");
+        eventSearch = findViewById(R.id.event_search_bar);
+        eventSearch.clearFocus();
         eventRecycler = findViewById(R.id.event_admin_recycler);
         eventRecycler.setLayoutManager(new LinearLayoutManager(this));
 
@@ -87,6 +114,22 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         adapter = new BrowseEventsAdapter(browseEventList);
         eventRecycler.setAdapter(adapter);
 
+        // On Searching with Search View
+        // Reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
+        eventSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return false;
+            }
+        });
+
     }
 
 
@@ -95,6 +138,15 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
 
         public BrowseEventsAdapter(ArrayList<Event> browseEventsList) {
             this.browseEventsList = browseEventsList;
+        }
+
+        /**
+         * this method applies filtered list from searchview into adapter
+         * @param newList
+         */
+        public void filterList(ArrayList<Event> newList) {
+            browseEventsList = newList;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -110,9 +162,12 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
             holder.eventNameTV.setText(eventName);
             holder.eventDateTV.setText(eventDate);
             holder.itemView.setOnClickListener(v -> {
-                //Intent intent = new Intent(AdminBrowseEventActivity.this, EventRegistrationActivity.class);
-                //intent.putExtra("isRegistered", true);
-                //startActivity(intent);
+                Intent intent = new Intent(AdminBrowseEventActivity.this, AdminViewEventActivity.class);
+                Event selectedEvent = browseEventList.get(position);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("selectedEvent", selectedEvent);
+                newArgs.putSerializable("appUser", appUser);
+                startActivity(intent);
             });
         }
 
@@ -135,6 +190,23 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                 eventDateTV = itemView.findViewById(R.id.eventDateTextView);
             }
         }
+
+    }
+
+    /**
+     * This method filters data based on query
+     * Reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
+     * @param enteredText: text searched by query
+     */
+    private void filter(String enteredText) {
+        ArrayList<Event> filteredList = new ArrayList<>();
+        for (Event filteredEvent : browseEventList) {
+            if (filteredEvent.getEventName().toLowerCase().contains(enteredText.toLowerCase())) {
+                filteredList.add(filteredEvent);
+            }
+        }
+
+        adapter.filterList(filteredList);
 
     }
 

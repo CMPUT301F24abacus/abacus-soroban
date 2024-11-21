@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         ConstraintLayout buttons = findViewById(R.id.dashboardButtons);
         firebaseController = new FireBaseController(this);
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
             // Add the user into the Firebase Database
-            firebaseController.initialize(progressBar,buttons, appUser);
+            firebaseController.initialize(progressBar,buttons, appUser, btnOpenAdminDashboard);
         }
 
 
@@ -89,12 +90,7 @@ public class MainActivity extends AppCompatActivity {
         // Get reference to the button
         Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
         Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
-        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
 
-        appUser.setAdminCheck(true);
-        if (appUser.getAdminCheck() != null && appUser.getAdminCheck()) {
-            btnOpenAdminDashboard.setVisibility(View.VISIBLE);
-        }
 
         // Set up a click listener to navigate to UserDashboardActivity
         btnOpenDashboard.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         btnOpenAdminDashboard.setOnClickListener( v -> {
             Intent intent;
             intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
+            Bundle argsAdmin = new Bundle();
+            argsAdmin.putSerializable("appUser",appUser);
+            intent.putExtras(argsAdmin);
             startActivity(intent);
         });
 

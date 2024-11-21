@@ -165,16 +165,20 @@ public class User implements Serializable {
      * Setter method for User's admin boolean check.
      * @Author: Kevin Li
      * @Version: 1.0
-     * @Param: admin boolean
+     * @Param: admin Boolean
      */
-    public void setAdminCheck(boolean check) { this.adminCheck = check; }
+    public void setAdminCheck(Boolean adminCheck) {
+        this.adminCheck = adminCheck;
+    }
 
     /**
      * Getter method for User's admin boolean.
      * @Author: Kevin Li
      * @Version: 1.0
      */
-    public Boolean getAdminCheck() { return adminCheck; }
+    public Boolean getAdminCheck() {
+        return adminCheck;
+    }
 
     /**
      * Creates a User's facility. This allows the User to become an organizer and create events.

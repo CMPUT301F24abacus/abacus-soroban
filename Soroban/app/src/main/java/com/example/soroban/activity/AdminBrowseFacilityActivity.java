@@ -102,7 +102,7 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
             holder.facilityNameTV.setText(facilityName);
             holder.ownerIdTV.setText("Owner ID: " + ownerId);
             holder.itemView.setOnClickListener(v -> {
-                //Intent intent = new Intent(AdminBrowseEventActivity.this, EventRegistrationActivity.class);
+                //Intent intent = new Intent(AdminBrowseFacilityActivity.this, EventRegistrationActivity.class);
                 //intent.putExtra("isRegistered", true);
                 //startActivity(intent);
             });
