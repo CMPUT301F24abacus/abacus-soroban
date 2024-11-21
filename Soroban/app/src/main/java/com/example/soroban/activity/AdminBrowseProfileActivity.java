@@ -120,7 +120,9 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * This is a sample adapter to display the user profiles.
+     */
     private class BrowseProfilesAdapter extends RecyclerView.Adapter<BrowseProfilesAdapter.ViewHolder> {
         private ArrayList<User> browseProfilesList;
 
@@ -130,19 +132,32 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
 
         /**
          * this method applies filtered list from searchview into adapter
-         * @param newList
+         * @param newList: new array list for search results
          */
         public void filterList(ArrayList<User> newList) {
             browseProfilesList = newList;
             notifyDataSetChanged();
         }
 
+        /**
+         * This method is called when a new ViewHolder is created.
+         * @param parent: The ViewGroup into which the new View will be added after it is bound to
+         *               an adapter position.
+         * @param viewType: The view type of the new View.
+         * @return
+         */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.profile_item, parent, false);
             return new ViewHolder(view);
         }
 
+        /**
+         * This method is called by RecyclerView to display the data at the specified position.
+         * @param holder The ViewHolder which should be updated to represent the contents of the
+         *        item at the given position in the data set.
+         * @param position The position of the item within the adapter's data set.
+         */
         @Override
         public void onBindViewHolder(BrowseProfilesAdapter.ViewHolder holder, int position) {
             String deviceId = browseProfilesList.get(position).getDeviceId();
