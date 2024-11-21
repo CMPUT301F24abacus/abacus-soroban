@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="508dp"
             android:text="Open Admin Dashboard"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/btn_open_dashboard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
