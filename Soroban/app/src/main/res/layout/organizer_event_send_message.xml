@@ -20,7 +20,7 @@
         android:id="@+id/organizerMessageEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Message Here"/>
+        android:hint="Enter message.." />
 
     <Button
         android:id="@+id/buttonSendMessage"
