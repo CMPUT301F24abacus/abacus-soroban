@@ -3,6 +3,7 @@ package com.example.soroban;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -58,7 +59,7 @@ public class FireBaseController implements Serializable {
      * @param layout: Layout which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
      */
-    public void initialize(ProgressBar progressBar, ConstraintLayout layout, User user){
+    public void initialize(ProgressBar progressBar, ConstraintLayout layout, User user, Button adminDashboard){
         DocumentReference docRef = userRf.document(user.getDeviceId());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
@@ -74,6 +75,14 @@ public class FireBaseController implements Serializable {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        user.setUsername((String) userData.get("username"));
+                        // remove the if statement later, this is just so preexisting accounts without adminCheck will run
+                        if (userData.get("adminCheck") != null) {
+                            user.setAdminCheck((Boolean) userData.get("adminCheck"));
+                            if (user.getAdminCheck()) {
+                                adminDashboard.setVisibility(View.VISIBLE);
+                            }
+                        }
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
@@ -111,6 +120,8 @@ public class FireBaseController implements Serializable {
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         data.put("facility", user.getFacility());
+        data.put("username", user.getDeviceId());
+        data.put("adminCheck", false);
         userRf
                 .document(user.getDeviceId())
                 .set(data)
@@ -893,7 +904,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -922,7 +933,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

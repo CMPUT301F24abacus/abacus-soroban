@@ -1,11 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFFFFF"
     android:orientation="horizontal"
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/profile_picture"
+        android:id="@+id/iv_profile_picture"
         android:layout_width="50dp"
         android:layout_height="55dp"
         android:layout_marginLeft="10dp"
@@ -20,18 +21,20 @@
         android:padding="7dp">
 
         <TextView
-            android:id="@+id/profile_id"
+            android:id="@+id/tv_profile_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User ID"
+            android:textColor="#000000"
             android:textSize="17sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/profile_name"
+            android:id="@+id/tv_profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name" />
+            android:text="Name"
+            android:textColor="#000000" />
 
     </LinearLayout>
 
