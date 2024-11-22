@@ -24,7 +24,7 @@ public class EventRegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_registration);
+        setContentView(R.layout.activity_event_details);
 
         // Find buttons
         registerButton = findViewById(R.id.btn_register);
