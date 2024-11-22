@@ -55,8 +55,6 @@ public class UserDashboardActivity extends AppCompatActivity {
             if(appUser == null ){
                 throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
             }
-
-
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
@@ -79,6 +77,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         // Set up click listeners for buttons
         scanQrCode.setOnClickListener(v -> {
             Intent intent = new Intent(UserDashboardActivity.this, QrCodeScanActivity.class);
+            intent.putExtra("appUser", appUser); // Pass the appUser object
             startActivity(intent);
         });
 

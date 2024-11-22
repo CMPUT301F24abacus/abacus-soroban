@@ -27,12 +27,44 @@ import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import com.example.soroban.model.Event;
+import com.example.soroban.model.User;
+
 /**
  * Activity to scan QR code and redirect to EventRegistrationActivity
  */
 public class QrCodeScanActivity extends AppCompatActivity {
-
+    private User appUser;
+    private boolean isRegistered; //
     private ActivityScanQrCodeBinding binding;
+
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initBinding();
+
+        // Retrieve appUser from intent
+        Bundle args = getIntent().getExtras();
+        if (args != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                appUser = args.getSerializable("appUser", User.class);
+            } else {
+                appUser = (User) args.getSerializable("appUser");
+            }
+
+            if (appUser == null) {
+                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
+            }
+        } else {
+            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
+        }
+
+        initViews();
+    }
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -64,13 +96,13 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 // Start EventDetailsActivity with event data
                 Intent intent = new Intent(QrCodeScanActivity.this, EventDetailsActivity.class);
                 intent.putExtra("eventData", event);
+                intent.putExtra("appUser", appUser); // Pass the appUser object
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     private void showCamera() {
         ScanOptions options = new ScanOptions();
@@ -82,16 +114,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
         options.setOrientationLocked(false);
 
         qrCodeLauncher.launch(options);
-    }
-    /**
-     * Called when the activity is first created.
-     * @param savedInstanceState
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initBinding();
-        initViews();
     }
 
     private void initViews() {
