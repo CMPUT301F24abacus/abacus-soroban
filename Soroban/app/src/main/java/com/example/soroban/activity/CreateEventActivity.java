@@ -195,8 +195,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
     private void updateDateTextViews() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        selectedEventDateTextView.setText(String.format("Event Date: %s", dateFormat.format(eventDate)));
-        selectedDrawDateTextView.setText(String.format("Draw Date: %s", dateFormat.format(drawDate)));
+        selectedEventDateTextView.setText(String.format("%s", dateFormat.format(eventDate)));
+        selectedDrawDateTextView.setText(String.format("%s", dateFormat.format(drawDate)));
     }
 
     private String generateHash(String input) {
