@@ -202,7 +202,6 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                 newArgs.putSerializable("appUser", appUser);
                 intent.putExtras(newArgs);
                 startActivity(intent);
-                finish();
             });
         }
 

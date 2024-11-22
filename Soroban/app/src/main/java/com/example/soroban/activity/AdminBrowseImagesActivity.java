@@ -199,7 +199,8 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
                             .setTitle("Delete Image")
                             .setMessage("Would you like to delete \"" + userIdList.get(position) + "\"'s image?")
                             .setPositiveButton("Delete", (dialog, which) -> {
-
+                                FirebaseDatabase.getInstance().getReference("users").child(certainUser.getDeviceId())
+                                        .removeValue();
                             })
                             .setNegativeButton("No", null)
                             .show();
