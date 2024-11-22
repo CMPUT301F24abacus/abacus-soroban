@@ -75,7 +75,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
 
         deleteEventButton.setOnClickListener(v -> {
             new AlertDialog.Builder(AdminViewEventActivity.this)
-                    .setTitle("Delete Image")
+                    .setTitle("Delete Event")
                     .setMessage("Would you like to delete \"" + selectedEvent.getEventName() + "\"?")
                     .setPositiveButton("Delete", (dialog, which) -> {
                         firebaseController.removeEventDoc(selectedEvent);
@@ -85,6 +85,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
                         argsEvent.putSerializable("appUser",appUser);
                         intent.putExtras(argsEvent);
                         startActivity(intent);
+                        finish();
                     })
                     .setNegativeButton("No", null)
                     .show();

@@ -91,6 +91,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         if (userData.get("phoneNumber") != null) { user.setPhoneNumber((long) userData.get("phoneNumber")); }
+                        user.createFacility();
                         browseProfilesList.add(user);
                     }
                     adapter.notifyDataSetChanged();
@@ -201,6 +202,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                 newArgs.putSerializable("appUser", appUser);
                 intent.putExtras(newArgs);
                 startActivity(intent);
+                finish();
             });
         }
 

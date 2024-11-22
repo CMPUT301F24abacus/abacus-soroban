@@ -900,6 +900,26 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Remove user's hosted event form hostedEvents
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User whose event is removed.
+     */
+    public void removeFromHostedEventsDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("hostedEvents")
+                .document(event.getEventName() + ", " + user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Hosted Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, hostedEvent may not include event.", e));
+    }
+
+    /**
      * Remove Event document from waitlist, while Removing User document as well.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -1076,6 +1096,7 @@ public class FireBaseController implements Serializable {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started hosted events deletion process!!!");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> eventData = document.getData();
                                 String eventName = (String) eventData.get("eventName");
@@ -1083,13 +1104,15 @@ public class FireBaseController implements Serializable {
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Event event = new Event(facility.getOwner(), facility, eventName, eventDate, drawDate,sampleSize);
+                                removeFromHostedEventsDoc(event, facility.getOwner());
                                 removeEventDoc(event);
                             }
                         } else {
-                            Log.e("Firestore", "Didn't find evet list!");
+                            Log.e("Firestore", "Didn't find facility list!");
                         }
                     }
-                });
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
 
         facilityRf.document(facility.getOwner().getDeviceId())
                 .delete()

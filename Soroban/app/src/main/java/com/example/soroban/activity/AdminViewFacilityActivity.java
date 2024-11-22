@@ -1,7 +1,10 @@
 package com.example.soroban.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -57,10 +60,31 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         violationText = findViewById(R.id.violation_tv);
         deleteFacilityBtn = findViewById(R.id.delete_facility_button);
 
+
         facilityNameText.setText(selectedFacility.getName());
         facilityDetailsText.setText(selectedFacility.getDetails());
         // Changed to username if necessary
         facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId() + "\nName: " + selectedFacility.getOwner().getFirstName());
+
+        deleteFacilityBtn.setOnClickListener(v -> {
+            new AlertDialog.Builder(AdminViewFacilityActivity.this)
+                    .setTitle("Delete Facility")
+                    .setMessage("Would you like to delete \"" + selectedFacility.getName() + "\"?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        Log.d("FireStore", "Delete is pressed.");
+                        firebaseController.removeFacilityDoc(selectedFacility);
+                        Intent intent;
+                        intent = new Intent(AdminViewFacilityActivity.this, AdminBrowseFacilityActivity.class);
+                        Bundle argsEvent = new Bundle();
+                        argsEvent.putSerializable("appUser", appUser);
+                        intent.putExtras(argsEvent);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
 
     }
 }

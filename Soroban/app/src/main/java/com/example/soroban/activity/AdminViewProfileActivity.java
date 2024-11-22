@@ -1,5 +1,7 @@
 package com.example.soroban.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -100,6 +102,24 @@ public class AdminViewProfileActivity extends AppCompatActivity {
                     Log.e("ViewProfileFragment", "Failed to load image URL", e);
                     userProfilePic.setImageResource(R.drawable.ic_profile); // Default image if fetch fails
                 });
+
+        deleteProfile.setOnClickListener(v -> {
+            new AlertDialog.Builder(AdminViewProfileActivity.this)
+                    .setTitle("Delete Image")
+                    .setMessage("Would you like to delete \"" + selectedUser.getDeviceId() + "\"?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        firebaseController.removeUserDoc(selectedUser);
+                        Intent intent;
+                        intent = new Intent(AdminViewProfileActivity.this, AdminBrowseProfileActivity.class);
+                        Bundle argsEvent = new Bundle();
+                        argsEvent.putSerializable("appUser",appUser);
+                        intent.putExtras(argsEvent);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
 
 
 
