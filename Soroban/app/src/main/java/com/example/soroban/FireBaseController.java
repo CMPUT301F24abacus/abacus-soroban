@@ -700,6 +700,8 @@ public class FireBaseController implements Serializable {
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         String eventDetails = document.getString("eventDetails");
+                        Integer maxEntrants = document.getLong("maxEntrants") != null ? document.getLong("maxEntrants").intValue() : null;
+                        Integer sampleSize = document.getLong("sampleSize") != null ? document.getLong("sampleSize").intValue() : null;
 
                         // Resolve owner reference
                         DocumentReference ownerRef = document.getDocumentReference("owner");
@@ -719,6 +721,8 @@ public class FireBaseController implements Serializable {
                                     event.setEventDate(eventDate);
                                     event.setDrawDate(drawDate);
                                     event.setEventDetails(eventDetails);
+                                    event.setMaxEntrants(maxEntrants);
+                                    event.setSampleSize(sampleSize);
                                     event.setOwner(owner);
 
                                     // Pass the event object back
