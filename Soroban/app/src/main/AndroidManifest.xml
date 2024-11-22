@@ -5,9 +5,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA"/>
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Soroban"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.PreferencesActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.CreateFacilityActivity"
             android:exported="false" />
@@ -45,7 +48,7 @@
         <activity android:name=".activity.EventRegistrationActivity" />
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
-        <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".activity.InvitationActivity" />
         <activity android:name=".activity.OrganizerDashboardActivity" />
         <activity android:name=".activity.FacilityDisplayActivity" />
         <activity android:name=".activity.ManageFacilityActivity" />
@@ -59,14 +62,13 @@
         <activity android:name=".activity.AdminViewProfileActivity" />
         <activity android:name=".activity.AdminViewEventActivity" />
         <activity android:name=".activity.AdminViewFacilityActivity" />
-        <activity android:name=".OrganizerEventViewDetailsActivity"/>
-        <activity android:name=".activity.EventEntrantsListActivity"/>
-        <activity android:name=".activity.EventUsersWaitlistedActivity"/>
-        <activity android:name=".activity.EventUsersConfirmedActivity"/>
-        <activity android:name=".activity.EventUsersCancelledActivity"/>
-        <activity android:name=".activity.EventUsersInvitedActivity"/>
+        <activity android:name=".OrganizerEventViewDetailsActivity" />
+        <activity android:name=".activity.EventEntrantsListActivity" />
+        <activity android:name=".activity.EventUsersWaitlistedActivity" />
+        <activity android:name=".activity.EventUsersConfirmedActivity" />
+        <activity android:name=".activity.EventUsersCancelledActivity" />
+        <activity android:name=".activity.EventUsersInvitedActivity" />
         <activity android:name=".EventDetailsActivity" />
-
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Notification;
@@ -38,6 +39,7 @@ public class FireBaseController implements Serializable {
     CollectionReference facilityRf;
     CollectionReference imageRf;
     Context context;
+    private NotificationManagerCompat notifManager;
 
     public FireBaseController(Context context){
         this.context = context;
@@ -171,6 +173,7 @@ public class FireBaseController implements Serializable {
         data.put("facility", facilityDoc);
         data.put("eventName", event.getEventName());
         data.put("eventDetails", event.getEventDetails());
+        data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
@@ -425,6 +428,7 @@ public class FireBaseController implements Serializable {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             int notifCounter = 0;
+                            notifManager = NotificationManagerCompat.from(context);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> notificationData = document.getData();
                                 String notificationTitle = (String) notificationData.get("title");
@@ -433,7 +437,7 @@ public class FireBaseController implements Serializable {
                                 String notificationEventName = (String) document.get("eventName");
                                 assert notificationDate != null;
                                 // Notify user if current time is after notification date
-                                if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0){
+                                if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0 && notifManager.areNotificationsEnabled()){
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
                                     notificationSystem.setNotification(notifCounter,notificationEventName + " : " + notificationTitle, notificationMessage);
                                     removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
@@ -693,6 +697,7 @@ public class FireBaseController implements Serializable {
                         String eventName = document.getString("eventName");
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
                         String eventDetails = document.getString("eventDetails");
 
                         // Create a new Event object with only the necessary data
@@ -700,6 +705,7 @@ public class FireBaseController implements Serializable {
                         event.setEventName(eventName);
                         event.setQrCodeHash(qrHash);
                         event.setEventDate(eventDate);
+                        event.setDrawDate(drawDate);
                         event.setEventDetails(eventDetails);
 
                         onSuccessListener.onSuccess(event);

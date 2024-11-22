@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.soroban.activity.EventRegistrationActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
@@ -25,8 +24,12 @@ public class EventDetailsActivity extends AppCompatActivity {
     private TextView eventName;
     private TextView eventDetails;
     private ImageView eventQRCode;
+    private TextView eventDrawDate;
+    private TextView eventDate;
     private Button notifyMeButton;
     private Button registerButton;
+    private Button unregisterButton;
+    private boolean isRegistered; // Store the registration status
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +40,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         if (args != null) {
             selectedEvent = (Event) args.getSerializable("eventData");
-
             if (selectedEvent == null) {
                 throw new IllegalArgumentException("Event data is missing.");
             }
@@ -48,14 +50,19 @@ public class EventDetailsActivity extends AppCompatActivity {
         // Assign button variables to views
         eventImage = findViewById(R.id.event_image);
         eventName = findViewById(R.id.event_name);
+        eventDate = findViewById(R.id.event_date);
+        eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
         notifyMeButton = findViewById(R.id.btn_notify_me);
         registerButton = findViewById(R.id.btn_register);
+        unregisterButton = findViewById(R.id.btn_unregister);
 
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
         eventDetails.setText(selectedEvent.getEventDetails());
+        eventDate.setText(selectedEvent.getEventDate().toString());
+        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
 
         // Set up QR code image
         eventQRCode.setOnClickListener(v -> {
@@ -79,14 +86,13 @@ public class EventDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
         });
 
-        registerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(EventDetailsActivity.this, EventRegistrationActivity.class);
-            Bundle newArgs = new Bundle();
-            newArgs.putSerializable("selectedEvent", selectedEvent);
-            newArgs.putSerializable("appUser", appUser);
-            intent.putExtras(newArgs);
-            startActivity(intent);
-        });
+        // Set up registration status
+        isRegistered = getIntent().getBooleanExtra("isRegistered", false);
+        updateRegistrationButtons();
+
+        // Set button click listeners
+        registerButton.setOnClickListener(v -> handleRegister());
+        unregisterButton.setOnClickListener(v -> handleUnregister());
     }
 
     private void showQRCodeDialog(Bitmap qrCodeBitmap) {
@@ -100,4 +106,29 @@ public class EventDetailsActivity extends AppCompatActivity {
         dialog.show();
         dialog.setCanceledOnTouchOutside(true);
     }
+
+    private void handleRegister() {
+        // Implement Registration
+        Toast.makeText(this, "Registered for the event!", Toast.LENGTH_SHORT).show();
+        isRegistered = true;
+        updateRegistrationButtons();
+    }
+
+    private void handleUnregister() {
+        // Implement Unregistration
+        Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
+        isRegistered = false;
+        updateRegistrationButtons();
+    }
+
+    private void updateRegistrationButtons() {
+        if (isRegistered) {
+            registerButton.setVisibility(View.GONE);
+            unregisterButton.setVisibility(View.VISIBLE);
+        } else {
+            registerButton.setVisibility(View.VISIBLE);
+            unregisterButton.setVisibility(View.GONE);
+        }
+    }
+
 }

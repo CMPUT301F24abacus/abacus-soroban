@@ -1,139 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/userProfilePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"/>
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/usernameText"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePhoto" />
+        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/user_firstname"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/firstNameText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userName" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/user_lastname"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/lastNameText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_firstname" />
+        <TextView
+            android:id="@+id/user_firstname"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/firstNameText"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/user_emailAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/emailAddressText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_lastname" />
+        <TextView
+            android:id="@+id/user_FirstNameField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/firstNameField"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/user_phoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/phoneNumberText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_emailAddress" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/user_registrationStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/registrationStatusText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_phoneNumber" />
+        <TextView
+            android:id="@+id/user_lastname"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/lastNameText"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/user_FirstNameField"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/firstNameField"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userName" />
+        <TextView
+            android:id="@+id/user_LastNameField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/lastNameField"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/user_LastNameField"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/lastNameField"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_FirstNameField" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/user_emailAddressField"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/emailAddressField"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_LastNameField" />
+        <TextView
+            android:id="@+id/user_emailAddress"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/emailAddressText"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/user_phoneNumberField"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/phoneNumberField"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_emailAddressField" />
+        <TextView
+            android:id="@+id/user_emailAddressField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/emailAddressField"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/user_phoneNumberField2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/registrationStatusField"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_phoneNumberField" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/user_phoneNumber"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/phoneNumberText"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/user_phoneNumberField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/phoneNumberField"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/user_registrationStatus"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:text="@string/registrationStatusText"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/registrationStatusField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/registrationStatusField"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>

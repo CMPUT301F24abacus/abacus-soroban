@@ -113,13 +113,19 @@ public class EventEntrantsListActivity extends AppCompatActivity {
 
             // Update Firebase to recognize invited users
             for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
-                fireBaseController.updateInvited(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
-                fireBaseController.updateUserInvited(selectedEvent.getInvitedEntrants().get(i), selectedEvent);
-                fireBaseController.removeFromWaitListDoc(selectedEvent, selectedEvent.getInvitedEntrants().get(i));
+                User user = selectedEvent.getInvitedEntrants().get(i);
+
+                fireBaseController.updateInvited(selectedEvent, user);
+                fireBaseController.updateUserInvited(user, selectedEvent);
+                fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+
+                // Update model class 
+                selectedEvent.addInvited(user);
+                selectedEvent.removeFromWaitingEntrants(user);
 
                 // Notify those invited entrants that they have been sampled
                 Notification newNotif = new Notification("You won the draw!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
-                fireBaseController.updateUserNotifications(selectedEvent.getInvitedEntrants().get(i), newNotif);
+                fireBaseController.updateUserNotifications(user, newNotif);
             }
 
             // Notify those still on waiting list that they have not been sampled

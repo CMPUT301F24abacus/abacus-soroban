@@ -14,8 +14,11 @@ import com.example.soroban.R;
 import com.example.soroban.adapter.UserArrayAdapter;
 import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
+
+import java.util.Calendar;
 
 public class EventUsersInvitedActivity extends AppCompatActivity {
     private User appUser;
@@ -82,7 +85,21 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
         });
 
         withdrawInvite.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement withdrawing invites from users", Toast.LENGTH_SHORT).show();
+            // Update Firebase to recognize cancelled users
+            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
+                User user = selectedEvent.getInvitedEntrants().get(i);
+                fireBaseController.updateThoseNotGoing(selectedEvent, user);
+                fireBaseController.removeInvitedDoc(selectedEvent, user);
+
+                // Update model class
+                selectedEvent.addToNotGoing(user);
+                selectedEvent.removeFromInvited(user);
+                listAdapter.notifyDataSetChanged();
+
+                // Notify those invited entrants that they have been cancelled
+                Notification newNotif = new Notification("Your invitation has been cancelled.", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                fireBaseController.updateUserNotifications(user, newNotif);
+            }
         });
     }
 }

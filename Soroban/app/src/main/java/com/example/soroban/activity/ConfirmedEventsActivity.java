@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.R;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
             String eventName = confirmedEvents.get(position);
             holder.tvEventName.setText(eventName);
             holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(ConfirmedEventsActivity.this, EventRegistrationActivity.class);
+                Intent intent = new Intent(ConfirmedEventsActivity.this, EventDetailsActivity.class);
                 intent.putExtra("isRegistered", true); // Pass true if the user is registered for the event
                 startActivity(intent);
             });
