@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Event Title -->
             <TextView
                 android:id="@+id/eventCreateTitle"
                 android:layout_width="wrap_content"
@@ -45,7 +46,6 @@
                 android:textColorHint="@color/text_secondary" />
 
             <!-- Event Date -->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
 
             <!-- Event Poster -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Event Poster:"
                 android:textColor="@color/color_registration_open"
@@ -107,18 +107,16 @@
 
             <!-- Draw Date -->
             <TextView
-                android:id="@+id/drawDateTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Selected Draw Date:"
+                android:text="Draw Date:"
                 android:textColor="@color/color_registration_open"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/draw_date_view"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MM/DD/YYYY" />
 
@@ -142,34 +140,29 @@
             <EditText
                 android:id="@+id/sampleSizeEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Entrant Limit:"
-                    android:textColor="@color/color_registration_open"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/entrantLimitEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter entrant limit (optional)"
-                    android:inputType="number"
-                    android:textColor="@color/background_light"
-                    android:textColorHint="@color/text_secondary" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:hint="Enter sample size"
                 android:inputType="number"
+                android:textColor="@color/background_light"
+                android:textColorHint="@color/text_secondary" />
+
+            <!-- Entrant Limit -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrant Limit:"
+                android:textColor="@color/color_registration_open"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/entrantLimitEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:hint="Enter entrant limit (optional)"
+                android:inputType="number"
                 android:textColor="@color/background_light"
                 android:textColorHint="@color/text_secondary" />
 
@@ -230,6 +223,7 @@
                 android:backgroundTint="@color/notification_positive_background"
                 android:text="Save Event"
                 android:textColor="#FFFFFF" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
