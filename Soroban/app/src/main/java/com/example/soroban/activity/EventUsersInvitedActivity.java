@@ -85,8 +85,10 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
         });
 
         withdrawInvite.setOnClickListener(v -> {
-            // Update Firebase to recognize cancelled users
-            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
+            int numberCancelled = selectedEvent.getInvitedEntrants().size();
+
+            // Update Firebase to recognize cancelled users (i.e. all users who had invites)
+            for(int i = 0; i < numberCancelled; i++){
                 User user = selectedEvent.getInvitedEntrants().get(i);
                 fireBaseController.updateThoseNotGoing(selectedEvent, user);
                 fireBaseController.removeInvitedDoc(selectedEvent, user);
@@ -100,6 +102,29 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
                 Notification newNotif = new Notification("Your invitation has been cancelled.", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
                 fireBaseController.updateUserNotifications(user, newNotif);
             }
+
+            // Resample entrants
+            int numberSampled = selectedEvent.sampleEntrants(numberCancelled).size();
+            Toast.makeText(this, numberSampled + " entrants were re-sampled.", Toast.LENGTH_SHORT).show();
+            // Schedule a new notification for all relevant users
+            selectedEvent.addNumberOfNotifications();
+
+            // Update Firebase to recognize invited users
+            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
+                User user = selectedEvent.getInvitedEntrants().get(i);
+                fireBaseController.updateInvited(selectedEvent, user);
+                fireBaseController.updateUserInvited(user, selectedEvent);
+                fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+
+                // Update model class
+                selectedEvent.addInvited(user);
+                selectedEvent.removeFromWaitingEntrants(user);
+
+                // Notify those invited entrants that they have been re-sampled
+                Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                fireBaseController.updateUserNotifications(user, newNotif);
+            }
+
         });
     }
 }

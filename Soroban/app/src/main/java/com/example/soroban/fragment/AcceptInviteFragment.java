@@ -15,7 +15,11 @@ import androidx.fragment.app.DialogFragment;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AcceptInviteFragment extends DialogFragment {
     private Event selectedEvent;
@@ -93,6 +97,26 @@ public class AcceptInviteFragment extends DialogFragment {
             // Perform Firebase changes
             fireBaseController.updateThoseNotGoing(selectedEvent, appUser);
             fireBaseController.removeInvitedDoc(selectedEvent, appUser);
+
+            // Re-sample a new user
+            ArrayList<Integer> reSampledIndices = selectedEvent.sampleEntrants(1); // Re-sample one user
+
+            // If a User was re-sampled
+            if(reSampledIndices.size() == 1){
+                User user = selectedEvent.getInvitedEntrants().get(0);
+                fireBaseController.updateInvited(selectedEvent, user);
+                fireBaseController.updateUserInvited(user, selectedEvent);
+                fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+
+                // Update model class
+                selectedEvent.addInvited(user);
+                selectedEvent.removeFromWaitingEntrants(user);
+
+                // Notify invited entrant that they have been re-sampled
+                Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                fireBaseController.updateUserNotifications(user, newNotif);
+            }
+            // Else there are no other waiting entrants
         });
         builder.setPositiveButton("Accept", (dialog, which) -> {
             //User accepts invitation
