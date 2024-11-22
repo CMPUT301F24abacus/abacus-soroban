@@ -1025,6 +1025,83 @@ public class FireBaseController implements Serializable {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
     }
 
+    /**
+     * Remove User Document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: Guy to be killed
+     */
+    public void removeUserDoc(User user) {
+        removeFacilityDoc(user.getFacility());
+        userRf.document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "The job is finished..");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user.", e));
+
+    }
+
+    /**
+     * Remove Event document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be eliminated.
+     */
+    public void removeEventDoc(Event event) {
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "EVENT Successfully Deleted!!!!!!!");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event.", e));
+    }
+
+    /**
+     * Remove Facility document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param facility: Facility to be finished off.
+     */
+    public void removeFacilityDoc(Facility facility) {
+        userRf.document(facility.getOwner().getDeviceId()).collection("hostedEvents")
+                        .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Event event = new Event(facility.getOwner(), facility, eventName, eventDate, drawDate,sampleSize);
+                                removeEventDoc(event);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find evet list!");
+                        }
+                    }
+                });
+
+        facilityRf.document(facility.getOwner().getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Facility is gone.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility.", e));
+    }
+
 
 
 }

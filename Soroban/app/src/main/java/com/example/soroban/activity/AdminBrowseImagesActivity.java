@@ -1,5 +1,6 @@
 package com.example.soroban.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Build;
@@ -192,6 +193,18 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
 
             holder.itemView.setOnClickListener(v -> {
                 deleteImageButton.setVisibility(View.VISIBLE);
+
+                deleteImageButton.setOnClickListener(v2 -> {
+                    new AlertDialog.Builder(AdminBrowseImagesActivity.this)
+                            .setTitle("Delete Image")
+                            .setMessage("Would you like to delete \"" + userIdList.get(position) + "\"'s image?")
+                            .setPositiveButton("Delete", (dialog, which) -> {
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                });
+
             });
         }
 

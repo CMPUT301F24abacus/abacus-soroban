@@ -1,5 +1,7 @@
 package com.example.soroban.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -70,6 +72,23 @@ public class AdminViewEventActivity extends AppCompatActivity {
         if (selectedEvent.getQRCode() != null) {
             eventQR.setImageBitmap(selectedEvent.getQRCode());
         }
+
+        deleteEventButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(AdminViewEventActivity.this)
+                    .setTitle("Delete Image")
+                    .setMessage("Would you like to delete \"" + selectedEvent.getEventName() + "\"?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        firebaseController.removeEventDoc(selectedEvent);
+                        Intent intent;
+                        intent = new Intent(AdminViewEventActivity.this, AdminBrowseEventActivity.class);
+                        Bundle argsEvent = new Bundle();
+                        argsEvent.putSerializable("appUser",appUser);
+                        intent.putExtras(argsEvent);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
 
 
     }
