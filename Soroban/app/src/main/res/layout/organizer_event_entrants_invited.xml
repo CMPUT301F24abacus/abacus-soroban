@@ -27,7 +27,10 @@
         android:id="@+id/usersInvitedView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:background="@color/color_spot_confirmed" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,7 +40,7 @@
             android:id="@+id/buttonWithdrawUsersInvite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Withdraw Invite"
+            android:text="Withdraw Invites"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

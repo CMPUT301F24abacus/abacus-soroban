@@ -13,24 +13,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import android.content.Intent;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.example.soroban.activity.NotificationActivity;
-import com.example.soroban.activity.UserDashboardActivity;
-import com.example.soroban.adapter.EventArrayAdapter;
+import com.example.soroban.activity.InvitationActivity;
 import com.example.soroban.adapter.NotificationAdapter;
-import com.example.soroban.model.Event;
-import com.example.soroban.model.EventList;
 import com.example.soroban.model.Notification;
-import com.example.soroban.model.User;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,13 +36,13 @@ public class TestNotificationActivity {
     private Notification mockNotification() { return new Notification("mockNotification", new Date(System.currentTimeMillis()), "mockEvent", Notification.NotificationType.BAD_NEWS); }
 
     @Rule
-    public ActivityScenarioRule<NotificationActivity> activityScenarioRule =
-    new ActivityScenarioRule<>(NotificationActivity.class);
+    public ActivityScenarioRule<InvitationActivity> activityScenarioRule =
+    new ActivityScenarioRule<>(InvitationActivity.class);
 
     @Test
     public void testNotificationTitleIsDisplayed() {
         // Check if the notification title "Notification" is displayed
-        onView(withId(R.id.tv_notifications)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_invitations)).check(matches(isDisplayed()));
     }
 
     // This test and below run into animation(?) errors, redo later...
@@ -61,7 +50,7 @@ public class TestNotificationActivity {
     public void testNotificationListDisplayed() {
         // Check if list view displays notifications
         Notification mockNotification = mockNotification();
-        onView(withId(R.id.tv_notifications)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_invitations)).check(matches(isDisplayed()));
 
         List<Notification> mockList = new ArrayList<>();
         mockList.add(mockNotification);
@@ -83,7 +72,7 @@ public class TestNotificationActivity {
     @Test
     public void testMuteAllBtn() {
         Notification mockNotification = mockNotification();
-        onView(withId(R.id.tv_notifications)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_invitations)).check(matches(isDisplayed()));
 
         List<Notification> mockList = new ArrayList<>();
         mockList.add(mockNotification);
@@ -104,7 +93,7 @@ public class TestNotificationActivity {
     @Test
     public void testClearAllBtn() {
         Notification mockNotification = mockNotification();
-        onView(withId(R.id.tv_notifications)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_invitations)).check(matches(isDisplayed()));
 
         List<Notification> mockList = new ArrayList<>();
         mockList.add(mockNotification);

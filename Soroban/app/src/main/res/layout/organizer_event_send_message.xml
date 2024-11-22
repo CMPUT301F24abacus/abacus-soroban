@@ -20,10 +20,13 @@
         android:id="@+id/organizerMessageEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Your message"
-        android:inputType="text"
-        android:textColor="@color/text_secondary"
-        android:textColorHint="@color/text_primary" />
+        android:hint="Enter message.." />
+
+    <Button
+        android:id="@+id/buttonSendMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Send Message" />
 
 </LinearLayout>

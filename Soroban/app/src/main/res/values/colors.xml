@@ -16,6 +16,7 @@
     <color name="black">#000000</color>
     <color name="light_gray">#F5F5F5</color>
     <color name="dark_gray">#616161</color>
+    <color name="gray_i_want">#A29A9A</color>
 
     <!-- Button Colors -->
     <color name="button_background_green">#A1CDA8</color>
