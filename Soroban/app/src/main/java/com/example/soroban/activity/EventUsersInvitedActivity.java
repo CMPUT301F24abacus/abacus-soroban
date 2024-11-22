@@ -88,7 +88,7 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
             int numberCancelled = selectedEvent.getInvitedEntrants().size();
 
             // Update Firebase to recognize cancelled users (i.e. all users who had invites)
-            for(int i = 0; i < numberCancelled; i++){
+            for(int i = selectedEvent.getInvitedEntrants().size() - 1; i >= 0 ; i--){
                 User user = selectedEvent.getInvitedEntrants().get(i);
                 fireBaseController.updateThoseNotGoing(selectedEvent, user);
                 fireBaseController.removeInvitedDoc(selectedEvent, user);
@@ -96,7 +96,6 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
                 // Update model class
                 selectedEvent.addToNotGoing(user);
                 selectedEvent.removeFromInvited(user);
-                listAdapter.notifyDataSetChanged();
 
                 // Notify those invited entrants that they have been cancelled
                 Notification newNotif = new Notification("Your invitation has been cancelled.", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
@@ -121,9 +120,11 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
                 selectedEvent.removeFromWaitingEntrants(user);
 
                 // Notify those invited entrants that they have been re-sampled
-                Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                Notification newNotif = new Notification("You have been re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
                 fireBaseController.updateUserNotifications(user, newNotif);
             }
+
+            listAdapter.notifyDataSetChanged();
 
         });
     }
