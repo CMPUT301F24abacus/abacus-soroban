@@ -89,6 +89,10 @@ public class Event implements Serializable {
         return owner;
     }
 
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     /**
      * Getter method for an Event's facility.
      * @Author: Matthieu Larochelle

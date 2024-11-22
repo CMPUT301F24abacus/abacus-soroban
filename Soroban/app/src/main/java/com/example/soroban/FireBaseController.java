@@ -694,22 +694,45 @@ public class FireBaseController implements Serializable {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
 
-                        // Only retrieve specific fields
+                        // Extract fields
                         String eventName = document.getString("eventName");
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         String eventDetails = document.getString("eventDetails");
 
-                        // Create a new Event object with only the necessary data
-                        Event event = new Event();
-                        event.setEventName(eventName);
-                        event.setQrCodeHash(qrHash);
-                        event.setEventDate(eventDate);
-                        event.setDrawDate(drawDate);
-                        event.setEventDetails(eventDetails);
+                        // Resolve owner reference
+                        DocumentReference ownerRef = document.getDocumentReference("owner");
+                        if (ownerRef != null) {
+                            ownerRef.get().addOnSuccessListener(ownerDoc -> {
+                                if (ownerDoc.exists()) {
+                                    // Extract owner details
+                                    String ownerDeviceId = ownerDoc.getId(); // deviceId as document ID
+                                    User owner = new User(ownerDeviceId); // Use existing constructor
 
-                        onSuccessListener.onSuccess(event);
+                                    owner.setDeviceId(ownerDeviceId);
+
+                                    // Build Event object
+                                    Event event = new Event();
+                                    event.setEventName(eventName);
+                                    event.setQrCodeHash(qrHash);
+                                    event.setEventDate(eventDate);
+                                    event.setDrawDate(drawDate);
+                                    event.setEventDetails(eventDetails);
+                                    event.setOwner(owner);
+
+                                    // Pass the event object back
+                                    onSuccessListener.onSuccess(event);
+                                } else {
+                                    onSuccessListener.onSuccess(null); // Owner not found
+                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error fetching owner details", e);
+                                onSuccessListener.onSuccess(null);
+                            });
+                        } else {
+                            onSuccessListener.onSuccess(null); // No owner reference
+                        }
                     } else {
                         onSuccessListener.onSuccess(null); // Event not found
                     }
@@ -719,6 +742,7 @@ public class FireBaseController implements Serializable {
                     onSuccessListener.onSuccess(null);
                 });
     }
+
 
     /**
      * Fetches an Event's Wailist of users collection in Firebase.
