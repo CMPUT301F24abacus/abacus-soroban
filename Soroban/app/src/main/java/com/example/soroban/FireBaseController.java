@@ -638,13 +638,13 @@ public class FireBaseController implements Serializable {
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
-        data.put("drawDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
-                .collection("hostedEvents").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
+                .collection("hostedEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId()).set(data);
     }
 
     /**
@@ -658,7 +658,7 @@ public class FireBaseController implements Serializable {
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
-        data.put("drawDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
