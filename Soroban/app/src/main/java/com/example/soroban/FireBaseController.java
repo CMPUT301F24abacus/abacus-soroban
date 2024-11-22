@@ -590,6 +590,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which is added.
      */
     public void updateUserWaitList(User user, Event event) {
+        Log.d("FireBaseController", "Adding user: " + user.getDeviceId() + " to waitlist for event: " + event.getEventName());
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
@@ -834,6 +835,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which updating is required.
      */
     public void updateEventWaitList(Event event, User user) {
+        Log.d("FireBaseController", "Adding user: " + user.getDeviceId() + " to events waitingEntrants for event: " + event.getEventName());
         Map<String, Object> data = new HashMap<>();
         data.put("deviceId", user.getDeviceId());
         data.put("firstName", user.getFirstName());

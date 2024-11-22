@@ -3,6 +3,7 @@ package com.example.soroban;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,8 +41,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         if (args != null) {
             selectedEvent = (Event) args.getSerializable("eventData");
-            if (selectedEvent == null) {
-                throw new IllegalArgumentException("Event data is missing.");
+            appUser = (User) args.getSerializable("appUser");
+
+            if (selectedEvent == null || appUser == null) {
+                throw new IllegalArgumentException("Event data or App User is missing.");
             }
         } else {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
@@ -108,8 +111,16 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void handleRegister() {
-        // Implement Registration
+        // Add the user to the users-waitlist and events-waitingEntrants
+        FireBaseController firebaseController = new FireBaseController(this);
+        firebaseController.updateEventWaitList(selectedEvent, appUser);
+        firebaseController.updateUserWaitList(appUser, selectedEvent);
+
+        Log.d("EventDetailsActivity", "User registration requested.");
         Toast.makeText(this, "Registered for the event!", Toast.LENGTH_SHORT).show();
+
+
+        // Update UI
         isRegistered = true;
         updateRegistrationButtons();
     }
