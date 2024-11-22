@@ -175,21 +175,21 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(snapshot -> {
                         String imageUrl = snapshot.getValue(String.class);
-                        Log.d("ViewProfileFragment", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
+                        Log.d("AdminBrowseProfileActivity", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
                         if (imageUrl != null) {
-                            Log.e("ViewProfileFragment", "before glide");
+                            Log.e("AdminBrowseProfileActivity", "before glide");
                             Glide.with(AdminBrowseProfileActivity.this)
                                     .load(imageUrl)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable caching to ensure updated image
                                     .skipMemoryCache(true)
                                     .into(holder.userPicIV);
-                            Log.e("ViewProfileFragment", "After glide");
+                            Log.e("AdminBrowseProfileActivity", "After glide");
                         } else {
                             holder.userPicIV.setImageResource(R.drawable.ic_profile); // Set default if no URL
                         }
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("ViewProfileFragment", "Failed to load image URL", e);
+                        Log.e("AdminBrowseProfileActivity", "Failed to load image URL", e);
                         holder.userPicIV.setImageResource(R.drawable.ic_profile); // Default image if fetch fails
                     });
 

@@ -209,7 +209,7 @@ public class FireBaseController implements Serializable {
                         user.setEmail((String) userData.get("email"));
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
-                        user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        if (userData.get("phoneNumber") != null) { user.setPhoneNumber((long) userData.get("phoneNumber")); }
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);

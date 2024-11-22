@@ -178,7 +178,11 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(BrowseEventsAdapter.ViewHolder holder, int position) {
             String eventName = browseEventsList.get(position).getEventName();
-            String eventDate = browseEventsList.get(position).getEventDate().toString();
+            String eventDate = "No Date"; // temporary, for events without dates
+            if (browseEventsList.get(position).getEventDate() != null) {
+                eventDate = browseEventsList.get(position).getEventDate().toString();
+            }
+
             holder.eventNameTV.setText(eventName);
             holder.eventDateTV.setText(eventDate);
             holder.itemView.setOnClickListener(v -> {
