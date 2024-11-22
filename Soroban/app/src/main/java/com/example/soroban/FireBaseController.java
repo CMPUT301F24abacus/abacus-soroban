@@ -1052,6 +1052,57 @@ public class FireBaseController implements Serializable {
      * @param user: Guy to be killed
      */
     public void removeUserDoc(User user) {
+        // remove user from event's waitList and remove the user's waitlist
+        userRf.document(user.getDeviceId()).collection("waitList")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started waitList deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                user.createFacility();
+                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                removeFromWaitListDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find waitlist!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting waitlist events.", e));
+
+        // remove user from event's Attendees and remove the user's registeredEvents list
+        userRf.document(user.getDeviceId()).collection("registeredEvents")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started registered deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                user.createFacility();
+                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                removeAttendeeDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find registered!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting registered events.", e));
+
+        // remove user's facility and then the user
         removeFacilityDoc(user.getFacility());
         userRf.document(user.getDeviceId())
                 .delete()
@@ -1072,6 +1123,8 @@ public class FireBaseController implements Serializable {
      * @param event: Event to be eliminated.
      */
     public void removeEventDoc(Event event) {
+        // to do: from userlists, remove event from user's waitlist/registered list
+
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1090,6 +1143,7 @@ public class FireBaseController implements Serializable {
      * @param facility: Facility to be finished off.
      */
     public void removeFacilityDoc(Facility facility) {
+        // remove events from user's hostedevents
         userRf.document(facility.getOwner().getDeviceId()).collection("hostedEvents")
                         .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -1114,6 +1168,7 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
 
+        // remove facility from firebase
         facilityRf.document(facility.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
