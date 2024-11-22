@@ -7,47 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- New button for Organizer Dashboard -->
+    <!-- Navbar (Toolbar) -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorPrimary"
+        android:title="Soroban App"
+        android:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Dashboard Buttons Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dashboardButtons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+        <!-- Button for Organizer Dashboard -->
         <Button
             android:id="@+id/btn_open_organizer_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Open Organizer Dashboard"
-            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_open_dashboard" />
 
+        <!-- Button for User Dashboard -->
         <Button
             android:id="@+id/btn_open_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Open Dashboard"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_open_organizer_dashboard" />
 
+        <!-- Button for Admin Dashboard -->
         <Button
             android:id="@+id/btn_open_admin_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="508dp"
             android:text="Open Admin Dashboard"
-            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/btn_open_dashboard"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_open_organizer_dashboard" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -57,6 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
