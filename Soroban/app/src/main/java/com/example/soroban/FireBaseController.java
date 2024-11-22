@@ -261,7 +261,6 @@ public class FireBaseController implements Serializable {
         });
     }
 
-
     /**
      * Fetches a User's WaitList collection in Firebase.
      * @Author: Kevin Li
@@ -327,6 +326,9 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                fetchEventWaitlistDoc(event);
+                                fetchEventCancelledDoc(event);
+                                fetchEventInvitedDoc(event);
                                 user.addRegisteredEvent(event);}
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
@@ -363,10 +365,11 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                fetchEventWaitlistDoc(event);
                                 fetchEventCancelledDoc(event);
-                                fetchEventInvitedDoc(event);
                                 fetchEventAttendeeDoc(event);
-                                user.addInvitedEvent(event);}
+                                user.addInvitedEvent(event);
+                                }
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
                         }
@@ -404,7 +407,8 @@ public class FireBaseController implements Serializable {
                                 fetchEventCancelledDoc(event);
                                 fetchEventInvitedDoc(event);
                                 fetchEventAttendeeDoc(event);
-                                user.addHostedEvent(event);}
+                                user.addHostedEvent(event);
+                            }
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
                         }
@@ -907,7 +911,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -936,7 +940,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

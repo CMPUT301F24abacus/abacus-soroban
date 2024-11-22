@@ -54,6 +54,8 @@ public class AcceptInviteFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = getLayoutInflater().inflate(R.layout.user_accept_invitation, null);
 
+        fireBaseController = new FireBaseController(getContext());
+
         Bundle args = getArguments();
 
         // Initialize appUser and selected Event for this fragment.
@@ -76,7 +78,6 @@ public class AcceptInviteFragment extends DialogFragment {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        fireBaseController = new FireBaseController(getContext());
         ImageButton cancel = view.findViewById(R.id.closeInvitation);
 
         cancel.setOnClickListener(v -> {
@@ -91,7 +92,6 @@ public class AcceptInviteFragment extends DialogFragment {
 
             // Perform local changes
             selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
-            selectedEvent.addToNotGoing(selectedEvent.getInvitedEntrants().find(appUser));
             listener.updateAdapter();
 
             // Perform Firebase changes

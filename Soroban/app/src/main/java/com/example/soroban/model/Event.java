@@ -331,12 +331,12 @@ public class Event implements Serializable {
 
     /**
      * Add a user to an Events's list of invited.
-     * @Author: Kevin Li
-     * @Version: 1.0
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 2.0
      * @param user : User.
      */
     public Boolean addInvited(User user){
-        return invitedEntrants.addUser(user);
+        return invitedEntrants.addUser(user) && (user.getInvitedEvents().contains(this) ? Boolean.TRUE : user.addInvitedEvent(this));
     }
 
     /**
@@ -346,7 +346,8 @@ public class Event implements Serializable {
      * @param user  User.
      */
     public Boolean removeFromInvited(User user){
-        return invitedEntrants.remove(user);
+
+        return invitedEntrants.remove(user) && (user.getInvitedEvents().contains(this) ? user.removeInvitedEvent(this)  : Boolean.TRUE);
     }
 
     /**

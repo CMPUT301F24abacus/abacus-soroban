@@ -107,14 +107,10 @@ public class UserEventActivity extends AppCompatActivity {
 
                 // If a User was re-sampled
                 if(reSampledIndices.size() == 1){
-                    User user = selectedEvent.getInvitedEntrants().get(0);
+                    User user = selectedEvent.getInvitedEntrants().get(reSampledIndices.get(0));
                     fireBaseController.updateInvited(selectedEvent, user);
                     fireBaseController.updateUserInvited(user, selectedEvent);
                     fireBaseController.removeFromWaitListDoc(selectedEvent, user);
-
-                    // Update model class
-                    selectedEvent.addInvited(user);
-                    selectedEvent.removeFromWaitingEntrants(user);
 
                     // Notify invited entrant that they have been re-sampled
                     Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
