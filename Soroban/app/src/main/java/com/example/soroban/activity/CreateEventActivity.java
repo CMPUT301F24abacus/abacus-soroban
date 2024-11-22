@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.FireBaseController;
-import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
 import com.example.soroban.fragment.DatePickerFragment;
@@ -24,7 +23,6 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,14 +41,12 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private Button geoReqButton;
     private Button autoReplaceButton;
     private Button saveEventButton;
+    private TextView selectedEventDateTextView;
+    private TextView selectedDrawDateTextView;
+
     private Date eventDate;
     private Date drawDate;
     private User appUser;
-
-    // QRCode
-    private Button generateQrCodeButton;
-    private TextView qrCodeLabel;
-    private ImageView qrCodeImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,41 +85,35 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         geoReqButton = findViewById(R.id.eventGeoReqSwitch);
         autoReplaceButton = findViewById(R.id.eventAutoReplaceSwitch);
         saveEventButton = findViewById(R.id.saveEventButton);
+        selectedEventDateTextView = findViewById(R.id.event_date_view);
+        selectedDrawDateTextView = findViewById(R.id.draw_date_view);
 
         eventPosterUploadButton.setOnClickListener(v -> {
             Toast.makeText(this, "WIP - Implement upload image prompt", Toast.LENGTH_SHORT).show();
         });
 
         // Set up Save button click listener
-        saveEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveEvent();
-            }
-        });
+        saveEventButton.setOnClickListener(v -> saveEvent());
 
         // Set up event date select and draw date select button listeners
         DatePickerListener listener = this;
 
-        eventDateSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerFragment dialogFragment = new DatePickerFragment();
-                dialogFragment.setTargetDate(eventDate);
-                dialogFragment.setListener(listener);
-                dialogFragment.show(getSupportFragmentManager(), "Select event date");
-            }
+        eventDateSelectButton.setOnClickListener(view -> {
+            DatePickerFragment dialogFragment = new DatePickerFragment();
+            dialogFragment.setTargetDate(eventDate);
+            dialogFragment.setListener(listener);
+            dialogFragment.show(getSupportFragmentManager(), "Select event date");
         });
 
-        drawDateSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerFragment dialogFragment = new DatePickerFragment();
-                dialogFragment.setTargetDate(drawDate);
-                dialogFragment.setListener(listener);
-                dialogFragment.show(getSupportFragmentManager(), "Select draw date");
-            }
+        drawDateSelectButton.setOnClickListener(view -> {
+            DatePickerFragment dialogFragment = new DatePickerFragment();
+            dialogFragment.setTargetDate(drawDate);
+            dialogFragment.setListener(listener);
+            dialogFragment.show(getSupportFragmentManager(), "Select draw date");
         });
+
+        // Display initial dates
+        updateDateTextViews();
     }
 
     private void saveEvent() {
@@ -191,7 +181,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         Intent intent = new Intent(CreateEventActivity.this, OrganizerDashboardActivity.class);
         Bundle newArgs = new Bundle();
-        newArgs.putSerializable("appUser",appUser);
+        newArgs.putSerializable("appUser", appUser);
         intent.putExtras(newArgs);
         startActivity(intent);
     }
@@ -203,6 +193,13 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         } else {
             drawDate = givenDate;
         }
+        updateDateTextViews();
+    }
+
+    private void updateDateTextViews() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        selectedEventDateTextView.setText(String.format("%s", dateFormat.format(eventDate)));
+        selectedDrawDateTextView.setText(String.format("%s", dateFormat.format(drawDate)));
     }
 
     private String generateHash(String input) {
@@ -222,3 +219,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
     }
 }
+
+
+
