@@ -79,6 +79,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
         browseImageBtn.setOnClickListener( v -> {
             Intent intent;
             intent = new Intent(AdminDashboardActivity.this, AdminBrowseImagesActivity.class);
+            Bundle argsIg = new Bundle();
+            argsIg.putSerializable("appUser",appUser);
+            intent.putExtras(argsIg);
             startActivity(intent);
         });
 

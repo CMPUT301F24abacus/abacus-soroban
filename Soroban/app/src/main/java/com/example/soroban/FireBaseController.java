@@ -212,7 +212,7 @@ public class FireBaseController implements Serializable {
                         user.setEmail((String) userData.get("email"));
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
-                        user.setPhoneNumber((long) userData.get("phoneNumber"));
+                        if (userData.get("phoneNumber") != null) { user.setPhoneNumber((long) userData.get("phoneNumber")); }
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
@@ -900,6 +900,26 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Remove user's hosted event form hostedEvents
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be removed.
+     * @param user: User whose event is removed.
+     */
+    public void removeFromHostedEventsDoc(Event event, User user) {
+        userRf.document(user.getDeviceId()).collection("hostedEvents")
+                .document(event.getEventName() + ", " + user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Hosted Event Successfully Deleted");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event, hostedEvent may not include event.", e));
+    }
+
+    /**
      * Remove Event document from waitlist, while Removing User document as well.
      * @Author: Kevin Li
      * @Version: 1.0
@@ -1023,6 +1043,141 @@ public class FireBaseController implements Serializable {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user, userlist may not include user.", e));
+    }
+
+    /**
+     * Remove User Document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param user: Guy to be killed
+     */
+    public void removeUserDoc(User user) {
+        // remove user from event's waitList and remove the user's waitlist
+        userRf.document(user.getDeviceId()).collection("waitList")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started waitList deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                user.createFacility();
+                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                removeFromWaitListDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find waitlist!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting waitlist events.", e));
+
+        // remove user from event's Attendees and remove the user's registeredEvents list
+        userRf.document(user.getDeviceId()).collection("registeredEvents")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started registered deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                user.createFacility();
+                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                removeAttendeeDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find registered!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting registered events.", e));
+
+        // remove user's facility and then the user
+        removeFacilityDoc(user.getFacility());
+        userRf.document(user.getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "The job is finished..");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting user.", e));
+
+    }
+
+    /**
+     * Remove Event document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param event: Event to be eliminated.
+     */
+    public void removeEventDoc(Event event) {
+        // to do: from userlists, remove event from user's waitlist/registered list
+
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "EVENT Successfully Deleted!!!!!!!");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting event.", e));
+    }
+
+    /**
+     * Remove Facility document from Firebase.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param facility: Facility to be finished off.
+     */
+    public void removeFacilityDoc(Facility facility) {
+        // remove events from user's hostedevents
+        userRf.document(facility.getOwner().getDeviceId()).collection("hostedEvents")
+                        .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started hosted events deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> eventData = document.getData();
+                                String eventName = (String) eventData.get("eventName");
+                                Date eventDate = document.getDate("eventDate");
+                                Date drawDate = document.getDate("drawDate");
+                                Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Event event = new Event(facility.getOwner(), facility, eventName, eventDate, drawDate,sampleSize);
+                                removeFromHostedEventsDoc(event, facility.getOwner());
+                                removeEventDoc(event);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find facility list!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
+
+        // remove facility from firebase
+        facilityRf.document(facility.getOwner().getDeviceId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("FireStore", "Facility is gone.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility.", e));
     }
 
 
