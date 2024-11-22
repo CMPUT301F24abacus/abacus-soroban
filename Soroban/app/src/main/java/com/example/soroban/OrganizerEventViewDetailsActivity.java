@@ -94,7 +94,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
         eventDate.setText(formattedEventDate);
         eventSampleSize.setText(selectedEvent.getSampleSize().toString());
-        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+        String formattedEventDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
+        eventDrawDate.setText(formattedEventDrawDate);
         // geoReq.setActivated();
         // autoReplace.setActivated();
 

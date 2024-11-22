@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,6 +129,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private void saveEvent() {
         // Get the entered data
         String eventName = eventNameEditText.getText().toString().trim();
+        String eventDetails = eventDescriptionEditText.getText().toString().trim();
         int eventSampleSize;
         Facility userFacility = appUser.getFacility();
 
@@ -175,6 +177,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Create a new Event object and set QR code hash
         Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        newOrganizerEvent.setEventDetails(eventDetails);
         newOrganizerEvent.setQrCodeHash(qrCodeHash);
 
         // Add the event to the list and database

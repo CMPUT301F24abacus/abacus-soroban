@@ -25,6 +25,8 @@ public class EventDetailsActivity extends AppCompatActivity {
     private TextView eventName;
     private TextView eventDetails;
     private ImageView eventQRCode;
+    private TextView eventDrawDate;
+    private TextView eventDate;
     private Button notifyMeButton;
     private Button registerButton;
 
@@ -48,6 +50,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         // Assign button variables to views
         eventImage = findViewById(R.id.event_image);
         eventName = findViewById(R.id.event_name);
+        eventDate = findViewById(R.id.event_date);
+        eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
         notifyMeButton = findViewById(R.id.btn_notify_me);
@@ -56,6 +60,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
         eventDetails.setText(selectedEvent.getEventDetails());
+        eventDate.setText(selectedEvent.getEventDate().toString());
+        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
 
         // Set up QR code image
         eventQRCode.setOnClickListener(v -> {

@@ -26,6 +26,20 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Date"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/event_draw_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Draw Date"
+        android:textAlignment="center" />
+
+    <TextView
         android:id="@+id/event_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
