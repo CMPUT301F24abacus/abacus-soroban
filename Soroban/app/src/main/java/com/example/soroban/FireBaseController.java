@@ -871,7 +871,7 @@ public class FireBaseController implements Serializable {
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .collection("waitingEntrants").document(user.getDeviceId()).set(data);
+                .collection("waitList").document(user.getDeviceId()).set(data);
     }
 
     /**
@@ -937,7 +937,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

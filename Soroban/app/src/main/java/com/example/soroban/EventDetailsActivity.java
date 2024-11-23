@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
-public class EventDetailsActivity extends AppCompatActivity {
+import java.util.Calendar;
 
+public class EventDetailsActivity extends AppCompatActivity {
+    private FireBaseController firebaseController;
     private Event selectedEvent;
     private User appUser;
     private ImageView eventImage;
@@ -38,6 +40,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_details);
 
         Bundle args = getIntent().getExtras();
+        firebaseController = new FireBaseController(this);
 
         if (args != null) {
             selectedEvent = (Event) args.getSerializable("eventData");
@@ -45,6 +48,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
             if (selectedEvent == null || appUser == null) {
                 throw new IllegalArgumentException("Event data or App User is missing.");
+            }else{
+                firebaseController.fetchEventWaitlistDoc(selectedEvent);
             }
         } else {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
@@ -69,7 +74,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         // Set up QR code image
         eventQRCode.setOnClickListener(v -> {
-            FireBaseController firebaseController = new FireBaseController(this);
             firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
                 if (qrCodeHash != null) {
                     Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
@@ -111,22 +115,42 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void handleRegister() {
-        // Add the user to the users-waitlist and events-waitingEntrants
-        FireBaseController firebaseController = new FireBaseController(this);
-        firebaseController.updateEventWaitList(selectedEvent, appUser);
-        firebaseController.updateUserWaitList(appUser, selectedEvent);
+        // Check if current date is passed drawDate
 
-        Log.d("EventDetailsActivity", "User registration requested.");
-        Toast.makeText(this, "Registered for the event!", Toast.LENGTH_SHORT).show();
+        if(!(Calendar.getInstance().getTimeInMillis() > selectedEvent.getDrawDate().getTime())){
+            // Add user to event waitlist
+            boolean joinResult = selectedEvent.addToWaitingEntrants(appUser);
+
+            if(joinResult){
+                // Add the user to the users-waitlist and events-waitingEntrants
+                FireBaseController firebaseController = new FireBaseController(this);
+                firebaseController.updateEventWaitList(selectedEvent, appUser);
+                firebaseController.updateUserWaitList(appUser, selectedEvent);
+
+                Log.d("EventDetailsActivity", "User registration requested.");
+                Toast.makeText(this, "Registered for the event!", Toast.LENGTH_SHORT).show();
 
 
-        // Update UI
-        isRegistered = true;
-        updateRegistrationButtons();
+                // Update UI
+                isRegistered = true;
+                updateRegistrationButtons();
+            }else{
+                // User was unable to join the waitlist
+                // Could be they are already registered, or max entrants was met
+                Toast.makeText(this, "Sorry, you cannot register for this event at this time!", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            // It is past the drawDate
+            Toast.makeText(this, "Sorry, the draw date for this event has already passed!", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void handleUnregister() {
-        // Implement Unregistration
+        // Unregistration
+        appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+        firebaseController.removeFromWaitListDoc(selectedEvent,appUser);
         Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
         isRegistered = false;
         updateRegistrationButtons();
