@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 
 public class User implements Serializable {
-    private final String deviceId;
+    private String deviceId;
     private String username;
     private String firstName;
     private String lastName;
@@ -59,6 +59,10 @@ public class User implements Serializable {
      */
     public String getDeviceId() {
         return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     /**

@@ -590,6 +590,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which is added.
      */
     public void updateUserWaitList(User user, Event event) {
+        Log.d("FireBaseController", "Adding user: " + user.getDeviceId() + " to waitlist for event: " + event.getEventName());
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
@@ -693,22 +694,49 @@ public class FireBaseController implements Serializable {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
 
-                        // Only retrieve specific fields
+                        // Extract fields
                         String eventName = document.getString("eventName");
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         String eventDetails = document.getString("eventDetails");
+                        Integer maxEntrants = document.getLong("maxEntrants") != null ? document.getLong("maxEntrants").intValue() : null;
+                        Integer sampleSize = document.getLong("sampleSize") != null ? document.getLong("sampleSize").intValue() : null;
 
-                        // Create a new Event object with only the necessary data
-                        Event event = new Event();
-                        event.setEventName(eventName);
-                        event.setQrCodeHash(qrHash);
-                        event.setEventDate(eventDate);
-                        event.setDrawDate(drawDate);
-                        event.setEventDetails(eventDetails);
+                        // Resolve owner reference
+                        DocumentReference ownerRef = document.getDocumentReference("owner");
+                        if (ownerRef != null) {
+                            ownerRef.get().addOnSuccessListener(ownerDoc -> {
+                                if (ownerDoc.exists()) {
+                                    // Extract owner details
+                                    String ownerDeviceId = ownerDoc.getId(); // deviceId as document ID
+                                    User owner = new User(ownerDeviceId); // Use existing constructor
 
-                        onSuccessListener.onSuccess(event);
+                                    owner.setDeviceId(ownerDeviceId);
+
+                                    // Build Event object
+                                    Event event = new Event();
+                                    event.setEventName(eventName);
+                                    event.setQrCodeHash(qrHash);
+                                    event.setEventDate(eventDate);
+                                    event.setDrawDate(drawDate);
+                                    event.setEventDetails(eventDetails);
+                                    event.setMaxEntrants(maxEntrants);
+                                    event.setSampleSize(sampleSize);
+                                    event.setOwner(owner);
+
+                                    // Pass the event object back
+                                    onSuccessListener.onSuccess(event);
+                                } else {
+                                    onSuccessListener.onSuccess(null); // Owner not found
+                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error fetching owner details", e);
+                                onSuccessListener.onSuccess(null);
+                            });
+                        } else {
+                            onSuccessListener.onSuccess(null); // No owner reference
+                        }
                     } else {
                         onSuccessListener.onSuccess(null); // Event not found
                     }
@@ -718,6 +746,7 @@ public class FireBaseController implements Serializable {
                     onSuccessListener.onSuccess(null);
                 });
     }
+
 
     /**
      * Fetches an Event's Wailist of users collection in Firebase.
@@ -834,6 +863,7 @@ public class FireBaseController implements Serializable {
      * @param event: Event for which updating is required.
      */
     public void updateEventWaitList(Event event, User user) {
+        Log.d("FireBaseController", "Adding user: " + user.getDeviceId() + " to events waitingEntrants for event: " + event.getEventName());
         Map<String, Object> data = new HashMap<>();
         data.put("deviceId", user.getDeviceId());
         data.put("firstName", user.getFirstName());
@@ -841,7 +871,7 @@ public class FireBaseController implements Serializable {
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
-                .collection("waitingEntrants").document(user.getDeviceId()).set(data);
+                .collection("waitList").document(user.getDeviceId()).set(data);
     }
 
     /**
@@ -927,7 +957,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeFromWaitListDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("waitList").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
