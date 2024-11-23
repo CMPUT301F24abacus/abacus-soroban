@@ -42,6 +42,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private TextView selectedEventDateTextView;
     private TextView selectedDrawDateTextView;
     private ActivityResultLauncher<Intent> posterPickerLauncher;
+    private String posterUrl = null;
 
     private static final int PICK_POSTER_REQUEST = 1001;
 
@@ -186,6 +187,9 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
         newOrganizerEvent.setEventDetails(eventDetails);
         newOrganizerEvent.setQrCodeHash(generateHash());
+        if (posterUrl != null) {
+            newOrganizerEvent.setPosterUrl(posterUrl);
+        }
 
         // Save the event to the user's hosted events and Firebase
         UserController userController = new UserController(appUser);
@@ -263,9 +267,9 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
             // Upload the poster to Firebase
             fireBaseController.uploadEventPoster(posterUri, tempEventName, uri -> {
-                String posterUrl = uri.toString();
+                posterUrl = uri.toString();
                 if (newOrganizerEvent != null) {
-                    newOrganizerEvent.setPosterUrl(posterUrl);
+                    //newOrganizerEvent.setPosterUrl(posterUrl);
                     fireBaseController.updateEventPoster(newOrganizerEvent);
                 }
                 Toast.makeText(this, "Poster uploaded successfully!", Toast.LENGTH_SHORT).show();
