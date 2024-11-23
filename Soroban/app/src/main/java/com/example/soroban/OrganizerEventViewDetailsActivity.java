@@ -2,8 +2,10 @@ package com.example.soroban;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.soroban.activity.EventEntrantsListActivity;
 import com.example.soroban.model.Event;
@@ -36,6 +40,9 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private TextView eventDrawDate;
     private Button geoReq;
     private Button autoReplace;
+    private ActivityResultLauncher<Intent> editPosterLauncher;
+    private static final int EDIT_POSTER_REQUEST = 1002; // Unique request code for editing a poster
+
 
     private Button viewEntrants;
     private Button editEvent;
@@ -49,6 +56,20 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_view_event_details);
+
+        // Initialize ActivityResultLauncher for editing the poster
+        editPosterLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri posterUri = result.getData().getData();
+                        handlePosterUpdate(posterUri);
+                    } else {
+                        Log.e("OrganizerEventViewDetailsActivity", "Poster update canceled or failed.");
+                        Toast.makeText(this, "Failed to update poster.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
         Bundle args = getIntent().getExtras();
 
@@ -144,7 +165,52 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         editEvent.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, OrganizerEventEditDetailsActivity.class);
-            startActivity(intent);
+            Bundle editArgs = new Bundle();
+            editArgs.putSerializable("selectedEvent", selectedEvent);
+            intent.putExtras(editArgs);
+            editPosterLauncher.launch(intent); // Use the new launcher
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_POSTER_REQUEST && resultCode == RESULT_OK && data != null) {
+            Uri posterUri = data.getData();
+            FireBaseController fireBaseController = new FireBaseController(this);
+
+            fireBaseController.uploadEventPoster(posterUri, selectedEvent.getEventName(), uri -> {
+                String posterUrl = uri.toString();
+                selectedEvent.setPosterUrl(posterUrl);
+                fireBaseController.eventUpdate(selectedEvent);
+
+                Toast.makeText(this, "Poster updated successfully!", Toast.LENGTH_SHORT).show();
+            }, e -> {
+                Log.e("OrganizerEventViewDetailsActivity", "Failed to update poster", e);
+                Toast.makeText(this, "Failed to update poster", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    // Handle poster updates
+    private void handlePosterUpdate(Uri posterUri) {
+        if (posterUri != null) {
+            FireBaseController fireBaseController = new FireBaseController(this);
+            fireBaseController.uploadEventPoster(posterUri, selectedEvent.getEventName(), uri -> {
+                String posterUrl = uri.toString();
+                selectedEvent.setPosterUrl(posterUrl);
+                fireBaseController.eventUpdate(selectedEvent);
+
+                Toast.makeText(this, "Poster updated successfully!", Toast.LENGTH_SHORT).show();
+            }, e -> {
+                Log.e("OrganizerEventViewDetailsActivity", "Failed to update poster", e);
+                Toast.makeText(this, "Failed to update poster.", Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Log.e("OrganizerEventViewDetailsActivity", "Poster URI is null.");
+            Toast.makeText(this, "Failed to get poster URI.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

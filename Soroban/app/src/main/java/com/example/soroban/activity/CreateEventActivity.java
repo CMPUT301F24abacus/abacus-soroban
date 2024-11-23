@@ -1,17 +1,17 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.FireBaseController;
@@ -22,13 +22,13 @@ import com.example.soroban.fragment.DatePickerListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
 
@@ -38,12 +38,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private Button eventDateSelectButton;
     private ImageButton eventPosterUploadButton;
     private Button drawDateSelectButton;
-    private Button geoReqButton;
-    private Button autoReplaceButton;
     private Button saveEventButton;
     private TextView selectedEventDateTextView;
     private TextView selectedDrawDateTextView;
+    private ActivityResultLauncher<Intent> posterPickerLauncher;
 
+    private static final int PICK_POSTER_REQUEST = 1001;
+
+    private Event newOrganizerEvent;
     private Date eventDate;
     private Date drawDate;
     private User appUser;
@@ -53,10 +55,22 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        // Get arguments passed from previous activity.
-        Bundle args = getIntent().getExtras();
+        // Initialize the launcher for picking an image
+        posterPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri posterUri = result.getData().getData();
+                        handlePosterUpload(posterUri);
+                    } else {
+                        Log.e("CreateEventActivity", "Poster selection canceled or failed.");
+                        Toast.makeText(this, "Failed to select a poster.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
-        // Initialize appUser for this activity.
+        // Get arguments passed from the previous activity
+        Bundle args = getIntent().getExtras();
         if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 appUser = args.getSerializable("appUser", User.class);
@@ -65,13 +79,13 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             }
 
             if (appUser == null) {
-                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
+                throw new IllegalArgumentException("Must pass a User object to initialize appUser.");
             }
         } else {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        // Initialize dates to be current day
+        // Initialize event dates
         eventDate = Calendar.getInstance().getTime();
         drawDate = Calendar.getInstance().getTime();
 
@@ -82,46 +96,62 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         eventPosterUploadButton = findViewById(R.id.buttonUploadPoster);
         eventDateSelectButton = findViewById(R.id.eventDateSelectButton);
         drawDateSelectButton = findViewById(R.id.drawDateSelectButton);
-        geoReqButton = findViewById(R.id.eventGeoReqSwitch);
-        autoReplaceButton = findViewById(R.id.eventAutoReplaceSwitch);
         saveEventButton = findViewById(R.id.saveEventButton);
         selectedEventDateTextView = findViewById(R.id.event_date_view);
         selectedDrawDateTextView = findViewById(R.id.draw_date_view);
 
-        eventPosterUploadButton.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement upload image prompt", Toast.LENGTH_SHORT).show();
-        });
 
-        // Set up Save button click listener
-        saveEventButton.setOnClickListener(v -> saveEvent());
-
-        // Set up event date select and draw date select button listeners
-        DatePickerListener listener = this;
-
+        // Set up date pickers
         eventDateSelectButton.setOnClickListener(view -> {
             DatePickerFragment dialogFragment = new DatePickerFragment();
             dialogFragment.setTargetDate(eventDate);
-            dialogFragment.setListener(listener);
+            dialogFragment.setListener(this);
             dialogFragment.show(getSupportFragmentManager(), "Select event date");
         });
 
         drawDateSelectButton.setOnClickListener(view -> {
             DatePickerFragment dialogFragment = new DatePickerFragment();
             dialogFragment.setTargetDate(drawDate);
-            dialogFragment.setListener(listener);
+            dialogFragment.setListener(this);
             dialogFragment.show(getSupportFragmentManager(), "Select draw date");
         });
 
-        // Display initial dates
+        // Enable poster upload button only after event is saved
+        saveEventButton.setOnClickListener(v -> {
+            saveEvent();
+        });
+
+        eventPosterUploadButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            posterPickerLauncher.launch(intent);
+        });
+
+
+
+        // Initialize the launcher for picking an image
+        posterPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri posterUri = result.getData().getData();
+                        handlePosterUpload(posterUri);
+                    } else {
+                        Log.e("CreateEventActivity", "Poster selection canceled or failed.");
+                        Toast.makeText(this, "Failed to select a poster.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Update the date views with initial values
         updateDateTextViews();
     }
 
     private void saveEvent() {
-        // Get the entered data
+        // Get input data
         String eventName = eventNameEditText.getText().toString().trim();
         String eventDetails = eventDescriptionEditText.getText().toString().trim();
         int eventSampleSize;
-        Facility userFacility = appUser.getFacility();
 
         // Validate input
         if (eventName.isEmpty()) {
@@ -130,17 +160,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
 
         if (eventDate.compareTo(drawDate) <= 0) {
-            Toast.makeText(this, "Please enter an event date that is after the draw date.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (eventDate.compareTo(Calendar.getInstance().getTime()) <= 0) {
-            Toast.makeText(this, "Please enter an event date that is after the current date.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (drawDate.compareTo(Calendar.getInstance().getTime()) <= 0) {
-            Toast.makeText(this, "Please enter a draw date that is after the current date.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The event date must be after the draw date.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -152,36 +172,70 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
 
         if (eventSampleSize <= 0) {
-            Toast.makeText(this, "Please enter a valid sample size for your event.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sample size must be greater than zero.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Ensure user has facility
+        Facility userFacility = appUser.getFacility();
         if (userFacility == null) {
             Toast.makeText(this, "You must have a facility to create events.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Generate a random QR code hash
-        String qrCodeHash = generateHash();
-
-        // Create a new Event object and set QR code hash
-        Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        // Create the event
+        newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
         newOrganizerEvent.setEventDetails(eventDetails);
-        newOrganizerEvent.setQrCodeHash(qrCodeHash);
+        newOrganizerEvent.setQrCodeHash(generateHash());
 
-        // Add the event to the list and database
+        // Save the event to the user's hosted events and Firebase
         UserController userController = new UserController(appUser);
         FireBaseController fireBaseController = new FireBaseController(this);
         userController.addHostedEvent(newOrganizerEvent);
         fireBaseController.createEventDb(newOrganizerEvent);
-        fireBaseController.updateUserHosted(appUser, newOrganizerEvent);
 
         Intent intent = new Intent(CreateEventActivity.this, OrganizerDashboardActivity.class);
         Bundle newArgs = new Bundle();
         newArgs.putSerializable("appUser", appUser);
         intent.putExtras(newArgs);
         startActivity(intent);
+
+        Toast.makeText(this, "Event saved successfully.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_POSTER_REQUEST && resultCode == RESULT_OK && data != null) {
+            Uri posterUri = data.getData();
+
+            if (posterUri != null) {
+                FireBaseController fireBaseController = new FireBaseController(this);
+                fireBaseController.uploadEventPoster(posterUri, newOrganizerEvent.getEventName(), uri -> {
+                    String posterUrl = uri.toString();
+                    newOrganizerEvent.setPosterUrl(posterUrl);
+                    fireBaseController.updateEventPoster(newOrganizerEvent);
+
+                    Toast.makeText(this, "Poster uploaded successfully!", Toast.LENGTH_SHORT).show();
+                }, e -> {
+                    Log.e("CreateEventActivity", "Failed to upload poster", e);
+                    Toast.makeText(this, "Failed to upload poster.", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                Log.e("CreateEventActivity", "Poster URI is null.");
+                Toast.makeText(this, "Failed to get image URI.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void updateDateTextViews() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        selectedEventDateTextView.setText(dateFormat.format(eventDate));
+        selectedDrawDateTextView.setText(dateFormat.format(drawDate));
+    }
+
+    private String generateHash() {
+        return java.util.UUID.randomUUID().toString();
     }
 
     @Override
@@ -194,17 +248,35 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         updateDateTextViews();
     }
 
-    private void updateDateTextViews() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        selectedEventDateTextView.setText(String.format("%s", dateFormat.format(eventDate)));
-        selectedDrawDateTextView.setText(String.format("%s", dateFormat.format(drawDate)));
+    // Handle the poster upload
+    private void handlePosterUpload(Uri posterUri) {
+        if (posterUri != null) {
+            String tempEventName = eventNameEditText.getText().toString().trim();
+
+            // Ensure that the event name is provided
+            if (tempEventName.isEmpty()) {
+                Toast.makeText(this, "Please enter an event name before uploading a poster.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FireBaseController fireBaseController = new FireBaseController(this);
+
+            // Upload the poster to Firebase
+            fireBaseController.uploadEventPoster(posterUri, tempEventName, uri -> {
+                String posterUrl = uri.toString();
+                if (newOrganizerEvent != null) {
+                    newOrganizerEvent.setPosterUrl(posterUrl);
+                    fireBaseController.updateEventPoster(newOrganizerEvent);
+                }
+                Toast.makeText(this, "Poster uploaded successfully!", Toast.LENGTH_SHORT).show();
+            }, e -> {
+                Log.e("CreateEventActivity", "Failed to upload poster", e);
+                Toast.makeText(this, "Failed to upload poster.", Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Log.e("CreateEventActivity", "Poster URI is null.");
+            Toast.makeText(this, "Failed to get image URI.", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private String generateHash() {
-        // Generate random UUID
-        return java.util.UUID.randomUUID().toString();
-    }
 }
-
-
-

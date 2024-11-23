@@ -1,6 +1,7 @@
 package com.example.soroban;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.example.soroban.model.Facility;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -23,6 +25,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -160,7 +164,8 @@ public class FireBaseController implements Serializable {
     /**
      * Create a new Event document in Firebase.
      * @Author: Kevin Li
-     * @Version: 1.0
+     * @Update: By Jerry Pan added a posterUrl field
+     * @Version: 1.1
      * @param event: Event for which updating is required.
      */
     public void createEventDb(Event event) {
@@ -178,6 +183,7 @@ public class FireBaseController implements Serializable {
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("QRHash", event.getQrCodeHash());
+        data.put("posterUrl", event.getPosterUrl());
         eventRf
                 .document(event.getEventName() + ", " + owner.getDeviceId())
                 .set(data)
@@ -559,7 +565,8 @@ public class FireBaseController implements Serializable {
     /**
      * Update Event document in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 1.1
+     * @Update: Added posterURL param
      * @param event: Event for which updating is required.
      */
     public void eventUpdate(Event event) {
@@ -570,6 +577,7 @@ public class FireBaseController implements Serializable {
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("QRHash", event.getQrCodeHash());
+        data.put("posterUrl", event.getPosterUrl());
 
         eventRf
                 .document(event.getEventName() + ", " + event.getOwner().getDeviceId())
@@ -1210,6 +1218,41 @@ public class FireBaseController implements Serializable {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility.", e));
     }
 
+    public void uploadEventPoster(Uri posterUri, String eventName, OnSuccessListener<Uri> onSuccessListener, OnFailureListener onFailureListener) {
+        // Define a storage reference for the poster
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("event_posters/" + eventName);
 
+        // Upload the file to Firebase Storage
+        storageRef.putFile(posterUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Get the download URL for the uploaded image
+                    storageRef.getDownloadUrl()
+                            .addOnSuccessListener(onSuccessListener)
+                            .addOnFailureListener(onFailureListener);
+                })
+                .addOnFailureListener(onFailureListener);
+    }
+
+    public void updateEventPoster(Event event) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String eventId = event.getQrCodeHash();
+        if (eventId == null || eventId.isEmpty()) {
+            Log.e("FireBaseController", "Event ID is null or empty. Cannot update poster.");
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("posterUrl", event.getPosterUrl());
+
+        db.collection("events")
+                .document(eventId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("FireBaseController", "Poster URL updated successfully for event: " + eventId);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FireBaseController", "Failed to update poster URL for event: " + eventId, e);
+                });
+    }
 
 }
