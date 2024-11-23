@@ -196,6 +196,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         FireBaseController fireBaseController = new FireBaseController(this);
         userController.addHostedEvent(newOrganizerEvent);
         fireBaseController.createEventDb(newOrganizerEvent);
+        fireBaseController.updateUserHosted(appUser, newOrganizerEvent);
+
 
         Intent intent = new Intent(CreateEventActivity.this, OrganizerDashboardActivity.class);
         Bundle newArgs = new Bundle();
