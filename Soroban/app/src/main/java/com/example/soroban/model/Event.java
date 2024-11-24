@@ -31,6 +31,7 @@ public class Event implements Serializable {
     private Bitmap QRCode;
     private int numberOfNotifications = 0; // Does not need to be stored in Firebase.
     private String qrCodeHash;
+    private String posterUrl;
 
     // No-argument constructor required by Firestore
     public Event() {
@@ -452,5 +453,12 @@ public class Event implements Serializable {
         this.qrCodeHash = qrCodeHash;
     }
 
+    // Getter and setter for posterUrl
+    public String getPosterUrl() {
+        return posterUrl;
+    }
 
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
 }
