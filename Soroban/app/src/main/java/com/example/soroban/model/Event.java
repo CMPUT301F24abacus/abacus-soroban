@@ -3,6 +3,7 @@ package com.example.soroban.model;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -334,12 +335,12 @@ public class Event implements Serializable {
 
     /**
      * Add a user to an Events's list of invited.
-     * @Author: Kevin Li
-     * @Version: 1.0
+     * @Author: Matthieu Larochelle, Kevin Li
+     * @Version: 2.0
      * @param user : User.
      */
     public Boolean addInvited(User user){
-        return invitedEntrants.addUser(user);
+        return invitedEntrants.addUser(user) && (user.getInvitedEvents().contains(this) ? Boolean.TRUE : user.addInvitedEvent(this));
     }
 
     /**
@@ -349,7 +350,8 @@ public class Event implements Serializable {
      * @param user  User.
      */
     public Boolean removeFromInvited(User user){
-        return invitedEntrants.remove(user);
+
+        return invitedEntrants.remove(user) && (user.getInvitedEvents().contains(this) ? user.removeInvitedEvent(this)  : Boolean.TRUE);
     }
 
     /**
@@ -392,15 +394,19 @@ public class Event implements Serializable {
     /**
      * Randomly samples the Event's sample size number of entrants to be invited
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
-     * @return: Number of sampled users.
+     * @Version: 2.0
+     * @param entrantNumber number of entrants that will be sampled (will be replaced by the size of the waitlist if said size is smaller)
+     * @return: Array of indices of sampled users in the Event's InvitedEntrants list.
      */
-    public int sampleEntrants(){
+    public ArrayList<Integer> sampleEntrants(int entrantNumber){
         Random random = new Random();
-        int sampleNumber = Math.min(sampleSize, waitingEntrants.size()); // Either sample specified number or all waitingEntrants
+        ArrayList<Integer> sampledIndices = new ArrayList<>();
+        int sampleNumber = Math.min(entrantNumber, waitingEntrants.size()); // Either sample specified number or all waitingEntrants
         int newRand = random.nextInt(waitingEntrants.size());
         for(int i = 0; i < sampleNumber; i++) {
-            addInvited(waitingEntrants.get(newRand));
+            User sampledUser = waitingEntrants.get(newRand);
+            addInvited(sampledUser);
+            sampledIndices.add(getInvitedEntrants().indexOf(sampledUser));
             removeFromWaitingEntrants(waitingEntrants.get(newRand));
             if(waitingEntrants.size() <= 1){
                 newRand = 0;
@@ -408,7 +414,7 @@ public class Event implements Serializable {
                 newRand = random.nextInt(waitingEntrants.size());
             }
         }
-        return sampleNumber;
+        return sampledIndices;
     }
 
 

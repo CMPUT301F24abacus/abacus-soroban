@@ -261,7 +261,6 @@ public class FireBaseController implements Serializable {
         });
     }
 
-
     /**
      * Fetches a User's WaitList collection in Firebase.
      * @Author: Kevin Li
@@ -327,6 +326,9 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                fetchEventWaitlistDoc(event);
+                                fetchEventCancelledDoc(event);
+                                fetchEventInvitedDoc(event);
                                 user.addRegisteredEvent(event);}
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
@@ -363,10 +365,11 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                fetchEventWaitlistDoc(event);
                                 fetchEventCancelledDoc(event);
-                                fetchEventInvitedDoc(event);
                                 fetchEventAttendeeDoc(event);
-                                user.addInvitedEvent(event);}
+                                user.addInvitedEvent(event);
+                                }
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
                         }
@@ -404,7 +407,8 @@ public class FireBaseController implements Serializable {
                                 fetchEventCancelledDoc(event);
                                 fetchEventInvitedDoc(event);
                                 fetchEventAttendeeDoc(event);
-                                user.addHostedEvent(event);}
+                                user.addHostedEvent(event);
+                            }
                         } else {
                             Log.e("Firestore", "Didn't find eventList!");
                         }
@@ -635,13 +639,13 @@ public class FireBaseController implements Serializable {
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
-        data.put("drawDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
         userRf.document(user.getDeviceId())
-                .collection("hostedEvents").document(event.getEventName()+ ", " + event.getOwner().getDeviceId()).set(data);
+                .collection("hostedEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId()).set(data);
     }
 
     /**
@@ -655,7 +659,7 @@ public class FireBaseController implements Serializable {
         Map<String, Object> data = new HashMap<>();
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
-        data.put("drawDate", event.getEventDate());
+        data.put("drawDate", event.getDrawDate());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
@@ -986,7 +990,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeAttendeeDoc(Event event, User user) {
-        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName())
+        userRf.document(user.getDeviceId()).collection("registeredEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
