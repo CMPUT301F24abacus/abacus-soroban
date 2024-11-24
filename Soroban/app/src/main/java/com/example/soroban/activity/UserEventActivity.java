@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class UserEventActivity extends AppCompatActivity {
@@ -98,6 +101,22 @@ public class UserEventActivity extends AppCompatActivity {
                 appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                 fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
                 fireBaseController.updateThoseNotGoing(selectedEvent,appUser);
+
+                // Re-sample a new user
+                ArrayList<Integer> reSampledIndices = selectedEvent.sampleEntrants(1); // Re-sample one user
+
+                // If a User was re-sampled
+                if(reSampledIndices.size() == 1){
+                    User user = selectedEvent.getInvitedEntrants().get(reSampledIndices.get(0));
+                    fireBaseController.updateInvited(selectedEvent, user);
+                    fireBaseController.updateUserInvited(user, selectedEvent);
+                    fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+
+                    // Notify invited entrant that they have been re-sampled
+                    Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                    fireBaseController.updateUserNotifications(user, newNotif);
+                }
+                // Else there are no other waiting entrants
             }
             Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
             Bundle newArgs = new Bundle();
