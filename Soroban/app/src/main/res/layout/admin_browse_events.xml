@@ -16,16 +16,17 @@
         android:text="Browse Events"
         android:textAlignment="textStart"
         android:textColor="#FFFFFF"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/event_search_bar"
-        android:layout_width="379dp"
+        android:layout_width="366dp"
         android:layout_height="wrap_content"
         android:background="@drawable/search_view_bg"
-        android:textColor="#FFFFFF"
+        android:textColor="#040303"
         app:defaultQueryHint="Search Events"
-        app:iconifiedByDefault="false"/>
+        app:iconifiedByDefault="false" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/event_admin_recycler"
