@@ -2,6 +2,7 @@ package com.example.soroban.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,6 +80,20 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
         imageSearch.clearFocus();
         imageRecycler = findViewById(R.id.image_admin_recycler);
         imageRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        // Customize SearchView text and hint color programmatically
+        // Reference: Customize SearchView EditText color programmatically
+        int searchEditTextId = imageSearch.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = imageSearch.findViewById(searchEditTextId);
+        if (searchEditText != null) {
+            searchEditText.setTextColor(Color.BLACK); // Set text color to black
+            searchEditText.setHintTextColor(Color.GRAY); // Set hint color to gray
+        }
+
+        // Customize SearchView background
+        imageSearch.setBackgroundResource(R.drawable.search_view_background);
+
+
 
         browseImageList = new ArrayList<>();
         userIdList = new ArrayList<>();

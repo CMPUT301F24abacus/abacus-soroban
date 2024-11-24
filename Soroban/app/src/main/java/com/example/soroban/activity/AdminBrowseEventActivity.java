@@ -1,11 +1,13 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
-import com.example.soroban.model.EventList;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -34,7 +33,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class AdminBrowseEventActivity extends AppCompatActivity {
@@ -46,6 +44,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private ArrayList<Event> browseEventList;
     private FireBaseController firebaseController;
 
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_browse_events);
@@ -55,32 +54,42 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         Bundle args = getIntent().getExtras();
 
         // Initialize appUser for this activity.
-        if(args != null){
+        if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 appUser = args.getSerializable("appUser", User.class);
-            }else{
+            } else {
                 appUser = (User) args.getSerializable("appUser");
             }
 
-            if(appUser == null ){
+            if (appUser == null) {
                 throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
             }
-
-        }else{
+        } else {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
-
 
         CollectionReference eventRf = db.collection("events");
         firebaseController = new FireBaseController(this);
         eventSearch = findViewById(R.id.event_search_bar);
-        eventSearch.clearFocus();
         eventRecycler = findViewById(R.id.event_admin_recycler);
         eventRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        // Customize SearchView text and hint color programmatically
+        // Reference: Customize SearchView EditText color programmatically
+        int searchEditTextId = eventSearch.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = eventSearch.findViewById(searchEditTextId);
+        if (searchEditText != null) {
+            searchEditText.setTextColor(Color.BLACK); // Set text color to black
+            searchEditText.setHintTextColor(Color.GRAY); // Set hint color to gray
+        }
+
+        // Customize SearchView background
+        eventSearch.setBackgroundResource(R.drawable.search_view_background);
 
 
         browseEventList = new ArrayList<>();
 
+        // Add snapshot listener for Firestore
         eventRf.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
@@ -90,20 +99,20 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                 }
                 if (querySnapshots != null) {
                     browseEventList.clear();
-                    for (QueryDocumentSnapshot document: querySnapshots) {
+                    for (QueryDocumentSnapshot document : querySnapshots) {
                         Log.d("Firestore", "Found Events!");
                         Map<String, Object> eventData = document.getData();
                         String eventName = (String) eventData.get("eventName");
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        User owner = new User(((DocumentReference) document.get("owner")).getPath().replace("users/",""));
+                        User owner = new User(((DocumentReference) document.get("owner")).getPath().replace("users/", ""));
                         firebaseController.fetchUserDoc(owner);
                         owner.createFacility();
                         DocumentReference facilityRef = (DocumentReference) document.get("facility");
                         Facility facility = owner.getFacility();
                         firebaseController.fetchFacilityDoc(owner, facilityRef);
-                        Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                        Event event = new Event(owner, facility, eventName, eventDate, drawDate, sampleSize);
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
@@ -115,14 +124,12 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
             }
         });
 
-
         adapter = new BrowseEventsAdapter(browseEventList);
         eventRecycler.setAdapter(adapter);
 
         // On Searching with Search View
         // Reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
         eventSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -134,7 +141,6 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
     /**
@@ -148,7 +154,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         }
 
         /**
-         * this method applies filtered list from searchview into adapter
+         * This method applies the filtered list from the SearchView into the adapter.
          * @param newList: new array list for search results
          */
         public void filterList(ArrayList<Event> newList) {
@@ -178,7 +184,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(BrowseEventsAdapter.ViewHolder holder, int position) {
             String eventName = browseEventsList.get(position).getEventName();
-            String eventDate = "No Date"; // temporary, for events without dates
+            String eventDate = "No Date"; // Temporary, for events without dates
             if (browseEventsList.get(position).getEventDate() != null) {
                 eventDate = browseEventsList.get(position).getEventDate().toString();
             }
@@ -215,11 +221,10 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                 eventDateTV = itemView.findViewById(R.id.eventDateTextView);
             }
         }
-
     }
 
     /**
-     * This method filters data based on query
+     * This method filters data based on the query.
      * Reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
      * @param enteredText: text searched by query
      */
@@ -232,7 +237,5 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         }
 
         adapter.filterList(filteredList);
-
     }
-
 }
