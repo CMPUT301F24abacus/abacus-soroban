@@ -1,11 +1,13 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -74,6 +76,20 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
         facilitySearch.clearFocus();
         facilityRecycler = findViewById(R.id.facility_admin_recycler);
         facilityRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        // Customize SearchView text and hint color programmatically
+        // Reference: Customize SearchView EditText color programmatically
+        int searchEditTextId = facilitySearch.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = facilitySearch.findViewById(searchEditTextId);
+        if (searchEditText != null) {
+            searchEditText.setTextColor(Color.BLACK); // Set text color to black
+            searchEditText.setHintTextColor(Color.GRAY); // Set hint color to gray
+        }
+
+        // Customize SearchView background
+        facilitySearch.setBackgroundResource(R.drawable.search_view_background);
+
+
 
         browseFacilityList = new ArrayList<>();
 

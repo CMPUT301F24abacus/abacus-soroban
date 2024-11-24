@@ -1,11 +1,13 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,6 +73,18 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
         profileRecycler = findViewById(R.id.user_admin_recycler);
         profileRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+        // Customize SearchView text and hint color programmatically
+        // Reference: Customize SearchView EditText color programmatically
+        int searchEditTextId = profileSearch.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = profileSearch.findViewById(searchEditTextId);
+        if (searchEditText != null) {
+            searchEditText.setTextColor(Color.BLACK); // Set text color to black
+            searchEditText.setHintTextColor(Color.GRAY); // Set hint color to gray
+        }
+
+        // Customize SearchView background
+        profileSearch.setBackgroundResource(R.drawable.search_view_background);
+
 
         browseProfilesList = new ArrayList<>();
 
@@ -106,7 +120,6 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
         // On Searching with Search View
         // Reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
         profileSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -117,6 +130,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                 filter(newText);
                 return false;
             }
+
         });
 
     }
