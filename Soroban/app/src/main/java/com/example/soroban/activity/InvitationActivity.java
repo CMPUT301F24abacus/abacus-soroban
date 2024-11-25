@@ -81,8 +81,12 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
     }
 
     @Override
-    public void updateAdapter() {
+    public void update() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void returnResult (boolean result) {
     }
 
 }

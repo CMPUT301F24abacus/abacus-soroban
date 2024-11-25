@@ -109,7 +109,6 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             int numberSampled = selectedEvent.sampleEntrants(selectedEvent.getSampleSize()).size();
             Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
             // Schedule a new notification for all relevant users
-            selectedEvent.addNumberOfNotifications();
 
             // Update Firebase to recognize invited users
             for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){

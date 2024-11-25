@@ -92,7 +92,7 @@ public class AcceptInviteFragment extends DialogFragment {
 
             // Perform local changes
             selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
-            listener.updateAdapter();
+            listener.update();
 
             // Perform Firebase changes
             fireBaseController.updateThoseNotGoing(selectedEvent, appUser);
@@ -124,17 +124,16 @@ public class AcceptInviteFragment extends DialogFragment {
             // Perform local changes
             selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
             selectedEvent.addAttendee(selectedEvent.getInvitedEntrants().find(appUser));
-            listener.updateAdapter();
+            listener.update();
 
             // Perform Firebase changes
             fireBaseController.updateUserRegistered(appUser, selectedEvent);
             fireBaseController.updateAttendees(selectedEvent, appUser);
             fireBaseController.removeInvitedDoc(selectedEvent, appUser);
-            listener.updateAdapter();
+            listener.update();
         });
 
         return builder.create();
     }
-
 
 }

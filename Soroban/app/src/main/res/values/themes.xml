@@ -48,19 +48,24 @@
         <item name="android:elevation">4dp</item>
     </style>
 
-<!--This is how i can use the theme objects in my xml files.-->
-<!--    <Button-->
-<!--        style="@style/AppButton"-->
-<!--        android:text="Click Me"/>-->
+    <style name="ThemeOverlay.Soroban.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
 
-<!--    <ListView-->
-<!--        style="@style/AppListView"-->
-<!--        android:id="@+id/list_view"/>-->
+    <!--This is how i can use the theme objects in my xml files.-->
+    <!--    <Button-->
+    <!--        style="@style/AppButton"-->
+    <!--        android:text="Click Me"/>-->
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        style="@style/DashboardCard">-->
-<!--        &lt;!&ndash; Card content here &ndash;&gt;-->
-<!--    </androidx.cardview.widget.CardView>-->
+    <!--    <ListView-->
+    <!--        style="@style/AppListView"-->
+    <!--        android:id="@+id/list_view"/>-->
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        style="@style/DashboardCard">-->
+    <!--        &lt;!&ndash; Card content here &ndash;&gt;-->
+    <!--    </androidx.cardview.widget.CardView>-->
 
 
 </resources>

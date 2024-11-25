@@ -1,12 +1,23 @@
 package com.example.soroban.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.example.soroban.FireBaseController;
@@ -21,16 +32,19 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
 
-import java.util.ArrayList;
-
-
+/*References:
+/ https://help.famoco.com/developers/media/display-map/
+/ https://mrappbuilder.medium.com/how-to-integrate-and-work-with-open-street-map-osm-in-an-android-app-kotlin-564b38590bfe
+/ https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
+/ https://sachankapil.medium.com/latest-method-how-to-get-current-location-latitude-and-longitude-in-android-give-support-for-c5132474c864
+*/
 public class EventEntrantsGeolocationActivity extends AppCompatActivity{
     private Event selectedEvent;
     private User appUser;
-    private FireBaseController fireBaseController;
+    private ActivityResultLauncher<String> requestPersmissionLauncher;
     private LocationManager locationManager;
+    private Location userLocation;
 
 
     @Override
@@ -63,26 +77,77 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        fireBaseController = new FireBaseController(this);
 
-        MapView map = (MapView) findViewById(R.id.map_view);
-        //map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setMultiTouchControls(true);
+        ProgressBar progress = findViewById(R.id.geo_progress_bar);
 
-        IMapController mapController = map.getController();
-        mapController.setZoom(9.0);
-        GeoPoint startGeo = new GeoPoint(48.8583, 2.2944);
-        IGeoPoint start = startGeo;
-        mapController.setCenter(start);
+        // Check if location permissions are on
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        Marker newMarker = new Marker(map);
-        newMarker.setPosition(startGeo);
-        newMarker.setIcon(getResources().getDrawable(org.osmdroid.library.R.drawable.ic_menu_mylocation, null));
-        newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        requestPersmissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
+            if(isGranted){
+                // App can access geo location
+            }else{
+                // App cant access geo location
+            }
+        });
 
-        map.getOverlays().add(newMarker);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                // App can use location
+                // Check if GPS is available
+                boolean hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+                LocationListener gpsListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(@NonNull Location location) {
+                        if(userLocation == null){
+                            userLocation = location;
+                            progress.setVisibility(View.GONE);
+                            MapView map = (MapView) findViewById(R.id.map_view);
+                            map.setHorizontalMapRepetitionEnabled(false);
+                            map.setVerticalMapRepetitionEnabled(false);
+                            map.setVisibility(View.VISIBLE);
+                            map.setTileSource(TileSourceFactory.MAPNIK);
+                            map.setMultiTouchControls(true);
+                            IMapController mapController = map.getController();
+                            mapController.setZoom(9.0);
+                            GeoPoint startGeo = new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
+                            IGeoPoint start = startGeo;
+                            mapController.setCenter(start);
+
+                            for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
+                                GeoPoint userPoint = selectedEvent.getWaitingEntrants().get(i).getLocation();
+
+                                Marker newMarker = new Marker(map);
+                                newMarker.setPosition(userPoint);
+                                newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
+                                newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                                map.getOverlays().add(newMarker);
+                            }
+
+                        }
+                    }
+                };
+
+                if(hasGPS){
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            5000,
+                            0F,
+                            gpsListener
+                    );
+                }
+
+            }else if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                // Prompt user to accept or decline location permissions
+            }else{
+                // Directly ask for permission
+                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+        }
 
     }
-
 
 }

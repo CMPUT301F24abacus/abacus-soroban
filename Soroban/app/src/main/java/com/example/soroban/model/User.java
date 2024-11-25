@@ -1,12 +1,14 @@
 package com.example.soroban.model;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Stores any relevant information that is associated to a user.
  * @Author: Matthieu Larochelle
- * @Version: 1.3
+ * @Version: 1.4
  */
 
 public class User implements Serializable {
@@ -21,6 +23,7 @@ public class User implements Serializable {
     private EventList hostedEvents;
     private EventList invitedEvents;
     private Facility facility;
+    private GeoPoint location;
     private Boolean adminCheck;
 
     /**
@@ -163,6 +166,26 @@ public class User implements Serializable {
      */
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Getter method for User's location.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: OMS GeoPoint.
+     */
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    /**
+     * Setter method for User's location.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: OMS GeoPoint.
+     */
+    public void setLocation(double lattitude, double longitude) {
+        this.location = new GeoPoint(lattitude,longitude);
     }
 
     /**

@@ -14,12 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.fragment.ConfirmGiveLocationFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
+import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 import java.util.Calendar;
 
-public class EventDetailsActivity extends AppCompatActivity {
+public class EventDetailsActivity extends AppCompatActivity implements DialogFragmentListener {
     private FireBaseController firebaseController;
     private Event selectedEvent;
     private User appUser;
@@ -32,6 +36,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
+    private boolean allowLocation;
     private boolean isRegistered; // Store the registration status
 
     @Override
@@ -115,8 +120,18 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void handleRegister() {
-        // Check if current date is passed drawDate
+        // Check if Event has geolocation requirement
+        if(selectedEvent.requiresGeolocation()){
+            boolean userAccepts;
+            ConfirmGiveLocationFragment fragment = new ConfirmGiveLocationFragment();
+            fragment.show(getSupportFragmentManager(), "Confirm geolocation");
+            if(!allowLocation){
+                // Do not allow User to register
+                return;
+            }
+        }
 
+        // Check if current date is passed drawDate
         if(!(Calendar.getInstance().getTimeInMillis() > selectedEvent.getDrawDate().getTime())){
             // Add user to event waitlist
             boolean joinResult = selectedEvent.addToWaitingEntrants(appUser);
@@ -166,4 +181,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void returnResult(boolean result) {
+        allowLocation = result;
+    }
 }

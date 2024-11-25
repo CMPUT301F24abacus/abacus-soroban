@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
+import com.example.soroban.fragment.AcceptInviteFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerFragment;
 import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
+import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
@@ -30,7 +36,7 @@ import java.util.Locale;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
+public class CreateEventActivity extends AppCompatActivity implements DatePickerListener, DialogFragmentListener {
 
     private EditText eventNameEditText;
     private EditText eventDescriptionEditText;
@@ -38,15 +44,17 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private Button eventDateSelectButton;
     private ImageButton eventPosterUploadButton;
     private Button drawDateSelectButton;
-    private Button geoReqButton;
+    private Switch geoReqButton;
     private Button autoReplaceButton;
     private Button saveEventButton;
     private TextView selectedEventDateTextView;
     private TextView selectedDrawDateTextView;
+    private boolean requiresLocation;
 
     private Date eventDate;
     private Date drawDate;
     private User appUser;
+    private Event newOrganizerEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +120,17 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             dialogFragment.show(getSupportFragmentManager(), "Select draw date");
         });
 
+        geoReqButton.setOnCheckedChangeListener((view, isChecked) ->{
+            ConfirmRequireLocationFragment fragment = new ConfirmRequireLocationFragment();
+            fragment.show(getSupportFragmentManager(), "Confirm geolocation");
+        });
+
         // Display initial dates
         updateDateTextViews();
+    }
+
+    private void checkEvent(){
+
     }
 
     private void saveEvent() {
@@ -122,6 +139,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         String eventDetails = eventDescriptionEditText.getText().toString().trim();
         int eventSampleSize;
         Facility userFacility = appUser.getFacility();
+        boolean geoRequirement = geoReqButton.isChecked();
 
         // Validate input
         if (eventName.isEmpty()) {
@@ -162,11 +180,12 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             return;
         }
 
-        // Generate a random QR code hash
-        String qrCodeHash = generateHash();
+        // Create a new Event object
+        newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        newOrganizerEvent.setRequiresGeolocation(requiresLocation);
 
-        // Create a new Event object and set QR code hash
-        Event newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        // Generate and set a random QR code hash
+        String qrCodeHash = generateHash();
         newOrganizerEvent.setEventDetails(eventDetails);
         newOrganizerEvent.setQrCodeHash(qrCodeHash);
 
@@ -203,6 +222,16 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private String generateHash() {
         // Generate random UUID
         return java.util.UUID.randomUUID().toString();
+    }
+
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void returnResult(boolean result) {
+       requiresLocation = result;
+       geoReqButton.setChecked(result);
     }
 }
 

@@ -21,8 +21,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -177,6 +179,7 @@ public class FireBaseController implements Serializable {
         data.put("drawDate", event.getDrawDate());
         data.put("sampleSize", event.getSampleSize());
         data.put("maxEntrants", event.getMaxEntrants());
+        data.put("geoLocation", event.requiresGeolocation());
         data.put("QRHash", event.getQrCodeHash());
         eventRf
                 .document(event.getEventName() + ", " + owner.getDeviceId())
@@ -213,6 +216,9 @@ public class FireBaseController implements Serializable {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         if (userData.get("phoneNumber") != null) { user.setPhoneNumber((long) userData.get("phoneNumber")); }
+                        if(document.getGeoPoint("location") != null){
+                            user.setLocation(document.getGeoPoint("location").getLatitude(), document.getGeoPoint("location").getLongitude());
+                        }
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
@@ -526,6 +532,7 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
+        data.put("location", new GeoPoint(user.getLocation().getLatitude(), user.getLocation().getLongitude()));
 
         userRf
                 .document(user.getDeviceId())
@@ -706,6 +713,7 @@ public class FireBaseController implements Serializable {
                         String eventDetails = document.getString("eventDetails");
                         Integer maxEntrants = document.getLong("maxEntrants") != null ? document.getLong("maxEntrants").intValue() : null;
                         Integer sampleSize = document.getLong("sampleSize") != null ? document.getLong("sampleSize").intValue() : null;
+                        Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
 
                         // Resolve owner reference
                         DocumentReference ownerRef = document.getDocumentReference("owner");
@@ -728,6 +736,7 @@ public class FireBaseController implements Serializable {
                                     event.setMaxEntrants(maxEntrants);
                                     event.setSampleSize(sampleSize);
                                     event.setOwner(owner);
+                                    event.setRequiresGeolocation(requireLocation);
 
                                     // Pass the event object back
                                     onSuccessListener.onSuccess(event);
