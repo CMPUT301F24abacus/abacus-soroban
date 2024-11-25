@@ -1,9 +1,7 @@
 package com.example.soroban.activity;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,15 +23,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
-import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +52,8 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
     private AdminBrowseImagesActivity.BrowseImagesAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<String> browseImageList;
-    private ArrayList<String> userIdList;
+    private ArrayList<String> idList;
+    private ArrayList<String> keyList;
     private FireBaseController firebaseController;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,44 +102,13 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
 
 
         browseImageList = new ArrayList<>();
-        userIdList = new ArrayList<>();
-
-        FirebaseDatabase.getInstance().getReference("users")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot != null) {
-                            browseImageList.clear();
-                            for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                                String userId = userSnapshot.getKey();
-                                userIdList.add(userId);
-                                FirebaseDatabase.getInstance().getReference("users")
-                                        .child(userId)
-                                        .child("profileImageUrl")
-                                        .get()
-                                        .addOnSuccessListener(snapshotImage -> {
-                                            String imageUrl = snapshotImage.getValue(String.class);
-                                            Log.d("AdminBrowseProfileActivity", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
-                                            if (imageUrl != null) {
-                                                browseImageList.add(imageUrl);
-                                            }
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e("AdminBrowseProfileActivity", "Failed to load image URL", e);
-                                        });
-                            }
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("AdminBrowseProfileActivity", "Failed to retrieve users");
-                    }
-                });
+        idList = new ArrayList<>();
+        keyList = new ArrayList<>();
 
 
-        adapter = new BrowseImagesAdapter(browseImageList, userIdList);
+        firebaseRead(browseImageList, idList, keyList);
+
+        adapter = new BrowseImagesAdapter(browseImageList, idList, keyList);
         imageRecycler.setAdapter(adapter);
 
         // On Searching with Search View
@@ -159,20 +134,23 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
      */
     private class BrowseImagesAdapter extends RecyclerView.Adapter<BrowseImagesAdapter.ViewHolder> {
         private ArrayList<String> browseImageList;
-        private ArrayList<String> userIdList;
+        private ArrayList<String> idList;
+        private ArrayList<String> keyList;
 
-        public BrowseImagesAdapter(ArrayList<String> browseImageList, ArrayList<String> userIdList) {
+        public BrowseImagesAdapter(ArrayList<String> browseImageList, ArrayList<String> idList, ArrayList<String> keyList) {
             this.browseImageList = browseImageList;
-            this.userIdList = userIdList;
+            this.idList = idList;
+            this.keyList = keyList;
         }
 
         /**
          * this method applies filtered list from searchview into adapter
          * @param newList: new array list for search results
          */
-        public void filterList(ArrayList<String> newList, ArrayList<String> newIdList) {
+        public void filterList(ArrayList<String> newList, ArrayList<String> newIdList, ArrayList<String> newKeyList) {
             browseImageList = newList;
-            userIdList = newIdList;
+            idList = newIdList;
+            keyList = newKeyList;
             notifyDataSetChanged();
         }
 
@@ -198,14 +176,19 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(BrowseImagesAdapter.ViewHolder holder, int position) {
             firebaseController = new FireBaseController(AdminBrowseImagesActivity.this);
-            User certainUser = new User(userIdList.get(position));
-            firebaseController.fetchUserDoc(certainUser);
-            holder.imageNameTV.setText("Profile Picture Of: " + certainUser.getDeviceId());
+            String newKey = keyList.get(position);
+
+            holder.imageNameTV.setText(newKey);
+            String id = idList.get(position);
+            String[] splitId = id.split(", ");
+            String imageDetail = (newKey == "From Event: ") ? splitId[1] + "'s " + splitId[0] : null;
+            holder.imageDetailsTV.setText((newKey == "From Profile: ") ? id : imageDetail);
             Glide.with(AdminBrowseImagesActivity.this)
                     .load(browseImageList.get(position))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable caching to ensure updated image
                     .skipMemoryCache(true)
                     .into(holder.imageIV);
+
 
             holder.itemView.setOnClickListener(v -> {
                 deleteImageButton.setVisibility(View.VISIBLE);
@@ -213,16 +196,25 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
                 deleteImageButton.setOnClickListener(v2 -> {
                     new AlertDialog.Builder(AdminBrowseImagesActivity.this)
                             .setTitle("Delete Image")
-                            .setMessage("Would you like to delete \"" + userIdList.get(position) + "\"'s image?")
+                            .setMessage("Would you like to delete \"" + ((newKey == "From Profile: ") ? id : splitId[1]) + "\"'s image?")
                             .setPositiveButton("Delete", (dialog, which) -> {
-                                FirebaseDatabase.getInstance().getReference("users").child(certainUser.getDeviceId())
-                                        .removeValue();
+                                if (newKey == "From Profile: ") {
+                                    FirebaseDatabase.getInstance().getReference("users").child(id)
+                                            .removeValue();
+                                } else if (newKey == "From Event: ") {
+                                    db.collection("events").document(id).update("posterUrl", FieldValue.delete());
+                                    firebaseRead(browseImageList, idList, keyList);
+                                }
+
                             })
                             .setNegativeButton("No", null)
                             .show();
                 });
 
             });
+
+
+
         }
 
         /**
@@ -257,17 +249,87 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
      */
     private void filter(String enteredText) {
         ArrayList<String> filteredImageList = new ArrayList<>();
-        ArrayList<String> filteredUserList = new ArrayList<>();
-        for (String filtered : userIdList) {
-            int index = userIdList.indexOf(filtered);
+        ArrayList<String> filteredIdList = new ArrayList<>();
+        ArrayList<String> filteredKeyList = new ArrayList<>();
+        for (String filtered : idList) {
+            int index = idList.indexOf(filtered);
             if (filtered.toLowerCase().contains(enteredText.toLowerCase())) {
                 filteredImageList.add(browseImageList.get(index));
-                filteredUserList.add(filtered);
+                filteredIdList.add(filtered);
+                filteredKeyList.add(keyList.get(index));
             }
         }
 
-        adapter.filterList(filteredImageList, filteredUserList);
+        adapter.filterList(filteredImageList, filteredIdList, filteredKeyList);
 
+    }
+
+    /**
+     * This method reads the url data from Firebase.
+     */
+    private void firebaseRead(ArrayList<String> browseImageList, ArrayList<String> idList, ArrayList<String> keyList) {
+
+        FirebaseDatabase.getInstance().getReference("users")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        browseImageList.clear();
+                        idList.clear();
+                        keyList.clear();
+                        if (snapshot != null) {
+                            for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                String userId = userSnapshot.getKey();
+                                idList.add(userId);
+                                keyList.add("From Profile: ");
+                                FirebaseDatabase.getInstance().getReference("users")
+                                        .child(userId)
+                                        .child("profileImageUrl")
+                                        .get()
+                                        .addOnSuccessListener(snapshotImage -> {
+                                            String imageUrl = snapshotImage.getValue(String.class);
+                                            Log.d("AdminBrowseProfileActivity", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
+                                            if (imageUrl != null) {
+                                                browseImageList.add(imageUrl);
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("AdminBrowseProfileActivity", "Failed to load image URL", e);
+                                        });
+                            }
+                            adapter.notifyDataSetChanged();
+
+                            db.collection("events").orderBy("posterUrl").whereNotEqualTo("posterUrl", null)
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                                            if (error != null) {
+                                                Log.e("Firestore", error.toString());
+                                                return;
+                                            }
+                                            if (querySnapshots != null) {
+                                                for (QueryDocumentSnapshot document: querySnapshots) {
+                                                    Map<String, Object> urlData = document.getData();
+                                                    if (!idList.contains(document.getId())) {
+                                                        idList.add(document.getId());
+                                                        keyList.add("From Event: ");
+                                                        browseImageList.add((String) urlData.get("posterUrl"));
+                                                    }
+                                                }
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    });
+
+
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("AdminBrowseProfileActivity", "Failed to retrieve users");
+                    }
+                });
     }
 
 }
