@@ -41,8 +41,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation(libs.preference)
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
+    // Geolocation
+    implementation("org.osmdroid:osmdroid-android:6.1.14")
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")

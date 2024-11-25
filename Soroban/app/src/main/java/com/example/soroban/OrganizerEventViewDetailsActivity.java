@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.activity.EventEntrantsGeolocationActivity;
 import com.example.soroban.activity.EventEntrantsListActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -130,7 +131,12 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
 
         eventGeolocation.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement viewing where entrants are located", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsGeolocationActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
         });
 
         viewEntrants.setOnClickListener(v -> {
