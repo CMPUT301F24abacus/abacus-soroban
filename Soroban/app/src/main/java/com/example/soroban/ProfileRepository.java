@@ -9,8 +9,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+/**
+ * Manages user profile images in Firebase Storage and Realtime Database.
+ * Handles uploading, retrieving, and deleting profile images.
+ * @author Jerry P
+ */
 public class ProfileRepository {
 
+    /**
+     * Uploads a profile image to Firebase Storage and stores its URL in Realtime Database.
+     *
+     * @param imageUri the URI of the image to upload.
+     * @param userId   the user ID to associate with the image.
+     * @see FirebaseStorage
+     * @see FirebaseDatabase
+     */
     public void uploadImageToFirebase(Uri imageUri, String userId) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images/" + userId);
 
@@ -42,6 +55,13 @@ public class ProfileRepository {
                 });
     }
 
+    /**
+     * Deletes a user's profile image from Firebase Storage and removes its URL from Realtime Database.
+     *
+     * @param userId the user ID whose profile image is to be deleted.
+     * @see FirebaseStorage
+     * @see FirebaseDatabase
+     */
     public void deleteProfileImage(String userId) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_images/" + userId);
 
