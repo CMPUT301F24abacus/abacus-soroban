@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -63,7 +64,7 @@ public class FireBaseController implements Serializable {
      * @param layout: Layout which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
      */
-    public void initialize(ProgressBar progressBar, ConstraintLayout layout, User user, Button adminDashboard){
+    public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
         DocumentReference docRef = userRf.document(user.getDeviceId());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
@@ -101,7 +102,8 @@ public class FireBaseController implements Serializable {
                         createUserDb(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    layout.setVisibility(View.VISIBLE);
+                    userBtn.setVisibility(View.VISIBLE);
+                    organizerBtn.setVisibility(View.VISIBLE);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
@@ -512,6 +514,42 @@ public class FireBaseController implements Serializable {
                             data.put("eventName", notification.getEvent().getEventName());
                             data.put("number", notification.getNumber());
                             notifcationRef.document(notification.getEvent().getEventName() + ", " + notification.getEvent().getOwner().getDeviceId() + ", " + numNotifs)
+                                    .set(data);
+                        } else {
+                            Log.e("Firestore", "Something went wrong.");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Update User's notifications collection after deletion by admin.
+     * @Author: Matthieu Larochelle
+     * @Version: 2.0
+     * @param user: User for which the notification is being added.
+     * @param notification: Notification which is being added.
+     */
+    public void updateUserNotificationsAdmin(User user, Notification notification) {
+
+        CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
+        // Count current number of notifications
+        notifcationRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int numNotifs = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                numNotifs++;
+                            }
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("title", notification.getTitle());
+                            data.put("date", notification.getTime());
+                            data.put("message", notification.getMessage());
+                            data.put("facilityName", notification.getFacility().getName());
+                            notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
                                     .set(data);
                         } else {
                             Log.e("Firestore", "Something went wrong.");
@@ -1144,6 +1182,50 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting registered events.", e));
 
+        // remove user from all event's invited userlist
+        eventRf.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Firestore", "Started invited deletion process!!!");
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        user.createFacility();
+                        Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        removeInvitedDoc(event, user);
+                    }
+                } else {
+                    Log.e("Firestore", "Didn't find events!");
+                }
+            }
+        });
+
+        // remove user from all event's not going userlist
+        eventRf.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Firestore", "Started not going deletion process!!!");
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        user.createFacility();
+                        Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        removeThoseNotGoingDoc(event, user);
+                    }
+                } else {
+                    Log.e("Firestore", "Didn't find events!");
+                }
+            }
+        });
+
         // remove user's facility and then the user
         removeFacilityDoc(user.getFacility());
         userRf.document(user.getDeviceId())
@@ -1165,8 +1247,45 @@ public class FireBaseController implements Serializable {
      * @param event: Event to be eliminated.
      */
     public void removeEventDoc(Event event) {
-        // to do: from userlists, remove event from user's waitlist/registered list
+        // remove event from user's waitlist/registered list
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("waitList")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started remove user from waitlist process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                removeFromWaitListDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find events!");
+                        }
+                    }
+                });
 
+        // remove event from user's waitlist/registered list
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("registeredEvents")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started remove user from waitlist process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                removeAttendeeDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find events!");
+                        }
+                    }
+                });
+
+        // remove event
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1185,8 +1304,9 @@ public class FireBaseController implements Serializable {
      * @param facility: Facility to be finished off.
      */
     public void removeFacilityDoc(Facility facility) {
+        DocumentReference docRef = userRf.document(facility.getOwner().getDeviceId());
         // remove events from user's hostedevents
-        userRf.document(facility.getOwner().getDeviceId()).collection("hostedEvents")
+        docRef.collection("hostedEvents")
                         .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -1210,6 +1330,11 @@ public class FireBaseController implements Serializable {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
 
+        // remove facility value from user
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("facility", FieldValue.delete());
+        docRef.update(updates);
+
         // remove facility from firebase
         facilityRf.document(facility.getOwner().getDeviceId())
                 .delete()
@@ -1222,6 +1347,11 @@ public class FireBaseController implements Serializable {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility.", e));
     }
 
+    /**
+     * Upload poster to Firebase Storage.
+     * @Author: Jerry Pan
+     * @Version: 1.0
+     */
     public void uploadEventPoster(Uri posterUri, String eventName, OnSuccessListener<Uri> onSuccessListener, OnFailureListener onFailureListener) {
         // Define a storage reference for the poster
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("event_posters/" + eventName);
@@ -1237,6 +1367,11 @@ public class FireBaseController implements Serializable {
                 .addOnFailureListener(onFailureListener);
     }
 
+    /**
+     * Update poster from Firebase.
+     * @Author: Jerry Pan
+     * @Version: 1.0
+     */
     public void updateEventPoster(Event event) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String eventId = event.getQrCodeHash();
