@@ -6,8 +6,11 @@ import java.util.Objects;
 
 /**
  * Stores any relevant information that is associated to a facility.
+ * Manages facility-specific details and hosted events.
  * @Author: Matthieu Larochelle
  * @Version: 1.0
+ * @see Event
+ * @see EventList
  */
 public class Facility implements Serializable {
     private final User owner;
@@ -20,6 +23,7 @@ public class Facility implements Serializable {
      *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param owner the owner of the facility.
      */
     public Facility(User owner) {
         this.owner = owner;
