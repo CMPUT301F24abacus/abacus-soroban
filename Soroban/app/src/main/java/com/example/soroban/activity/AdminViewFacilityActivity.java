@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
+import com.example.soroban.fragment.AdminMessageFragment;
+import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
@@ -67,22 +69,22 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId() + "\nName: " + selectedFacility.getOwner().getFirstName());
 
         deleteFacilityBtn.setOnClickListener(v -> {
+
             new AlertDialog.Builder(AdminViewFacilityActivity.this)
                     .setTitle("Delete Facility")
                     .setMessage("Would you like to delete \"" + selectedFacility.getName() + "\"?")
                     .setPositiveButton("Delete", (dialog, which) -> {
                         Log.d("FireStore", "Delete is pressed.");
-                        firebaseController.removeFacilityDoc(selectedFacility);
-                        Intent intent;
-                        intent = new Intent(AdminViewFacilityActivity.this, AdminBrowseFacilityActivity.class);
-                        Bundle argsEvent = new Bundle();
-                        argsEvent.putSerializable("appUser", appUser);
-                        intent.putExtras(argsEvent);
-                        startActivity(intent);
-                        finish();
+                        AdminMessageFragment fragment = AdminMessageFragment.newInstance(selectedFacility, appUser);
+                        fragment.show(getSupportFragmentManager(), "Send Message");
+
+
                     })
                     .setNegativeButton("No", null)
                     .show();
+
+            //finish();
+
         });
 
 

@@ -521,6 +521,42 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Update User's notifications collection after deletion by admin.
+     * @Author: Matthieu Larochelle
+     * @Version: 2.0
+     * @param user: User for which the notification is being added.
+     * @param notification: Notification which is being added.
+     */
+    public void updateUserNotificationsAdmin(User user, Notification notification) {
+
+        CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
+        // Count current number of notifications
+        notifcationRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int numNotifs = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                numNotifs++;
+                            }
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("title", notification.getTitle());
+                            data.put("date", notification.getTime());
+                            data.put("message", notification.getMessage());
+                            data.put("facilityName", notification.getFacility().getName());
+                            notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
+                                    .set(data);
+                        } else {
+                            Log.e("Firestore", "Something went wrong.");
+                        }
+                    }
+                });
+    }
+
+    /**
      * Update User document in FireBase.
      * @Author: Kevin Li, Matthieu Larochelle
      * @Version: 1.0
