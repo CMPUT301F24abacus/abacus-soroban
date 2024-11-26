@@ -48,6 +48,11 @@
         <item name="android:elevation">4dp</item>
     </style>
 
+    <!-- Alert Dialog Style -->
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/gray_i_want</item>
+    </style>
+
 <!--This is how i can use the theme objects in my xml files.-->
 <!--    <Button-->
 <!--        style="@style/AppButton"-->

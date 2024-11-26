@@ -737,6 +737,19 @@ public class FireBaseController implements Serializable {
         });
     }
 
+    /**
+     * Delete QR Hash from Event
+     * @author Kevin Li
+     * @version 1.0
+     */
+    public void deleteQRCodeHash(Event event) {
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("QRHash", FieldValue.delete());
+
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .update(updates);
+    }
+
     public void fetchEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
         eventRf.whereEqualTo("QRHash", qrCodeHash)
                 .get()

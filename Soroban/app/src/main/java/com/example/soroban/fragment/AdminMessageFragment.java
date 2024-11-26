@@ -75,8 +75,8 @@ public class AdminMessageFragment extends DialogFragment {
         Button sendButton = view.findViewById(R.id.buttonSendMessage);
         sendButton.setVisibility(View.INVISIBLE);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Send Which Violation User's Facility has Violated: ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        builder.setTitle("What Violation has the Facility Violated? ");
         builder.setView(view);
         builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("Send", (dialog, which) -> {

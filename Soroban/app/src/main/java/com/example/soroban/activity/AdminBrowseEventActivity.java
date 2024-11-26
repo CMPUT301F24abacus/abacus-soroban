@@ -117,6 +117,9 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
                         }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
                         browseEventList.add(event);
                     }
                     adapter.notifyDataSetChanged();

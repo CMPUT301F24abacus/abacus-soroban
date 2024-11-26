@@ -12,7 +12,6 @@ import android.app.Activity;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.example.soroban.activity.EventRegistrationActivity;
 import com.example.soroban.activity.OrganizerDashboardActivity;
 import com.example.soroban.model.User;
 
@@ -29,8 +28,8 @@ public class TestEventRegistrationActivity {
     }
 
     @Rule
-    public ActivityScenarioRule<EventRegistrationActivity> scenario = new
-            ActivityScenarioRule<EventRegistrationActivity>(EventRegistrationActivity.class);
+    public ActivityScenarioRule<EventDetailsActivity> scenarioRule =
+            new ActivityScenarioRule<>(EventDetailsActivity.class);
 
     @Test
     public void testRegisterBtn() {
