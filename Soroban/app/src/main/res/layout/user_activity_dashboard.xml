@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="196dp"
             android:background="#33334F"
-            android:divider="@android:color/darker_gray"
+            android:divider="@color/white"
             android:dividerHeight="1dp" />
     </LinearLayout>
 
@@ -106,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="196dp"
             android:background="#33334F"
-            android:divider="@android:color/darker_gray"
+            android:divider="@color/white"
             android:dividerHeight="1dp" />
     </LinearLayout>
 
