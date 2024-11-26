@@ -21,7 +21,18 @@ import com.example.soroban.model.UserList;
 
 import java.util.Objects;
 
-
+/**
+ * Manages the list of users on the waitlist for a specific event.
+ * Event organizers can view the waitlist and send messages to waitlisted users.
+ *
+ * @author Aaryan Shetty
+ * @author Matthieu Larochelle
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see UserArrayAdapter
+ * @see SendMessageFragment
+ */
 public class EventUsersWaitlistedActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
@@ -35,7 +46,9 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
 
     /**
      * Called when this activity is first created.
-     * @param savedInstanceState
+     *
+     * @param savedInstanceState the saved state of the activity
+     * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
      * Author: Aaryan Shetty, Matthieu Larochelle
      */
     @Override

@@ -44,6 +44,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Allows administrators to browse and manage user profile image stored in Firebase.
+ * Implements functionality for searching, filtering, displaying, and deleting user profile images.
+ * @author Kevin Li
+ * @see FireBaseController
+ * @see User
+ */
 public class AdminBrowseImagesActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView imageRecycler;
@@ -56,6 +63,13 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
     private ArrayList<String> keyList;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is first created.
+     * Sets up the UI, initializes Firebase, and configures the RecyclerView.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_browse_images);
@@ -130,13 +144,18 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
     }
 
     /**
-     * This is a sample adapter to display the images.
+     * This is a sample adapter to display user profile images.
      */
     private class BrowseImagesAdapter extends RecyclerView.Adapter<BrowseImagesAdapter.ViewHolder> {
         private ArrayList<String> browseImageList;
         private ArrayList<String> idList;
         private ArrayList<String> keyList;
 
+        /**
+         * Constructor for the adapter.
+         * @param browseImageList the list of image URLs to display.
+         * @param userIdList the list of user IDs associated with the images.
+         */
         public BrowseImagesAdapter(ArrayList<String> browseImageList, ArrayList<String> idList, ArrayList<String> keyList) {
             this.browseImageList = browseImageList;
             this.idList = idList;
@@ -144,7 +163,8 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
         }
 
         /**
-         * this method applies filtered list from searchview into adapter
+         * this method updates the adapter with a new filtered
+         * list of images and user IDs from searchview into adapter
          * @param newList: new array list for search results
          */
         public void filterList(ArrayList<String> newList, ArrayList<String> newIdList, ArrayList<String> newKeyList) {
@@ -159,7 +179,7 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
          * @param parent: The ViewGroup into which the new View will be added after it is bound to
          *               an adapter position.
          * @param viewType: The view type of the new View.
-         * @return
+         * @return a new ViewHolder
          */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -219,13 +239,16 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the item count
          */
         @Override
         public int getItemCount() {
             return browseImageList.size();
         }
 
+        /**
+         * ViewHolder for RecyclerView items representing profile images.
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView imageIV;
             TextView imageNameTV;

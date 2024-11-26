@@ -30,6 +30,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Allows organizers to create new events by providing details such as
+ * event name, description, dates, and sample size. Users can also upload a poster for the event.
+ * @author
+ * @see Event
+ * @see Facility
+ * @see User
+ * @see FireBaseController
+ * @see DatePickerFragment
+ * @see DatePickerListener
+ * @see OrganizerDashboardActivity
+ */
 public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
 
     private EditText eventNameEditText;
@@ -51,6 +63,12 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private Date drawDate;
     private User appUser;
 
+    /**
+     * Initializes the activity, sets up UI components, and processes any passed arguments.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments (e.g., appUser) are missing.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +140,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             saveEvent();
         });
 
+        // Launch the poster picker when the upload button is clicked
         eventPosterUploadButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -148,6 +167,9 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         updateDateTextViews();
     }
 
+    /**
+     * Saves the event by validating inputs, creating an Event object, and uploading details to Firebase.
+     */
     private void saveEvent() {
         // Get input data
         String eventName = eventNameEditText.getText().toString().trim();
@@ -234,16 +256,30 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
     }
 
+    /**
+     * Updates the date TextViews to reflect the selected dates.
+     */
     private void updateDateTextViews() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         selectedEventDateTextView.setText(dateFormat.format(eventDate));
         selectedDrawDateTextView.setText(dateFormat.format(drawDate));
     }
 
+    /**
+     * Generates a unique hash for the event.
+     *
+     * @return a UUID string.
+     */
     private String generateHash() {
         return java.util.UUID.randomUUID().toString();
     }
 
+    /**
+     * Sets the selected date for the target field.
+     *
+     * @param targetDate the target field to update (eventDate or drawDate).
+     * @param givenDate the selected date.
+     */
     @Override
     public void setDate(Date targetDate, Date givenDate) {
         if (eventDate.equals(targetDate)) {
@@ -254,6 +290,11 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         updateDateTextViews();
     }
 
+    /**
+     * Handles poster uploads by interacting with Firebase and updating the event object.
+     *
+     * @param posterUri the URI of the selected poster.
+     */
     // Handle the poster upload
     private void handlePosterUpload(Uri posterUri) {
         if (posterUri != null) {

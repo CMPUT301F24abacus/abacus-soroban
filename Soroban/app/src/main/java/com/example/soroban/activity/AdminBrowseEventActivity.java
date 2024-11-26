@@ -18,6 +18,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
@@ -34,7 +35,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
-
+/**
+ * Allows the admin to browse events from Firebase, search for events using a search bar,
+ * and view detailed information about a selected event.
+ * It retrieves data from Firebase Firestore and displays
+ * the list of events in a RecyclerView.
+ * @author Kevin Li
+ * @see AdminViewEventActivity
+ * @see FireBaseController
+ * @see Event
+ * @see User
+ * @see Facility
+ */
 public class AdminBrowseEventActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView eventRecycler;
@@ -44,6 +56,14 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private ArrayList<Event> browseEventList;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is created. It
+     * initializes the activity, retrieves user data
+     * sets up Firestore data listener, and
+     * configures the event list and search functionality
+     *
+     * @param savedInstanceState a Bundle containing saved instance data
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,7 +190,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
          * @param parent: The ViewGroup into which the new View will be added after it is bound to
          *               an adapter position.
          * @param viewType: The view type of the new View.
-         * @return
+         * @return the newly created ViewHolder
          */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -207,13 +227,16 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the size of the event list
          */
         @Override
         public int getItemCount() {
             return browseEventsList.size();
         }
 
+        /**
+         * ViewHolder class to hold references to UI elements for each event item.
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView eventNameTV;
             TextView eventDateTV;

@@ -24,11 +24,26 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.soroban.R;
 import com.example.soroban.model.User;
 
+/**
+ * Allows the user to manage application settings,
+ * specifically enabling or disabling notifications for the app.
+ * @author
+ * @see User
+ * @see NotificationManager
+ * @see NotificationManagerCompat
+ */
 public class PreferencesActivity extends AppCompatActivity {
     private User appUser;
     private Switch notifSwitch;
     private NotificationManagerCompat notifManager;
 
+    /**
+     * Called when this activity is created.
+     * Initializes the user, notification manager, and notification switch.
+     *
+     * @param savedInstanceState The saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are not provided.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +85,10 @@ public class PreferencesActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Called when the activity is resumed.
+     * Updates the appearance of the notification switch based on the current settings.
+     */
     @Override
     protected void onResume(){
         super.onResume();

@@ -37,6 +37,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Allows administrators to browse and manage facilities.
+ * Implements functionality for searching, filtering, and displaying facilities
+ * in a RecyclerView with Firebase integration.
+ * @author Kevin Li
+ * @see AdminViewFacilityActivity
+ * @see Facility
+ * @see User
+ * @see FireBaseController
+ */
 public class AdminBrowseFacilityActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView facilityRecycler;
@@ -46,6 +56,13 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
     private ArrayList<Facility> browseFacilityList;
     private FireBaseController fireBaseController;
 
+    /**
+     * Called when the activity is first created.
+     * Sets up the UI, initializes Firebase, and configures the RecyclerView.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_browse_facility);
@@ -146,6 +163,10 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
     private class BrowseFacilityAdapter extends RecyclerView.Adapter<BrowseFacilityAdapter.ViewHolder> {
         private ArrayList<Facility> browseFacilityList;
 
+        /**
+         * Constructor for the adapter.
+         * @param browseFacilityList the list of facilities to display.
+         */
         public BrowseFacilityAdapter(ArrayList<Facility> browseFacilityList) {
             this.browseFacilityList = browseFacilityList;
         }
@@ -155,7 +176,7 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
          * @param parent: The ViewGroup into which the new View will be added after it is bound to
          *               an adapter position.
          * @param viewType: The view type of the new View.
-         * @return
+         * @return a new ViewHolder
          */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -197,17 +218,24 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the item count.
          */
         @Override
         public int getItemCount() {
             return browseFacilityList.size();
         }
 
+        /**
+         * ViewHolder for RecyclerView items.
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView facilityNameTV;
             TextView ownerIdTV;
 
+            /**
+             * Constructor for the ViewHolder.
+             * @param itemView the item view.
+             */
             ViewHolder(View itemView) {
                 super(itemView);
                 facilityNameTV = itemView.findViewById(R.id.facility_name_text);

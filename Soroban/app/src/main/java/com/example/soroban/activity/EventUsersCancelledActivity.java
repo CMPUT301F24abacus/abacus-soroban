@@ -18,6 +18,16 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
 
+/**
+ * EventUsersCancelledActivity displays the list of users who have cancelled their participation
+ * in a selected event. The organizer can send messages to these users through the interface provided.
+ * @author Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see UserArrayAdapter
+ * @see SendMessageFragment
+ */
 public class EventUsersCancelledActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
@@ -30,6 +40,7 @@ public class EventUsersCancelledActivity extends AppCompatActivity {
     /**
      * Called when this activity is first created.
      * @param savedInstanceState
+     * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
      * Author: Aaryan Shetty
      */
     @Override

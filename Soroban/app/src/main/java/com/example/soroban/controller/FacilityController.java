@@ -4,8 +4,10 @@ import com.example.soroban.model.Facility;
 
 /**
  * Any class that deals with the modification of a Facility object must utilize this class.
+ * Provides methods for updating facility details.
  * @Author: Matthieu Larochelle
  * @Version: 1.1
+ * @see Facility
  */
 public class FacilityController {
     private Facility facility;

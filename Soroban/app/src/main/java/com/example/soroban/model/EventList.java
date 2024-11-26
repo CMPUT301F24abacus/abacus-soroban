@@ -6,8 +6,10 @@ import java.util.ArrayList;
 
 /**
  * Keeps track of event objects.
+ * Supports adding, finding, and destroying events
  * @Author: Matthieu Larochelle
  * @Version: 2.0
+ * @see Event
  */
 public class EventList extends ArrayList<Event> implements Serializable {
  

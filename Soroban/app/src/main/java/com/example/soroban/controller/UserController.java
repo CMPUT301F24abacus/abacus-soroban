@@ -7,8 +7,11 @@ import com.example.soroban.model.User;
 
 /**
  * Any class that deals with the modification of a User object must utilize this class.
+ * Provides methods for updating user details and hosted events.
  * @Author: Matthieu Larochelle
  * @Version: 1.1
+ * @see User
+ * @see Event
  */
 public class UserController {
     private User user;
@@ -17,6 +20,7 @@ public class UserController {
      * Constructor method for UserController.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param user the {@link User} to manage.
      */
     public UserController(User user){
         this.user = user;
@@ -39,6 +43,12 @@ public class UserController {
         user.setPhoneNumber(phoneNumber);
     }
 
+    /**
+     * Adds an event to the list of hosted events for the {@link User}.
+     *
+     * @param event the {@link Event} to add.
+     * @return {@code true} if the addition was successful, {@code false} otherwise.
+     */
     public boolean addHostedEvent(Event event){
         return user.addHostedEvent(event);
     }

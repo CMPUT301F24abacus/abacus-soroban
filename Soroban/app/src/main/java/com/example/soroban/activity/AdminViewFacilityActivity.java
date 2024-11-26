@@ -18,6 +18,15 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+/**
+ * Displays the details of a selected facility and
+ * provides an option for administrators to delete the facility.
+ * @author Kevin Li
+ * @see AdminBrowseFacilityActivity
+ * @see Facility
+ * @see User
+ * @see FireBaseController
+ */
 public class AdminViewFacilityActivity extends AppCompatActivity {
     private User appUser;
     private Facility selectedFacility;
@@ -28,6 +37,13 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
     private Button deleteFacilityBtn;
     private FireBaseController firebaseController;
 
+    /**
+     * Initializes the activity. Sets up the UI components and retrieves
+     * the selected facility and admin user passed as arguments.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +51,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
 
-        // Initialize appUser and selected Event for this activity.
+        // Initialize/Retrieve appUser and selectedFacility from the passed arguments
         if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 selectedFacility = args.getSerializable("selectedFacility", Facility.class);
@@ -62,7 +78,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         violationText = findViewById(R.id.violation_tv);
         deleteFacilityBtn = findViewById(R.id.delete_facility_button);
 
-
+        // Populate facility details
         facilityNameText.setText(selectedFacility.getName());
         if (selectedFacility.getDetails() != null) {
             facilityDetailsText.setText(selectedFacility.getDetails());
@@ -72,6 +88,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         // Changed to username if necessary
         facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId() + "\nName: " + (((selectedFacility.getOwner().getFirstName() != null) ? selectedFacility.getOwner().getFirstName() : "No Name Set")));
 
+        // Set up delete facility button functionality
         deleteFacilityBtn.setOnClickListener(v -> {
 
             new AlertDialog.Builder(AdminViewFacilityActivity.this)

@@ -1,9 +1,3 @@
-/**
- * This screen will display the events in which the User has already registered and secured their spot
- * Author: Ayan Imran Chaudhry
- * References: ChatGPT, Stack Overflow, Android Documentation
- */
-
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -22,14 +16,23 @@ import com.example.soroban.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This screen will display the events in which the User has already registered and secured their spot
+ * References: ChatGPT, Stack Overflow, Android Documentation
+ * @author Ayan Imran Chaudhry
+ * @see EventDetailsActivity
+ * @see RecyclerView
+ * @see LinearLayoutManager
+ */
 public class ConfirmedEventsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerConfirmedEvents;
     private ConfirmedEventsAdapter adapter;
 
     /**
-     * This method is called when the activity is created.
-     * @param savedInstanceState
+     * Initializes the activity and sets up the RecyclerView to display the list of confirmed events.
+     *
+     * @param savedInstanceState the saved state of the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
          *               an adapter position.
          * @param viewType The view type of the new View.
          *
-         * @return
+         * @return a new ViewHolder instance
          */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -99,16 +102,24 @@ public class ConfirmedEventsActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the number of confirmed events
          */
         @Override
         public int getItemCount() {
             return confirmedEvents.size();
         }
 
+        /**
+         * ViewHolder class to hold the layout and data for individual items in the RecyclerView.
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvEventName;
 
+            /**
+             * Constructs the ViewHolder and initializes its views.
+             *
+             * @param itemView the layout view for an individual item.
+             */
             ViewHolder(View itemView) {
                 super(itemView);
                 tvEventName = itemView.findViewById(R.id.tv_event_name);
