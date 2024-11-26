@@ -18,12 +18,13 @@ import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerListener;
 import com.example.soroban.fragment.DialogFragmentListener;
+import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 import java.util.Calendar;
 
-public class EventDetailsActivity extends AppCompatActivity implements DialogFragmentListener {
+public class EventDetailsActivity extends AppCompatActivity implements GeolocationListener {
     private FireBaseController firebaseController;
     private Event selectedEvent;
     private User appUser;
@@ -103,7 +104,15 @@ public class EventDetailsActivity extends AppCompatActivity implements DialogFra
         updateRegistrationButtons();
 
         // Set button click listeners
-        registerButton.setOnClickListener(v -> handleRegister());
+        registerButton.setOnClickListener(v ->{
+            // Check if Event has geolocation requirement
+            if(selectedEvent.requiresGeolocation()){
+                ConfirmGiveLocationFragment fragment = new ConfirmGiveLocationFragment();
+                fragment.show(getSupportFragmentManager(), "Confirm geolocation");
+            }else{
+                handleRegister();
+            }
+        });
         unregisterButton.setOnClickListener(v -> handleUnregister());
     }
 
@@ -120,16 +129,6 @@ public class EventDetailsActivity extends AppCompatActivity implements DialogFra
     }
 
     private void handleRegister() {
-        // Check if Event has geolocation requirement
-        if(selectedEvent.requiresGeolocation()){
-            boolean userAccepts;
-            ConfirmGiveLocationFragment fragment = new ConfirmGiveLocationFragment();
-            fragment.show(getSupportFragmentManager(), "Confirm geolocation");
-            if(!allowLocation){
-                // Do not allow User to register
-                return;
-            }
-        }
 
         // Check if current date is passed drawDate
         if(!(Calendar.getInstance().getTimeInMillis() > selectedEvent.getDrawDate().getTime())){
@@ -181,12 +180,20 @@ public class EventDetailsActivity extends AppCompatActivity implements DialogFra
         }
     }
 
-    @Override
-    public void update() {
-    }
 
     @Override
     public void returnResult(boolean result) {
-        allowLocation = result;
+        if(result){
+            // Allow user to register
+            handleRegister();
+        }
+    }
+
+    @Override
+    public void setLocation(double latitude, double longitude) {
+        if(appUser != null) {
+            appUser.setLocation(latitude, longitude);
+            firebaseController.userUpdate(appUser);
+        }
     }
 }

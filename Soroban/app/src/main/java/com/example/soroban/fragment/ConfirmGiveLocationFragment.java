@@ -32,55 +32,33 @@ import org.osmdroid.util.GeoPoint;
 public class ConfirmGiveLocationFragment  extends DialogFragment {
     private User appUser;
     private FireBaseController fireBaseController;
-    private DialogFragmentListener listener;
+    private GeolocationListener listener;
     private ActivityResultLauncher<String> requestPersmissionLauncher;
     private LocationManager locationManager;
-    private Location userLocation;
-
-    public static AcceptInviteFragment newInstance(Event selectedEvent, User appUser) {
-
-        Bundle args = new Bundle();
-        args.putSerializable("appUser", appUser);
-
-        AcceptInviteFragment fragment = new AcceptInviteFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if(context instanceof DialogFragmentListener){
-            listener = (DialogFragmentListener) context;
+        if(context instanceof GeolocationListener){
+            listener = (GeolocationListener) context;
         }else{
-            throw new RuntimeException(context + "must implement DialogFragmentListener");
+            throw new RuntimeException(context + "must implement GeolocationListener");
         }
+
+        requestPersmissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
+            if(isGranted){
+                // App can access geo location
+            }else{
+                // App cant access geo location
+            }
+        });
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.user_accept_invitation, null);
-
-        Bundle args = getArguments();
-        // Initialize appUser for this fragment.
-        if(args != null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                appUser = args.getSerializable("appUser", User.class);
-            }else{
-                appUser = (User) args.getSerializable("appUser");
-            }
-
-            if(appUser == null){
-                throw new IllegalArgumentException("Must pass object of type User to initialize appUser.");
-            }
-
-        }else{
-            throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
-        }
-
-        fireBaseController = new FireBaseController(getContext());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("This event requires your location to join the waitlist. Give location?");
@@ -92,13 +70,6 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
             // Check if location permissions are on
             locationManager = (LocationManager) getSystemService(getContext(), LocationManager.class);
 
-            requestPersmissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
-                if(isGranted){
-                    // App can access geo location
-                }else{
-                    // App cant access geo location
-                }
-            });
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     // App can use location
@@ -108,9 +79,8 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
                     LocationListener gpsListener = new LocationListener() {
                         @Override
                         public void onLocationChanged(@NonNull Location location) {
-                            // Set user's location on Firebase
-                            appUser.setLocation(location.getLatitude(), location.getLongitude());
-                            fireBaseController.userUpdate(appUser);
+                            // Return User's location
+                            listener.setLocation(location.getLatitude(), location.getLongitude());
                         }
                     };
 
