@@ -22,8 +22,21 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
+/**
+ * Dialog fragment for viewing a user's profile.
+ * Displays user details and profile image with options for editing the profile.
+ *
+ * @author
+ * @see User
+ */
 public class ViewProfileFragment extends DialogFragment {
 
+    /**
+     * Creates a new instance of {@code ViewProfileFragment}.
+     *
+     * @param user the user whose profile will be viewed.
+     * @return a new {@code ViewProfileFragment} instance.
+     */
     public static ViewProfileFragment newInstance(@Nullable User user) {
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);

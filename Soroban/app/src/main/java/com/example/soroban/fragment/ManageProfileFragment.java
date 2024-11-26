@@ -35,6 +35,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
+/**
+ * Dialog fragment for managing and updating user profiles.
+ * Supports updating user details and uploading profile images to Firebase.
+ *
+ * @author
+ * @see User
+ */
 public class ManageProfileFragment extends DialogFragment {
     private UserController userController;
     private FireBaseController fireBaseController;
@@ -43,6 +50,12 @@ public class ManageProfileFragment extends DialogFragment {
     private ImageView userProfilePhoto;
     private User appUser;
 
+    /**
+     * Creates a new instance of {@code ManageProfileFragment}.
+     *
+     * @param user the user whose profile is being managed.
+     * @return a new {@code ManageProfileFragment} instance.
+     */
     public static ManageProfileFragment newInstance(@NonNull User user){
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
