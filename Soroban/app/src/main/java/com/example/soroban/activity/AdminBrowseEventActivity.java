@@ -36,11 +36,8 @@ import java.util.Date;
 import java.util.Map;
 /**
  * AdminBrowseEventActivity allows the admin to
- * <ul>
- *     <li>Browse events from Firebase</li>
- *     <li>Search for events using a search bar</li>
- *     <li>View detailed information about a selected event</li>
- * </ul>
+ * Browse events from Firebase, search for events using a search bar,
+ * and view detailed information about a selected event.
  * It retrieves data from Firebase Firestore and displays
  * the list of events in a RecyclerView.
  */
@@ -54,13 +51,10 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private FireBaseController firebaseController;
 
     /**
-     * Called when the activity is created.
-     * <ul>
-     *     <li>Initializes the activity</li>
-     *     <li>Retrieves user data</li>
-     *     <li>Sets up Firestore data listener</li>
-     *     <li>Configures the event list and search functionality</li>
-     * </ul>
+     * Called when the activity is created. It
+     * initializes the activity, retrieves user data
+     * sets up Firestore data listener, and
+     * configures the event list and search functionality
      *
      * @param savedInstanceState a Bundle containing saved instance data
      */
