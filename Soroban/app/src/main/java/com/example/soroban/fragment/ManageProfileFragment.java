@@ -31,7 +31,9 @@ import com.example.soroban.ProfileRepository;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
 import com.example.soroban.model.User;
+import com.example.soroban.fragment.ViewProfileFragment;
 import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.io.Serializable;
 
@@ -70,7 +72,7 @@ public class ManageProfileFragment extends DialogFragment {
                         Uri imageUri = result.getData().getData();
                         Log.d("ManageProfileFragment", "Image URI received: " + imageUri);
                         userProfilePhoto.setImageURI(imageUri); // Display the selected image
-                        profileRepository.uploadImageToFirebase(imageUri, appUser.getDeviceId()); // Use actual user ID here
+                        profileRepository.uploadImageToFirebase(imageUri, appUser.getDeviceId());
                     } else {
                         Log.d("ManageProfileFragment", "No image selected or result not OK");
                     }
@@ -125,7 +127,9 @@ public class ManageProfileFragment extends DialogFragment {
                                         .into(userProfilePhoto);
                                 Log.e("ViewProfileFragment", "After glide");
                             } else {
-                                userProfilePhoto.setImageResource(R.drawable.ic_profile); // Set default if no URL
+
+                                int defaultPictureID = ViewProfileFragment.getDefaultPictureID(appUser.getFirstName(), requireContext());
+                                userProfilePhoto.setImageResource(defaultPictureID); // Set default if no URL
                             }
                         })
                         .addOnFailureListener(e -> {
@@ -139,7 +143,7 @@ public class ManageProfileFragment extends DialogFragment {
 
                 ImageButton removeProfileButton = view.findViewById(R.id.editProfilePhotoButton2);
                 removeProfileButton.setOnClickListener(v -> {
-                    profileRepository.deleteProfileImage(appUser.getDeviceId()); // Use actual user ID here
+                    profileRepository.deleteProfileImage(appUser.getDeviceId());
                     userProfilePhoto.setImageResource(R.drawable.ic_profile); // Reset to default image
                 });
 
