@@ -34,7 +34,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
-
+/**
+ * AdminBrowseEventActivity allows the admin to
+ * <ul>
+ *     <li>Browse events from Firebase</li>
+ *     <li>Search for events using a search bar</li>
+ *     <li>View detailed information about a selected event</li>
+ * </ul>
+ * It retrieves data from Firebase Firestore and displays
+ * the list of events in a RecyclerView.
+ */
 public class AdminBrowseEventActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView eventRecycler;
@@ -44,6 +53,17 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private ArrayList<Event> browseEventList;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is created.
+     * <ul>
+     *     <li>Initializes the activity</li>
+     *     <li>Retrieves user data</li>
+     *     <li>Sets up Firestore data listener</li>
+     *     <li>Configures the event list and search functionality</li>
+     * </ul>
+     *
+     * @param savedInstanceState a Bundle containing saved instance data
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +187,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
          * @param parent: The ViewGroup into which the new View will be added after it is bound to
          *               an adapter position.
          * @param viewType: The view type of the new View.
-         * @return
+         * @return the newly created ViewHolder
          */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -204,13 +224,16 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the size of the event list
          */
         @Override
         public int getItemCount() {
             return browseEventsList.size();
         }
 
+        /**
+         * ViewHolder class to hold references to UI elements for each event item.
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView eventNameTV;
             TextView eventDateTV;
