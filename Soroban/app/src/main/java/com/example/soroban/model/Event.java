@@ -10,9 +10,13 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 /**
- * Stores any relevant information that is related to an event.
+ * Stores any relevant information that is related to an event such as
+ * name, date, attendees, and facility. Manages user interaction and event participation
  * @Author: Matthieu Larochelle
  * @Version: 1.2
+ * @see User
+ * @see Facility
+ * @see UserList
  */
 
 public class Event implements Serializable {
@@ -33,6 +37,9 @@ public class Event implements Serializable {
     private String qrCodeHash;
     private String posterUrl;
 
+    /**
+     * No-argument constructor required by Firestore.
+     */
     // No-argument constructor required by Firestore
     public Event() {
         this.attendees = new UserList();
@@ -67,6 +74,7 @@ public class Event implements Serializable {
 
     /**
      * Destructor method for Event.
+     * Cleans up event resources and unregisters associated users
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */

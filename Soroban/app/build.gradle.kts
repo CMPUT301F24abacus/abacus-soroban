@@ -43,6 +43,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
+    // Uncomment when Generating JavaDoc and then comment after
+    // implementation(files("/Users/edwin/Library/Android/sdk/platforms/android-35/android.jar"))
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")

@@ -37,6 +37,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * This class handles interactions with Firebase Firestore and Storage.
+ * It manages users, events, facilities, and notifications by performing CRUD operations.
+ * @Author: Matthieu Larochelle, Kevin Li, Edwin M
+ * @Version: 1.2
+ */
 public class FireBaseController implements Serializable {
     FirebaseFirestore db;
     CollectionReference userRf;
@@ -737,6 +743,15 @@ public class FireBaseController implements Serializable {
         });
     }
 
+    /**
+     * Retrieves an event from Firestore using its QR code hash.
+     * Resolves event details and the associated owner to construct a complete {@link Event} object.
+     *
+     * @author Edwin Manalastas
+     * @param qrCodeHash        the QR code hash identifying the event.
+     * @param onSuccessListener callback triggered with the {@link Event} if found, or {@code null} if not.
+     */
+
     public void fetchEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
         eventRf.whereEqualTo("QRHash", qrCodeHash)
                 .get()
@@ -1348,9 +1363,13 @@ public class FireBaseController implements Serializable {
     }
 
     /**
-     * Upload poster to Firebase Storage.
-     * @Author: Jerry Pan
-     * @Version: 1.0
+     * Uploads an event poster image to Firebase Storage and retrieves its download URL.
+     *
+     * @author Jerry P
+     * @param posterUri          the URI of the poster image to upload.
+     * @param eventName          the name of the event associated with the poster.
+     * @param onSuccessListener  callback triggered with the download URL upon successful upload.
+     * @param onFailureListener  callback triggered in case of an upload failure.
      */
     public void uploadEventPoster(Uri posterUri, String eventName, OnSuccessListener<Uri> onSuccessListener, OnFailureListener onFailureListener) {
         // Define a storage reference for the poster
@@ -1368,9 +1387,10 @@ public class FireBaseController implements Serializable {
     }
 
     /**
-     * Update poster from Firebase.
-     * @Author: Jerry Pan
-     * @Version: 1.0
+     * Updates the poster URL of an event in Firestore.
+     *
+     * @author Jerry P
+     * @param event the {@link Event} whose poster URL needs to be updated.
      */
     public void updateEventPoster(Event event) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

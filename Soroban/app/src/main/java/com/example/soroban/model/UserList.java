@@ -3,15 +3,18 @@ package com.example.soroban.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
 /**
  * Keeps track of user objects.
+ * Supports adding, finding, and destroying users.
+ *
  * @Author: Matthieu Larochelle
  * @Version: 2.0
+ * @see User
  */
 public class UserList extends ArrayList<User> implements Serializable {
     /**
      * Constructor method for UserList.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 2.0
      */
@@ -21,6 +24,7 @@ public class UserList extends ArrayList<User> implements Serializable {
 
     /**
      * Destructor method for UserList.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */
@@ -32,8 +36,10 @@ public class UserList extends ArrayList<User> implements Serializable {
 
     /**
      * Add user to UserList.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param user the user to add.
      * @return: Result of addition of User to User List
      */
     public boolean addUser(User user){
@@ -47,8 +53,10 @@ public class UserList extends ArrayList<User> implements Serializable {
 
     /**
      * Find event in UserList.
+     *
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param user the user to find.
      * @Return: Null if no matching user was found; the matching user otherwise
      */
     public User find(User user){

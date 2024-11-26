@@ -15,14 +15,33 @@ import com.example.soroban.model.Notification;
 
 import java.util.List;
 
+/**
+ * RecyclerView Adapter for displaying a list of {@link Notification} objects.
+ * This adapter binds each notification to a custom layout and handles user interactions.
+ *
+ * @author
+ * @see Notification
+ */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     private List<Notification> notificationList;
 
+    /**
+     * Constructs a new {@code NotificationAdapter}.
+     *
+     * @param notificationList the list of notifications to display.
+     */
     public NotificationAdapter(List<Notification> notificationList) {
         this.notificationList = notificationList;
     }
 
+    /**
+     * Creates a new ViewHolder for the RecyclerView.
+     *
+     * @param parent the parent view group.
+     * @param viewType the view type of the new View.
+     * @return a new {@code NotificationViewHolder}.
+     */
     @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,6 +49,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return new NotificationViewHolder(view);
     }
 
+    /**
+     * Binds data from a {@link Notification} to a ViewHolder.
+     *
+     * @param holder the ViewHolder to bind data to.
+     * @param position the position of the item in the list.
+     */
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
@@ -73,6 +98,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         });*/
     }
 
+    /**
+     * Returns the total number of items in the list.
+     *
+     * @return the size of the notification list.
+     */
     @Override
     public int getItemCount() {
         return notificationList.size();
@@ -92,11 +122,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         notifyDataSetChanged();
     }
 
+    /**
+     * ViewHolder class for displaying a single {@link Notification}.
+     */
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView, timeTextView, eventTextView;
         ImageView muteIcon;
         Button deleteButton;
 
+        /**
+         * Constructs a new {@code NotificationViewHolder}.
+         *
+         * @param itemView the view representing a single notification item.
+         */
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.notification_title);

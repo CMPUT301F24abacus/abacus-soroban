@@ -21,12 +21,28 @@ import com.example.soroban.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Dialog fragment for handling invitation acceptance or rejection for an event.
+ * Provides options for users to accept or reject an event invitation with Firebase integration.
+ *
+ * @author
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ */
 public class AcceptInviteFragment extends DialogFragment {
     private Event selectedEvent;
     private User appUser;
     private FireBaseController fireBaseController;
     private DialogFragmentListener listener;
 
+    /**
+     * Creates a new instance of {@code AcceptInviteFragment}.
+     *
+     * @param selectedEvent the selected event for which the invitation is being handled.
+     * @param appUser the user interacting with the fragment.
+     * @return a new {@code AcceptInviteFragment} instance.
+     */
     public static AcceptInviteFragment newInstance(Event selectedEvent, User appUser) {
 
         Bundle args = new Bundle();

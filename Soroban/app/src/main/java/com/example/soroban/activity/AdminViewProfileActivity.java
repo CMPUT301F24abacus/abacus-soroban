@@ -21,6 +21,14 @@ import com.example.soroban.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Displays the details of a selected user profile
+ * and allows administrators to delete the user's profile.
+ * @author Kevin Li
+ * @see AdminBrowseProfileActivity
+ * @see User
+ * @see FireBaseController
+ */
 public class AdminViewProfileActivity extends AppCompatActivity {
     private User selectedUser;
     private User appUser;
@@ -34,6 +42,13 @@ public class AdminViewProfileActivity extends AppCompatActivity {
     private ImageView userProfilePic;
     private FireBaseController firebaseController;
 
+    /**
+     * Initializes the activity, retrieves arguments, and sets up the UI components
+     * for viewing or deleting a user profile.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +56,7 @@ public class AdminViewProfileActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
 
-        // Initialize appUser and selected Event for this activity.
+        // Initialize/Retrieve appUser and selectedUser from the passed arguments
         if(args != null){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 selectedUser = args.getSerializable("selectedUser", User.class);
@@ -74,6 +89,7 @@ public class AdminViewProfileActivity extends AppCompatActivity {
         userPhoneNumber = findViewById(R.id.user_phoneNumberField);
         userProfilePic = findViewById(R.id.userProfilePhoto);
 
+        // Populate user details
         userFirstName.setText(selectedUser.getFirstName());
         userLastName.setText(selectedUser.getLastName());
         userEmail.setText(selectedUser.getEmail());
@@ -103,6 +119,7 @@ public class AdminViewProfileActivity extends AppCompatActivity {
                     userProfilePic.setImageResource(R.drawable.ic_profile); // Default image if fetch fails
                 });
 
+        // Set up delete profile button functionality
         deleteProfile.setOnClickListener(v -> {
             new AlertDialog.Builder(AdminViewProfileActivity.this)
                     .setTitle("Delete Image")

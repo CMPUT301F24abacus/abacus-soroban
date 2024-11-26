@@ -15,12 +15,29 @@ import com.example.soroban.controller.FacilityController;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+/**
+ * Allows the user to view and edit the details of an existing facility.
+ * The user can update the facility's name and details, and save these changes.
+ * @see Facility
+ * @see User
+ * @see FacilityController
+ * @see FireBaseController
+ * @see OrganizerDashboardActivity
+ * @author
+ */
 public class ManageFacilityActivity extends AppCompatActivity {
     private User appUser;
     private Facility thisFacility;
     private EditText editTextFacilityName, editTextFacilityDetails;
     private Button buttonSaveChanges;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes views, retrieves facility data, and sets up event listeners.
+     *
+     * @param savedInstanceState The saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are not provided.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

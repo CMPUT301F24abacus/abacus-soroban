@@ -15,17 +15,30 @@ import java.util.GregorianCalendar;
 
 /**
  * Dialog fragment that allows a user to pick a specific date.
+ * Integrates a custom date picker dialog with a listener for setting the chosen date.
+ *
  * @Author: Matthieu Larochelle (Referencing: https://developer.android.com/develop/ui/views/components/pickers)
  * @Version: 1.0
+ * @see DatePickerListener
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     private DatePickerListener listener;
     private Date targetDate;
 
+    /**
+     * Sets the listener for handling the selected date.
+     *
+     * @param listener the listener to handle the date selection.
+     */
     public void setListener(DatePickerListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Sets the target date to update when a date is selected.
+     *
+     * @param targetDate the target {@link Date} to be updated.
+     */
     public void setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
     }

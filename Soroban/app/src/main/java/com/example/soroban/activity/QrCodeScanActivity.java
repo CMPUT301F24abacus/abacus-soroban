@@ -1,8 +1,3 @@
-/**
- *  Author: Edwin Manalastas
- *  References: Youtube / StackOverflow / ChatGPT (for small bugs)
- */
-
 package com.example.soroban.activity;
 
 import android.Manifest;
@@ -31,7 +26,15 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 /**
- * Activity to scan QR code and redirect to EventRegistrationActivity
+ * Handles the functionality for scanning QR codes
+ * and redirects the user to EventDetailsActivity with the scanned event data.
+ * References: YouTube, StackOverflow
+ *
+ * @author: Edwin Manalastas
+ * @see Event
+ * @see User
+ * @see EventDetailsActivity
+ * @see FireBaseController
  */
 public class QrCodeScanActivity extends AppCompatActivity {
     private User appUser;
@@ -39,8 +42,11 @@ public class QrCodeScanActivity extends AppCompatActivity {
     private ActivityScanQrCodeBinding binding;
 
     /**
-     * Called when the activity is first created.
-     * @param savedInstanceState
+     * Called when the activity is created.
+     * Initializes binding, retrieves appUser, and sets up views.
+     *
+     * @param savedInstanceState The saved state of the activity.
+     * @throws IllegalArgumentException if the required appUser argument is not provided.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
         initViews();
     }
 
+    /**
+     * Launcher to handle camera permission requests.
+     */
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if(isGranted) {
@@ -76,6 +85,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 }
             });
 
+    /**
+     * Launcher to handle QR code scanning results.
+     */
     private ActivityResultLauncher<ScanOptions> qrCodeLauncher = registerForActivityResult(new ScanContract(), result -> {
         if (result.getContents() == null) {
             Toast.makeText(this, "Scan Cancelled", Toast.LENGTH_SHORT).show();
@@ -84,6 +96,11 @@ public class QrCodeScanActivity extends AppCompatActivity {
         }
     });
 
+    /**
+     * Processes the scanned QR code hash to fetch event details.
+     *
+     * @param qrCodeHash The hash value scanned from the QR code.
+     */
     // Action after scanning QR Code
     private void retrieveEventDetails(String qrCodeHash) {
 
@@ -104,6 +121,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Launches the camera for scanning QR codes.
+     */
     private void showCamera() {
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
@@ -116,12 +136,20 @@ public class QrCodeScanActivity extends AppCompatActivity {
         qrCodeLauncher.launch(options);
     }
 
+    /**
+     * Initializes views and sets up the FloatingActionButton for scanning QR codes.
+     */
     private void initViews() {
         binding.fab.setOnClickListener(view -> {
             checkPermissionAndShowActivity(this);
         });
     }
 
+    /**
+     * Checks for camera permission and handles user redirection to app settings if necessary.
+     *
+     * @param context The context for checking permissions.
+     */
     private void checkPermissionAndShowActivity(Context context) {
         if(ContextCompat.checkSelfPermission(
                 context,
@@ -148,6 +176,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes view binding for the activity.
+     */
     private void initBinding() {
         binding = ActivityScanQrCodeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
