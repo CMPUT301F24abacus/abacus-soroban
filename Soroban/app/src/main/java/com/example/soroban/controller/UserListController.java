@@ -5,8 +5,12 @@ import com.example.soroban.model.UserList;
 
 /**
  * Any class that deals with the modification of a UserList object must utilize this class.
+ * Provides methods for adding, removing, and updating {@link User} objects.
+ *
  * @Author: Matthieu Larochelle
  * @Version: 1.0
+ * @see User
+ * @see UserList
  */
 public class UserListController {
     private UserList userList;
@@ -15,6 +19,7 @@ public class UserListController {
      * Constructor method for UserListController.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
+     * @param userList the {@link UserList} to manage.
      */
     public UserListController(UserList userList){
         this.userList = userList;
