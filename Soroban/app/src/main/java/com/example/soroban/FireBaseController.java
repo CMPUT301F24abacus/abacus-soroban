@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -63,7 +64,7 @@ public class FireBaseController implements Serializable {
      * @param layout: Layout which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
      */
-    public void initialize(ProgressBar progressBar, ConstraintLayout layout, User user, Button adminDashboard){
+    public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
         DocumentReference docRef = userRf.document(user.getDeviceId());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
@@ -101,7 +102,8 @@ public class FireBaseController implements Serializable {
                         createUserDb(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    layout.setVisibility(View.VISIBLE);
+                    userBtn.setVisibility(View.VISIBLE);
+                    organizerBtn.setVisibility(View.VISIBLE);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
@@ -1302,8 +1304,9 @@ public class FireBaseController implements Serializable {
      * @param facility: Facility to be finished off.
      */
     public void removeFacilityDoc(Facility facility) {
+        DocumentReference docRef = userRf.document(facility.getOwner().getDeviceId());
         // remove events from user's hostedevents
-        userRf.document(facility.getOwner().getDeviceId()).collection("hostedEvents")
+        docRef.collection("hostedEvents")
                         .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -1326,6 +1329,11 @@ public class FireBaseController implements Serializable {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
+
+        // remove facility value from user
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("facility", FieldValue.delete());
+        docRef.update(updates);
 
         // remove facility from firebase
         facilityRf.document(facility.getOwner().getDeviceId())
