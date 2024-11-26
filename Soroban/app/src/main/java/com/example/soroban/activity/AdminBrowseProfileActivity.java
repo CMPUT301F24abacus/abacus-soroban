@@ -1,3 +1,7 @@
+/**
+ * Activity to allow administrators to browse user profiles.
+ * Implements functionality for searching, filtering, and displaying user profiles in a RecyclerView.
+ */
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -11,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -43,6 +48,13 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<User> browseProfilesList;
 
+    /**
+     * Initializes the activity. Sets up the user interface, Firebase connection,
+     * and RecyclerView for browsing user profiles.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_browse_users);
@@ -141,6 +153,11 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
     private class BrowseProfilesAdapter extends RecyclerView.Adapter<BrowseProfilesAdapter.ViewHolder> {
         private ArrayList<User> browseProfilesList;
 
+        /**
+         * Constructor for the adapter.
+         *
+         * @param browseProfilesList the list of user profiles to display.
+         */
         public BrowseProfilesAdapter(ArrayList<User> browseProfilesList) {
             this.browseProfilesList = browseProfilesList;
         }
@@ -159,8 +176,9 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
          * @param parent: The ViewGroup into which the new View will be added after it is bound to
          *               an adapter position.
          * @param viewType: The view type of the new View.
-         * @return
+         * @return a new VieHolder
          */
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.profile_item, parent, false);
@@ -221,7 +239,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
 
         /**
          * This method returns the total number of items in the data set held by the adapter.
-         * @return
+         * @return the item count
          */
         @Override
         public int getItemCount() {
@@ -233,6 +251,11 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
             TextView userNameTV;
             ImageView userPicIV;
 
+            /**
+             * Constructor for the ViewHolder.
+             *
+             * @param itemView the item view.
+             */
             ViewHolder(View itemView) {
                 super(itemView);
                 userIdTV = itemView.findViewById(R.id.tv_profile_id);
