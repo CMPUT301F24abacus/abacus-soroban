@@ -131,12 +131,16 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
 
         eventGeolocation.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsGeolocationActivity.class);
-            Bundle newArgs = new Bundle();
-            newArgs.putSerializable("selectedEvent", selectedEvent);
-            newArgs.putSerializable("appUser", appUser);
-            intent.putExtras(newArgs);
-            startActivity(intent);
+            if(selectedEvent.requiresGeolocation()){
+                Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsGeolocationActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("selectedEvent", selectedEvent);
+                newArgs.putSerializable("appUser", appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "Your event does not have geolocation enabled", Toast.LENGTH_SHORT).show();
+            }
         });
 
         viewEntrants.setOnClickListener(v -> {

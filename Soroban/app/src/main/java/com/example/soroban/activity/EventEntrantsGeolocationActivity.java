@@ -116,12 +116,14 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
                             mapController.setCenter(start);
 
                             for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
-                                GeoPoint userPoint = selectedEvent.getWaitingEntrants().get(i).getLocation();
+                                User entrant = selectedEvent.getWaitingEntrants().get(i);
+                                GeoPoint userPoint = entrant.getLocation();
 
                                 Marker newMarker = new Marker(map);
                                 newMarker.setPosition(userPoint);
                                 newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
                                 newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                                newMarker.setTitle(entrant.getFirstName()  + " " + entrant.getLastName() );
 
                                 map.getOverlays().add(newMarker);
                             }

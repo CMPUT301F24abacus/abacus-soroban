@@ -31,7 +31,7 @@ public class Event implements Serializable {
     private Bitmap QRCode;
     private int numberOfNotifications = 0; // Does not need to be stored in Firebase.
     private String qrCodeHash;
-    private boolean requiresGeolocation;
+    private boolean requiresGeolocation = false; // Set to false by default
 
     // No-argument constructor required by Firestore
     public Event() {
