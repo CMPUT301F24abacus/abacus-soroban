@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- https://developer.android.com/guide/topics/resources/drawable-resource -->
+
+<!-- Background by Sofya Pestova on Unsplash -->
+<!-- https://unsplash.com/photos/strong-waves-of-body-of-water-kyXTDh5BWNU -->
+
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <bitmap
