@@ -1,8 +1,3 @@
-/**
- * Activity to allow administrators to browse facilities.
- * Implements functionality for searching, filtering, and displaying facilities
- * in a RecyclerView with Firebase integration.
- */
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -43,7 +38,14 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Activity for administrators to browse and manage facilities.
+ * Allows administrators to browse and manage facilities.
+ * Implements functionality for searching, filtering, and displaying facilities
+ * in a RecyclerView with Firebase integration.
+ * @author Kevin Li
+ * @see AdminViewFacilityActivity
+ * @see Facility
+ * @see User
+ * @see FireBaseController
  */
 public class AdminBrowseFacilityActivity extends AppCompatActivity {
     private User appUser;

@@ -20,6 +20,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
+/**
+ * Handles the display and management of an event the user is either
+ * registered for or waitlisted for, allowing the user to unregister or leave the waitlist.
+ * @author
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see UserDashboardActivity
+ * @see Notification
+ */
 public class UserEventActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;

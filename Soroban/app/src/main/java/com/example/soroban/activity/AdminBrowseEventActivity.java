@@ -18,6 +18,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
@@ -35,11 +36,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 /**
- * AdminBrowseEventActivity allows the admin to
- * Browse events from Firebase, search for events using a search bar,
+ * Allows the admin to browse events from Firebase, search for events using a search bar,
  * and view detailed information about a selected event.
  * It retrieves data from Firebase Firestore and displays
  * the list of events in a RecyclerView.
+ * @author Kevin Li
+ * @see AdminViewEventActivity
+ * @see FireBaseController
+ * @see Event
+ * @see User
+ * @see Facility
  */
 public class AdminBrowseEventActivity extends AppCompatActivity {
     private User appUser;

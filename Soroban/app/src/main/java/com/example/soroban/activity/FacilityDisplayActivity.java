@@ -12,6 +12,14 @@ import com.example.soroban.R;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+/**
+ * Displays the details of a facility associated with the user.
+ * The user can view and edit facility information through this activity.
+ * @author
+ * @see ManageFacilityActivity
+ * @see Facility
+ * @see User
+ */
 public class FacilityDisplayActivity extends AppCompatActivity {
     private User appUser;
     private TextView facilityNameTextView;
@@ -20,6 +28,13 @@ public class FacilityDisplayActivity extends AppCompatActivity {
 
     private static final int EDIT_FACILITY_REQUEST_CODE = 2;
 
+    /**
+     * Called when this activity is first created.
+     * Initializes views and displays the facility data.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if the appUser is not passed in the intent extras.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +82,14 @@ public class FacilityDisplayActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handles the result returned from the ManageFacilityActivity.
+     * Updates the facility information displayed in the TextViews.
+     *
+     * @param requestCode the request code of the activity.
+     * @param resultCode the result code returned by the activity.
+     * @param data the intent data containing updated facility information.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

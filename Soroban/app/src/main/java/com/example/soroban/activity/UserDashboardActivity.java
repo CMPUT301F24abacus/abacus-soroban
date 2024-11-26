@@ -18,6 +18,22 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
+/**
+ * Displays the user's dashboard with options to scan QR codes,
+ * view notifications, manage preferences, and browse waitlisted and confirmed events.
+ * References: StackOverflow
+ *
+ * @author Ayan Chaudhry
+ * @author Matthieu Larochelle
+ * @author Kevin Li
+ * @see QrCodeScanActivity
+ * @see InvitationActivity
+ * @see PreferencesActivity
+ * @see Event
+ * @see EventArrayAdapter
+ * @see User
+ * @see UserEventActivity
+ */
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
     private FireBaseController fireBaseController;
@@ -30,7 +46,8 @@ public class UserDashboardActivity extends AppCompatActivity {
 
     /**
      * Called when the activity is first created.
-     * @param savedInstanceState
+     * @param savedInstanceState the saved state of the activity
+     * @throws IllegalArgumentException if the required User object is not passed.
      * Author: Ayan Chaudhry, Matthieu Larochelle, Kevin Li
      *
      */

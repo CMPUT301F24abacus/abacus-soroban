@@ -1,7 +1,3 @@
-/**
- * AdminViewFacilityActivity displays the details of a selected facility and
- * provides an option for administrators to delete the facility.
- */
 package com.example.soroban.activity;
 
 import android.app.AlertDialog;
@@ -20,6 +16,15 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+/**
+ * Displays the details of a selected facility and
+ * provides an option for administrators to delete the facility.
+ * @author Kevin Li
+ * @see AdminBrowseFacilityActivity
+ * @see Facility
+ * @see User
+ * @see FireBaseController
+ */
 public class AdminViewFacilityActivity extends AppCompatActivity {
     private User appUser;
     private Facility selectedFacility;

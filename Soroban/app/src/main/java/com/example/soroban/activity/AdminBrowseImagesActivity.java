@@ -1,7 +1,3 @@
-/**
- * Activity to allow administrators to browse and manage user profile images.
- * Implements functionality for searching, filtering, displaying, and deleting user profile images.
- */
 package com.example.soroban.activity;
 
 import android.app.AlertDialog;
@@ -44,7 +40,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Activity for administrators to browse and manage user profile images stored in Firebase.
+ * Allows administrators to browse and manage user profile image stored in Firebase.
+ * Implements functionality for searching, filtering, displaying, and deleting user profile images.
+ * @author Kevin Li
+ * @see FireBaseController
+ * @see User
  */
 public class AdminBrowseImagesActivity extends AppCompatActivity {
     private User appUser;

@@ -17,6 +17,16 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
 
+/**
+ * Displays the list of users who have confirmed their participation
+ * in a selected event. The organizer can send messages to these attendees through the interface provided.
+ * @author Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see UserArrayAdapter
+ * @see SendMessageFragment
+ */
 public class EventUsersConfirmedActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
@@ -28,7 +38,8 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
 
     /**
      * Called when this activity is first created.
-     * @param savedInstanceState
+     * @param savedInstanceState the saved state of the activity
+     * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
      * Author: Aaryan Shetty
      */
     @Override

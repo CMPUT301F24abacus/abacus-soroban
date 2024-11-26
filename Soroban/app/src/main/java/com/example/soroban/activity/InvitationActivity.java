@@ -1,9 +1,3 @@
-/**
- * Author: Ayan Chaudhry, Matthieu
- * References: ChatGPT, Stack Overflow, Geeks for Geeks
- * this class contains all the functionalities related to Notifications for the User
- */
-
 package com.example.soroban.activity;
 
 import android.Manifest;
@@ -28,6 +22,17 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 
+/**
+ * Handles all functionalities related to notifications for the user.
+ * Users can view, manage, and respond to event invitations in this activity.
+ * References: ChatGPT, Stack Overflow, Geeks for Geeks
+ *
+ * @author Ayan Chaudhry
+ * @author Matthieu
+ * @see Event
+ * @see AcceptInviteFragment
+ * @see EventArrayAdapter
+ */
 public class InvitationActivity extends AppCompatActivity implements DialogFragmentListener {
     private User appUser;
     private FireBaseController fireBaseController;
@@ -38,11 +43,19 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
     private Button clearAllButton;
     private ActivityResultLauncher<String> requestPersmissionLauncher;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes views, data, and event listeners.
+     *
+     * @param savedInstanceState The saved state of the activity.
+     * @throws IllegalArgumentException if appUser is not provided in the intent extras.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitations);
 
+        // Retrieve arguments passed from the previous activity.
         Bundle args = getIntent().getExtras();
 
         // Initialize appUser for this activity.
@@ -80,6 +93,10 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
 
     }
 
+    /**
+     * Updates the adapter for the ListView.
+     * Called to refresh the displayed data.
+     */
     @Override
     public void updateAdapter() {
         adapter.notifyDataSetChanged();

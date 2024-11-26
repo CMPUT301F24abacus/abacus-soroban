@@ -1,7 +1,3 @@
-/**
- * AdminDashboardActivity serves as the main navigation hub for administrators.
- * Provides buttons to navigate to different browsing activities: Events, Profiles, Facilities, and Images.
- */
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -15,6 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.R;
 import com.example.soroban.model.User;
 
+/**
+ * Serves as the main navigation hub for administrators.
+ * Provides buttons to navigate to different browsing activities: Events, Profiles, Facilities, and Images.
+ * @author Kevin Li
+ * @see AdminBrowseEventActivity
+ * @see AdminBrowseProfileActivity
+ * @see AdminBrowseFacilityActivity
+ * @see AdminBrowseImagesActivity
+ * @see User
+ */
 public class AdminDashboardActivity extends AppCompatActivity {
     private User appUser;
     private Button browseEventBtn;

@@ -1,7 +1,3 @@
-/**
- * Activity to allow administrators to browse user profiles.
- * Implements functionality for searching, filtering, and displaying user profiles in a RecyclerView.
- */
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -24,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
@@ -40,6 +37,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Allows administrators to browse user profiles.
+ * Implements functionality for searching, filtering, and displaying user profiles in a RecyclerView.
+ * @author Kevin Li
+ * @see AdminViewProfileActivity
+ * @see User
+ * @see FireBaseController
+ */
 public class AdminBrowseProfileActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView profileRecycler;

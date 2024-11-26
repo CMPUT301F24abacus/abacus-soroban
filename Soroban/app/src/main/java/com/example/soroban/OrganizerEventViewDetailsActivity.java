@@ -27,6 +27,20 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Allows organizers to view details of a specific event.
+ * Provides functionality to view event details, entrants, and QR codes.
+ *
+ * Author: Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see EventEntrantsListActivity
+ * @see OrganizerEventEditDetailsActivity
+ * @see AlertDialog
+ * @see QRCodeGenerator
+ * @see Glide
+ */
 public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
@@ -45,8 +59,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private Button editEvent;
 
     /**
-     * Called when this activity is first created.
-     * @param savedInstanceState
+     * Called when this activity is first created. Initializes UI components and populates event details.
+     * @param savedInstanceState the saved instance state of the activity.
      * Author: Aaryan Shetty
      */
     @Override
