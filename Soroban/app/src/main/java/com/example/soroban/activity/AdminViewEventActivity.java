@@ -1,3 +1,9 @@
+/**
+ * AdminViewEventActivity is responsible for displaying the details of a selected event
+ * and providing options to delete the event or its associated QR code.
+ *  * Outstanding Issues:
+ *  - The QR code display functionality is still a work in progress.
+ */
 package com.example.soroban.activity;
 
 import android.app.AlertDialog;
@@ -28,6 +34,13 @@ public class AdminViewEventActivity extends AppCompatActivity {
     private ImageView eventQR;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the user interface and passes the appUser data to subsequent activities.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
