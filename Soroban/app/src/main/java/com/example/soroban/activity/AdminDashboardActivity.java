@@ -1,3 +1,7 @@
+/**
+ * AdminDashboardActivity serves as the main navigation hub for administrators.
+ * Provides buttons to navigate to different browsing activities: Events, Profiles, Facilities, and Images.
+ */
 package com.example.soroban.activity;
 
 import android.content.Intent;
@@ -18,6 +22,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private Button browseImageBtn;
     private Button browseFacilityBtn;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the user interface and passes the appUser data to subsequent activities.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
