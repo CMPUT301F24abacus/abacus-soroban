@@ -86,7 +86,8 @@
             android:layout_width="369dp"
             android:layout_height="71dp"
             android:text="Violation of App Policy"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/delete_facility_button"

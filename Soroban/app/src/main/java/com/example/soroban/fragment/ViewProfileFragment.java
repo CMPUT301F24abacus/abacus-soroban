@@ -2,6 +2,7 @@ package com.example.soroban.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.io.Serializable;
  * @see User
  */
 public class ViewProfileFragment extends DialogFragment {
+    int defaultPictureID;
 
     /**
      * Creates a new instance of {@code ViewProfileFragment}.
@@ -93,7 +95,11 @@ public class ViewProfileFragment extends DialogFragment {
                                         .into(userProfilePhoto);
                                 Log.e("ViewProfileFragment", "After glide");
                             } else {
-                                userProfilePhoto.setImageResource(R.drawable.ic_profile); // Set default if no URL
+                                // Get the users first name and set the user's pfp to a default letter
+                                // corresponding to their first name's first letter.
+                                Log.d("User's first name:", appUser.getFirstName());
+                                defaultPictureID = getDefaultPictureID(appUser.getFirstName(), requireContext());
+                                userProfilePhoto.setImageResource(defaultPictureID);
                             }
                         })
                         .addOnFailureListener(e -> {
@@ -123,4 +129,31 @@ public class ViewProfileFragment extends DialogFragment {
             throw new RuntimeException("Instantiate ViewProfileFragment by using newInstance() method.");
         }
     }
+
+    /**
+     * Getter for getting the defaultPictureID. This is important for displaying the default picture in
+     * the edit profile page. This allows ManageProfileFragment to access the attribute so it can display
+     * the default picture by ID as well.
+     * @return an int that corresponds to the default picture's ID
+     */
+    public static int getDefaultPictureID(String firstName, Context context) {
+        if (firstName == null || firstName.isEmpty()) {
+            return R.drawable.ic_profile; // Default fallback image
+        }
+
+        char firstLetter = Character.toLowerCase(firstName.charAt(0)); // Get the first letter and ensure it's lowercase
+        if (firstLetter < 'a' || firstLetter > 'z') {
+            return R.drawable.ic_profile; // Default fallback if the first letter is not A-Z
+        }
+
+        // Dynamically fetch the drawable resource
+        int drawableId = context.getResources().getIdentifier(
+                "letter_" + firstLetter,
+                "drawable",
+                context.getPackageName()
+        );
+
+        return (drawableId != 0) ? drawableId : R.drawable.ic_profile; // Return the default image if the drawable is not found
+    }
+
 }

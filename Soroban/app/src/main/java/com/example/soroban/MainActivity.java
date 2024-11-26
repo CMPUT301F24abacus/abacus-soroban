@@ -65,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
         ProgressBar progressBar = findViewById(R.id.progressBar);
-        ConstraintLayout buttons = findViewById(R.id.dashboardButtons);
+        // Get reference to the button
+        Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
+        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
         firebaseController = new FireBaseController(this);
 
         Bundle args = getIntent().getExtras();
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
             // Add the user into the Firebase Database
-            firebaseController.initialize(progressBar,buttons, appUser, btnOpenAdminDashboard);
+            firebaseController.initialize(progressBar, btnOpenDashboard, btnOpenOrganizerDashboard, appUser, btnOpenAdminDashboard);
         }
 
 
@@ -103,10 +105,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // Get reference to the button
-        Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
-        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
 
 
         // Set up a click listener to navigate to UserDashboardActivity
