@@ -1,3 +1,7 @@
+/**
+ * AdminViewFacilityActivity displays the details of a selected facility and
+ * provides an option for administrators to delete the facility.
+ */
 package com.example.soroban.activity;
 
 import android.app.AlertDialog;
@@ -26,6 +30,13 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
     private Button deleteFacilityBtn;
     private FireBaseController firebaseController;
 
+    /**
+     * Initializes the activity. Sets up the UI components and retrieves
+     * the selected facility and admin user passed as arguments.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +44,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
 
-        // Initialize appUser and selected Event for this activity.
+        // Initialize/Retrieve appUser and selectedFacility from the passed arguments
         if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 selectedFacility = args.getSerializable("selectedFacility", Facility.class);
@@ -60,12 +71,13 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         violationText = findViewById(R.id.violation_tv);
         deleteFacilityBtn = findViewById(R.id.delete_facility_button);
 
-
+        // Populate facility details
         facilityNameText.setText(selectedFacility.getName());
         facilityDetailsText.setText(selectedFacility.getDetails());
         // Changed to username if necessary
         facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId() + "\nName: " + selectedFacility.getOwner().getFirstName());
 
+        // Set up delete facility button functionality
         deleteFacilityBtn.setOnClickListener(v -> {
             new AlertDialog.Builder(AdminViewFacilityActivity.this)
                     .setTitle("Delete Facility")
