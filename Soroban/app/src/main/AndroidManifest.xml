@@ -45,7 +45,6 @@
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
-        <activity android:name=".activity.EventRegistrationActivity" />
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.InvitationActivity" />
@@ -62,7 +61,8 @@
         <activity android:name=".activity.AdminViewProfileActivity" />
         <activity android:name=".activity.AdminViewEventActivity" />
         <activity android:name=".activity.AdminViewFacilityActivity" />
-        <activity android:name=".OrganizerEventViewDetailsActivity" />
+        <activity android:name=".activity.OrganizerEventViewDetailsActivity" />
+        <activity android:name=".activity.OrganizerEventEditDetailsActivity" />
         <activity android:name=".activity.EventEntrantsListActivity" />
         <activity android:name=".activity.EventUsersWaitlistedActivity" />
         <activity android:name=".activity.EventUsersConfirmedActivity" />
