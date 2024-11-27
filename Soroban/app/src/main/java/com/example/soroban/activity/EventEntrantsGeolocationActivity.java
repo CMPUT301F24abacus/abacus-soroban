@@ -80,6 +80,30 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
 
         ProgressBar progress = findViewById(R.id.geo_progress_bar);
 
+        //Set-up map
+        MapView map = (MapView) findViewById(R.id.map_view);
+        map.setHorizontalMapRepetitionEnabled(false);
+        map.setVerticalMapRepetitionEnabled(false);
+        map.setVisibility(View.VISIBLE);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setMultiTouchControls(true);
+        IMapController mapController = map.getController();
+        mapController.setZoom(9.0);
+        progress.setVisibility(View.GONE);
+
+        for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
+            User entrant = selectedEvent.getWaitingEntrants().get(i);
+            GeoPoint userPoint = entrant.getLocation();
+
+            Marker newMarker = new Marker(map);
+            newMarker.setPosition(userPoint);
+            newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
+            newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            newMarker.setTitle(entrant.getFirstName() + " " + entrant.getLastName());
+
+            map.getOverlays().add(newMarker);
+        }
+
         // Check if location permissions are on
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -102,29 +126,9 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
                     public void onLocationChanged(@NonNull Location location) {
                         if(userLocation == null){
                             userLocation = location;
-                            progress.setVisibility(View.GONE);
-                            MapView map = (MapView) findViewById(R.id.map_view);
-                            map.setHorizontalMapRepetitionEnabled(false);
-                            map.setVerticalMapRepetitionEnabled(false);
-                            map.setVisibility(View.VISIBLE);
-                            map.setTileSource(TileSourceFactory.MAPNIK);
-                            map.setMultiTouchControls(true);
-                            IMapController mapController = map.getController();
-                            mapController.setZoom(9.0);
                             GeoPoint startGeo = new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
                             IGeoPoint start = startGeo;
                             mapController.setCenter(start);
-
-                            for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
-                                GeoPoint userPoint = selectedEvent.getWaitingEntrants().get(i).getLocation();
-
-                                Marker newMarker = new Marker(map);
-                                newMarker.setPosition(userPoint);
-                                newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
-                                newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-                                map.getOverlays().add(newMarker);
-                            }
 
                         }
                     }

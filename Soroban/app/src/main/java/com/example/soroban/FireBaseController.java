@@ -582,7 +582,9 @@ public class FireBaseController implements Serializable {
         data.put("lastName", user.getLastName());
         data.put("email", user.getEmail());
         data.put("phoneNumber", user.getPhoneNumber());
-        data.put("location", new GeoPoint(user.getLocation().getLatitude(), user.getLocation().getLongitude()));
+        if(user.getLocation() != null){
+            data.put("location", new GeoPoint(user.getLocation().getLatitude(), user.getLocation().getLongitude()));
+        }
 
         userRf
                 .document(user.getDeviceId())
