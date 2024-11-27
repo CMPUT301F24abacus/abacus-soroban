@@ -8,8 +8,24 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+/**
+ * Generates QR code images as {@link Bitmap} objects.
+ * Uses the ZXing library for QR code generation.
+ *
+ * @author Edwin Manalastas
+ * @see Bitmap
+ * @see com.google.zxing.qrcode.QRCodeWriter
+ */
 public class QRCodeGenerator {
 
+    /**
+     * Generates a QR code bitmap from a given text.
+     *
+     * @param text the text to encode into the QR code.
+     * @return a {@link Bitmap} containing the QR code, or null if an error occurs.
+     * @see com.google.zxing.qrcode.QRCodeWriter
+     * @see com.google.zxing.common.BitMatrix
+     */
     // Method to generate a QR Code bitmap
     public static Bitmap generateQRCode(String text) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();

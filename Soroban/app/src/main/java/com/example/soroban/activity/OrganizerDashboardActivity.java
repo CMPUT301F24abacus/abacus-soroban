@@ -3,14 +3,12 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.soroban.OrganizerEventViewDetailsActivity;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.model.Event;
@@ -19,6 +17,17 @@ import com.example.soroban.model.User;
 
 import java.util.Calendar;
 
+/**
+ * Serves as the main dashboard for organizers.
+ * This activity allows the user to view hosted events, create new events, or manage their facility profile.
+ * @author
+ * @see CreateEventActivity
+ * @see FacilityDisplayActivity
+ * @see EventArrayAdapter
+ * @see Event
+ * @see User
+ * @see OrganizerEventViewDetailsActivity
+ */
 public class OrganizerDashboardActivity extends AppCompatActivity {
 
     private User appUser;
@@ -32,6 +41,13 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
     private static final int CREATE_EVENT_REQUEST_CODE = 1;
     private static final int EDIT_FACILITY_REQUEST_CODE = 2;
 
+    /**
+     * Called when this activity is first created.
+     * Initializes views, sets up event listeners, and populates the organizer's events.
+     *
+     * @param savedInstanceState The saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are not provided.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

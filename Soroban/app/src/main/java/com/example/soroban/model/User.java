@@ -7,8 +7,13 @@ import java.util.Objects;
 
 /**
  * Stores any relevant information that is associated to a user.
+ * Manages user's roles, events, and facilities.
+ *
  * @Author: Matthieu Larochelle
  * @Version: 1.4
+ * @see Event
+ * @see Facility
+ * @see EventList
  */
 
 public class User implements Serializable {
@@ -30,6 +35,7 @@ public class User implements Serializable {
      * Constructor method for User.
      * @Author: Matthieu Larochelle
      * @Version: 1.2
+     * @param deviceId the unique identifier for the user.
      */
     public User(String deviceId) {
         this.deviceId = deviceId;

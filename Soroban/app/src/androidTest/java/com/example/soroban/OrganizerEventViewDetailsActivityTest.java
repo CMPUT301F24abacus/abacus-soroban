@@ -7,12 +7,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.filters.LargeTest;
 
-import com.example.soroban.activity.OrganizerDashboardActivity;
+import com.example.soroban.activity.OrganizerEventViewDetailsActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
@@ -41,7 +40,7 @@ public class OrganizerEventViewDetailsActivityTest {
 
     private static Intent createOrganizerEventViewActivityIntent(User appUser, Event mockEvent) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setClassName("com.example.soroban", "com.example.soroban.OrganizerEventViewDetailsActivity");;
+        intent.setClassName("com.example.soroban", "com.example.soroban.activity.OrganizerEventViewDetailsActivity");;
         intent.putExtra("selectedEvent", mockEvent);
         intent.putExtra("appUser", appUser);
         return intent;

@@ -20,6 +20,18 @@ import com.example.soroban.model.UserList;
 
 import java.util.Calendar;
 
+/**
+ * Displays the list of users invited to a specific event.
+ * The organizer can send messages to invited users or withdraw their invitations.
+ * @author Aaryan Shetty
+ * @author Matthieu Larochelle
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see UserArrayAdapter
+ * @see SendMessageFragment
+ * @see Notification
+ */
 public class EventUsersInvitedActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
@@ -32,7 +44,9 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
 
     /**
      * Called when this activity is first created.
-     * @param savedInstanceState
+     *
+     * @param savedInstanceState the saved state of the activity
+     * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
      * Author: Aaryan Shetty, Matthieu Larochelle
      */
     @Override

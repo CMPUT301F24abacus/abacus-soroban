@@ -11,6 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.R;
 import com.example.soroban.model.User;
 
+/**
+ * Serves as the main navigation hub for administrators.
+ * Provides buttons to navigate to different browsing activities: Events, Profiles, Facilities, and Images.
+ * @author Kevin Li
+ * @see AdminBrowseEventActivity
+ * @see AdminBrowseProfileActivity
+ * @see AdminBrowseFacilityActivity
+ * @see AdminBrowseImagesActivity
+ * @see User
+ */
 public class AdminDashboardActivity extends AppCompatActivity {
     private User appUser;
     private Button browseEventBtn;
@@ -18,6 +28,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private Button browseImageBtn;
     private Button browseFacilityBtn;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the user interface and passes the appUser data to subsequent activities.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -7,8 +7,10 @@ import  java.util.Date;
 
 /**
  * Any class that deals with the modification of an Event object must utilize this class.
+ * Ensures centralized control for updating event details.
  * @Author: Matthieu Larochelle
  * @Version: 1.1
+ * @see Event
  */
 public class EventController {
     private Event event;
@@ -16,6 +18,7 @@ public class EventController {
     /**
      * Constructor method for EventController.
      * @Author: Kevin Li, Matthieu Larochelle
+     * @param event the {@link Event} object to manage.
      * @Version: 1.1
      */
     public EventController(Event event) {
@@ -23,7 +26,7 @@ public class EventController {
     }
 
     /**
-     * Update Event.
+     * Update the details of the associated {@link Event}
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      * @param eventName: Event's new name.

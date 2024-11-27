@@ -15,9 +15,25 @@ import com.example.soroban.R;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
+/**
+ * Allows users to create and set up their facility profiles.
+ * A facility profile is required for organizing events. This provides Firebase integration
+ * for saving facility data
+ * @author
+ * @see Facility
+ * @see User
+ * @see FireBaseController
+ * @see OrganizerDashboardActivity
+ */
 public class CreateFacilityActivity extends AppCompatActivity {
-    private User appUser;
+    private User appUser; // The user creating the facility.
 
+    /**
+     * Initializes the activity, retrieves passed arguments, and sets up the UI for facility creation.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments (e.g., appUser) are missing.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +60,7 @@ public class CreateFacilityActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
+        // Display an initial message to guide the user
         Toast.makeText(this, "Set up your facility profile in order to organize events", Toast.LENGTH_SHORT).show();
 
         // Initialize views
@@ -65,12 +82,15 @@ public class CreateFacilityActivity extends AppCompatActivity {
             // Set up FireBase functionality
             FireBaseController fireBaseController = new FireBaseController(this);
 
+            // Create and set up a new facility for the user
             Facility newFacility = appUser.createFacility();
             newFacility.setName(updatedFacilityName);
             newFacility.setDetails(updatedFacilityDetails);
 
+            // Save the facility to Firebase
             fireBaseController.createFacilityDb(newFacility);
 
+            // Navigate to the Organizer Dashboard
             Intent intent = new Intent(CreateFacilityActivity.this, OrganizerDashboardActivity.class);
             intent.putExtra("appUser", appUser);
             startActivity(intent);

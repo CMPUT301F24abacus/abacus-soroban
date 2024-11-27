@@ -24,6 +24,18 @@ import com.example.soroban.model.User;
 
 import java.util.Calendar;
 
+/**
+ * Handles the display and management of event details.
+ * Allows the user to view details, register/unregister for an event, and access the event's QR code.
+ * @author Edwin Manalastas
+ * @author Aaryan Shetty
+ * @author Matthieu Larochelle
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see QRCodeGenerator
+ * @see AlertDialog
+ */
 public class EventDetailsActivity extends AppCompatActivity implements GeolocationListener {
     private FireBaseController firebaseController;
     private Event selectedEvent;
@@ -40,6 +52,12 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private boolean allowLocation;
     private boolean isRegistered; // Store the registration status
 
+    /**
+     * Called when the activity is created. Initializes the UI and sets up event data.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments (User or Event) are missing.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +134,11 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         unregisterButton.setOnClickListener(v -> handleUnregister());
     }
 
+    /**
+     * Displays the event QR code in a dialog.
+     *
+     * @param qrCodeBitmap the bitmap of the QR code to display.
+     */
     private void showQRCodeDialog(Bitmap qrCodeBitmap) {
         View dialogView = getLayoutInflater().inflate(R.layout.activity_view_qr_code, null);
         ImageView qrCodeImageView = dialogView.findViewById(R.id.qrCodeImageView);
@@ -128,6 +151,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         dialog.setCanceledOnTouchOutside(true);
     }
 
+    /**
+     * Handles user registration for the event.
+     */
     private void handleRegister() {
 
         // Check if current date is passed drawDate
@@ -161,6 +187,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
 
     }
 
+    /**
+     * Handles user unregistration from the event.
+     */
     private void handleUnregister() {
         // Unregistration
         appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
@@ -170,6 +199,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         updateRegistrationButtons();
     }
 
+    /**
+     * Updates the visibility of the registration buttons based on registration status.
+     */
     private void updateRegistrationButtons() {
         if (isRegistered) {
             registerButton.setVisibility(View.GONE);

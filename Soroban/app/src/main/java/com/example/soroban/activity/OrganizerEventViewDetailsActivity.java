@@ -1,9 +1,10 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,16 +15,34 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.activity.EventEntrantsGeolocationActivity;
 import com.example.soroban.activity.EventEntrantsListActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
+/**
+ * Allows organizers to view details of a specific event.
+ * Provides functionality to view event details, entrants, and QR codes.
+ *
+ * Author: Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see EventEntrantsListActivity
+ * @see OrganizerEventEditDetailsActivity
+ * @see AlertDialog
+ * @see QRCodeGenerator
+ * @see Glide
+ */
 public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
@@ -42,8 +61,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private Button editEvent;
 
     /**
-     * Called when this activity is first created.
-     * @param savedInstanceState
+     * Called when this activity is first created. Initializes UI components and populates event details.
+     * @param savedInstanceState the saved instance state of the activity.
      * Author: Aaryan Shetty
      */
     @Override
@@ -99,6 +118,17 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventDrawDate.setText(formattedEventDrawDate);
         // geoReq.setActivated();
         // autoReplace.setActivated();
+
+        if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
+            Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+            Glide.with(this)
+                    .load(selectedEvent.getPosterUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(eventPoster);
+
+        } else {
+            eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
+        }
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {

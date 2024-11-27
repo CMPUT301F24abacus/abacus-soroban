@@ -17,6 +17,14 @@ import com.example.soroban.model.User;
 
 import java.util.Objects;
 
+/**
+ * Responsible for displaying the details of a selected event
+ * and providing options to delete the event or its associated QR code.
+ * @author Kevin Li
+ * @see AdminBrowseEventActivity
+ * @see Event
+ * @see FireBaseController
+ */
 public class AdminViewEventActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
@@ -28,6 +36,13 @@ public class AdminViewEventActivity extends AppCompatActivity {
     private ImageView eventQR;
     private FireBaseController firebaseController;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the user interface and passes the appUser data to subsequent activities.
+     *
+     * @param savedInstanceState the saved state of the activity.
+     * @throws IllegalArgumentException if required arguments are missing or incorrect.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

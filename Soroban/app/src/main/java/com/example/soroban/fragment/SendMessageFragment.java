@@ -25,7 +25,13 @@ import com.example.soroban.model.UserList;
 import java.util.Calendar;
 import java.util.Objects;
 
-
+/**
+ * Dialog fragment for sending messages to selected event participants.
+ * Includes Firebase updates for notifications and user messaging.
+ *
+ * @author
+ * @see Event
+ */
 public class SendMessageFragment extends DialogFragment {
     private Event selectedEvent;
     private User appUser;
@@ -34,6 +40,12 @@ public class SendMessageFragment extends DialogFragment {
     private DialogFragmentListener listener;
     String listType;
 
+    /**
+     * Creates a new instance of {@code SendMessageFragment}.
+     *
+     * @param selectedEvent the event whose participants will receive the message.
+     * @return a new {@code SendMessageFragment} instance.
+     */
     public static SendMessageFragment newInstance(Event selectedEvent, User appUser, String listType) {
 
         Bundle args = new Bundle();

@@ -31,10 +31,19 @@ import com.example.soroban.ProfileRepository;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
 import com.example.soroban.model.User;
+import com.example.soroban.fragment.ViewProfileFragment;
 import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.io.Serializable;
 
+/**
+ * Dialog fragment for managing and updating user profiles.
+ * Supports updating user details and uploading profile images to Firebase.
+ *
+ * @author
+ * @see User
+ */
 public class ManageProfileFragment extends DialogFragment {
     private UserController userController;
     private FireBaseController fireBaseController;
@@ -43,6 +52,12 @@ public class ManageProfileFragment extends DialogFragment {
     private ImageView userProfilePhoto;
     private User appUser;
 
+    /**
+     * Creates a new instance of {@code ManageProfileFragment}.
+     *
+     * @param user the user whose profile is being managed.
+     * @return a new {@code ManageProfileFragment} instance.
+     */
     public static ManageProfileFragment newInstance(@NonNull User user){
         Bundle args = new Bundle();
         args.putSerializable("appUser", user);
@@ -70,7 +85,7 @@ public class ManageProfileFragment extends DialogFragment {
                         Uri imageUri = result.getData().getData();
                         Log.d("ManageProfileFragment", "Image URI received: " + imageUri);
                         userProfilePhoto.setImageURI(imageUri); // Display the selected image
-                        profileRepository.uploadImageToFirebase(imageUri, appUser.getDeviceId()); // Use actual user ID here
+                        profileRepository.uploadImageToFirebase(imageUri, appUser.getDeviceId());
                     } else {
                         Log.d("ManageProfileFragment", "No image selected or result not OK");
                     }
@@ -125,7 +140,9 @@ public class ManageProfileFragment extends DialogFragment {
                                         .into(userProfilePhoto);
                                 Log.e("ViewProfileFragment", "After glide");
                             } else {
-                                userProfilePhoto.setImageResource(R.drawable.ic_profile); // Set default if no URL
+
+                                int defaultPictureID = ViewProfileFragment.getDefaultPictureID(appUser.getFirstName(), requireContext());
+                                userProfilePhoto.setImageResource(defaultPictureID); // Set default if no URL
                             }
                         })
                         .addOnFailureListener(e -> {
@@ -139,7 +156,7 @@ public class ManageProfileFragment extends DialogFragment {
 
                 ImageButton removeProfileButton = view.findViewById(R.id.editProfilePhotoButton2);
                 removeProfileButton.setOnClickListener(v -> {
-                    profileRepository.deleteProfileImage(appUser.getDeviceId()); // Use actual user ID here
+                    profileRepository.deleteProfileImage(appUser.getDeviceId());
                     userProfilePhoto.setImageResource(R.drawable.ic_profile); // Reset to default image
                 });
 

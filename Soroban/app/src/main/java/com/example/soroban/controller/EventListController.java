@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Any class that deals with the modification of an EventList object must utilize this class.
+ * Provides methods for adding, removing, and updating {@link Event} objects.
  * @Author: Matthieu Larochelle
  * @Version: 1.0
  */
@@ -14,7 +15,8 @@ public class EventListController {
     private EventList eventList;
 
     /**
-     * Constructor method for EventListController.
+     * Constructor method for {@code EventListController}.
+     * @param eventList the {@link EventList} to manage.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
      */
@@ -26,8 +28,14 @@ public class EventListController {
      * Update User in UserList.
      * @Author: Matthieu Larochelle
      * @Version: 1.0
-     * @param event : Target Event.
-     * @return : Result of successful update of Event in EventList.
+     *
+     * @param event the target {@link Event} to update.
+     * @param eventName the new name of the event.
+     * @param eventDate the new event date.
+     * @param drawDate the new draw date.
+     * @param sampleSize the new sample size.
+     * @param maxEntrants the new maximum number of entrants.
+     * @return {@code true} if the update was successful, {@code false} otherwise.
      */
     public Boolean updateEvent(Event event, String eventName, Date eventDate, Date drawDate, int sampleSize, int maxEntrants){
         if(eventList.contains(event)){
@@ -43,10 +51,10 @@ public class EventListController {
     }
 
     /**
-     * Add Event to EventList
+     * Adds a new Event to EventList
      * @Author: Matthieu Larochelle
      * @version : 1.0
-     * @param event
+     * @param event the {@link Event} to add.
      * @return : Result of successful addition of Event to EventList.
      */
     public Boolean addEvent(Event event){

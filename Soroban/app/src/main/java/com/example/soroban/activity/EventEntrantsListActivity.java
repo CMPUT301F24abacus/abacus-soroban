@@ -17,6 +17,21 @@ import com.example.soroban.model.User;
 
 import java.util.Calendar;
 
+/**
+ * Allows event organizers to view and manage different categories of entrants
+ * (waitlisted, invited, confirmed, and cancelled) for a selected event.
+ * It also provides functionality for sampling entrants and sending notifications based on the results.
+ * @author Matthieu Larochelle
+ * @author Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see Notification
+ * @see EventUsersWaitlistedActivity
+ * @see EventUsersInvitedActivity
+ * @see EventUsersCancelledActivity
+ * @see EventUsersConfirmedActivity
+ */
 public class EventEntrantsListActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;

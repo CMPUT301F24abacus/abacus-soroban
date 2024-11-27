@@ -1,17 +1,24 @@
-package com.example.soroban;
+/**
+ * Allows editing event details for organizers.
+ * Such as event title, date, description, poster, sample size, and other event-related settings.
+ *
+ * Author: Aaryan Shetty
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ */
+package com.example.soroban.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.soroban.R;
 
 public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     private EditText eventTitle;
@@ -29,8 +36,8 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     private Button buttonCancel;
 
     /**
-     * Called when this activity is first created.
-     * @param savedInstanceState
+     * Called when this activity is first created. Initializes UI components and sets up listeners.
+     * @param savedInstanceState the saved instance state of the activity.
      * Author: Aaryan Shetty
      */
     @Override
