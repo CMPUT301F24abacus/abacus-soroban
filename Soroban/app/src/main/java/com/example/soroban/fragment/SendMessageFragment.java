@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -98,9 +99,11 @@ public class SendMessageFragment extends DialogFragment {
 
         // Reference to input text
         EditText messageEdit = view.findViewById(R.id.organizerMessageEdit);
+        TextView titleText = view.findViewById(R.id.setMessageTitle);
+        titleText.setVisibility(View.INVISIBLE);
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
         builder.setTitle("Send message to selected entrants?");
         builder.setView(view);
         builder.setNegativeButton("Cancel", null);
