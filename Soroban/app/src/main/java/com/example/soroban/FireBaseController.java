@@ -556,7 +556,7 @@ public class FireBaseController implements Serializable {
                             data.put("title", notification.getTitle());
                             data.put("date", notification.getTime());
                             data.put("message", notification.getMessage());
-                            data.put("facilityName", notification.getFacility().getName());
+                            data.put("eventName", notification.getFacility().getName());
                             notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
                                     .set(data);
                         } else {
