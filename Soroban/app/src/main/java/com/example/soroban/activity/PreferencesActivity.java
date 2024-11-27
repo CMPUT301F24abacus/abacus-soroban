@@ -27,7 +27,7 @@ import com.example.soroban.model.User;
 /**
  * Allows the user to manage application settings,
  * specifically enabling or disabling notifications for the app.
- * @author
+ * @author Matthieu Larochelle
  * @see User
  * @see NotificationManager
  * @see NotificationManagerCompat
@@ -36,6 +36,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private User appUser;
     private Switch notifSwitch;
     private NotificationManagerCompat notifManager;
+    private boolean redirectSwitch = false;
 
     /**
      * Called when this activity is created.
@@ -71,18 +72,10 @@ public class PreferencesActivity extends AppCompatActivity {
         // Set up notifications manager
         notifManager = NotificationManagerCompat.from(this);
 
-
         // Reference for notifications switch
         notifSwitch = findViewById(R.id.notifications_switch);
 
 
-        notifSwitch.setOnCheckedChangeListener((view,isChecked) ->{
-            // Send user to app Notifcations Settings
-            Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
-            startActivity(settingsIntent);
-        });
     }
 
     /**
@@ -92,12 +85,27 @@ public class PreferencesActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+
         // Update appearance of notifications switch
         boolean notifsEnabled = notifManager.areNotificationsEnabled();
-        notifSwitch.setChecked(notifsEnabled);
         if(notifsEnabled){
             notifSwitch.setText("Disable Notifications");
+            notifSwitch.setChecked(true);
         }
+
+        notifSwitch.setOnCheckedChangeListener((view,isChecked) ->{
+            // Send user to app Notifcations Settings
+            if(!redirectSwitch){
+                redirectSwitch = true;
+                Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+                startActivity(settingsIntent);
+            }else{
+                redirectSwitch = false;
+            }
+
+        });
     }
 
 }
