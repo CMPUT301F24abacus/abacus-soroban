@@ -22,8 +22,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
-import com.example.soroban.model.Event;
-import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -34,7 +32,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 /**

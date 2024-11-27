@@ -14,6 +14,9 @@ import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * Custom ArrayAdapter for displaying a list of {@link Event} objects.
  * This adapter is responsible for inflating a custom layout for each event in the list.
@@ -57,8 +60,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = events.get(position);
 
         TextView eventName = view.findViewById(R.id.tv_event_name);
+        TextView eventDate = view.findViewById(R.id.tv_event_date);
 
         eventName.setText(event.getEventName());
+        String formattedEventDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDrawDate());
+        eventDate.setText("Event Date: " + formattedEventDrawDate);
+
 
         return view;
     }

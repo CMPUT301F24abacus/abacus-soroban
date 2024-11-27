@@ -67,8 +67,10 @@ public class FireBaseController implements Serializable {
      * @Author: Matthieu Larochelle, Kevin Li
      * @Version: 1.0
      * @param progressBar: Progress bar which will be made invisible upon data retrieval.
-     * @param layout: Layout which will be made visible upon data retrieval.
+     * @param userBtn: Button to user dashboard which will be made visible upon data retrieval.
+     * @param organizerBtn: Button to organizer dashboard which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
+     * @param adminDashboard: Button to admin dashboard which will be made visible if user's an admin.
      */
     public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
         DocumentReference docRef = userRf.document(user.getDeviceId());
