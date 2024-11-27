@@ -37,6 +37,7 @@ public class Event implements Serializable {
     private String qrCodeHash;
     private boolean requiresGeolocation;
     private String posterUrl;
+    private boolean requiresGeolocation = false; // Set to false by default
 
     /**
      * No-argument constructor required by Firestore.

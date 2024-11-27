@@ -301,10 +301,12 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
                                 fetchUserDoc(owner);
                                 Facility facility = owner.getFacility();
                                 Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                event.setRequiresGeolocation(requireLocation);
                                 if (eventData.get("maxEntrants") != null) {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
@@ -338,10 +340,12 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
                                 fetchUserDoc(owner);
                                 Facility facility = owner.getFacility();
                                 Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                event.setRequiresGeolocation(requireLocation);
                                 if (eventData.get("maxEntrants") != null) {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
@@ -377,10 +381,12 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
                                 fetchUserDoc(owner);
                                 Facility facility = owner.getFacility();
                                 Event event = new Event(owner, facility, eventName, eventDate, drawDate,sampleSize);
+                                event.setRequiresGeolocation(requireLocation);
                                 if (eventData.get("maxEntrants") != null) {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
@@ -417,8 +423,10 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                                Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 Facility facility = user.getFacility();
                                 Event event = new Event(user, facility, eventName, eventDate, drawDate,sampleSize);
+                                event.setRequiresGeolocation(requireLocation);
                                 if (eventData.get("maxEntrants") != null) {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
@@ -705,6 +713,7 @@ public class FireBaseController implements Serializable {
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
         data.put("QRHash", event.getQrCodeHash());
+        data.put("geoLocation", event.requiresGeolocation());
         userRf.document(user.getDeviceId())
                 .collection("hostedEvents").document(event.getEventName() + ", " + event.getOwner().getDeviceId()).set(data);
     }
