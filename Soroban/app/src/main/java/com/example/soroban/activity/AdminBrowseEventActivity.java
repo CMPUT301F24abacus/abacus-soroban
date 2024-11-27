@@ -140,6 +140,9 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                         if (eventData.get("posterUrl") != null) {
                             event.setPosterUrl((String) eventData.get("posterUrl"));
                         }
+                        if (eventData.get("geoLocation") != null) {
+                            // do later
+                        }
                         browseEventList.add(event);
                     }
                     adapter.notifyDataSetChanged();

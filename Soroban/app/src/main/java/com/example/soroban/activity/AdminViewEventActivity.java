@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +40,11 @@ public class AdminViewEventActivity extends AppCompatActivity {
     private TextView eventDetailsTV;
     private TextView eventDateTV;
     private TextView drawDateTV;
+    private TextView sampleSizeTV;
+    private TextView entrantLimitTV;
     private Button deleteQRButton;
     private Button deleteEventButton;
+    private Switch geoSwitch;
     private ImageView eventPoster;
     private ImageView eventQR;
     private FireBaseController firebaseController;
@@ -55,7 +59,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.admin_view_event);
 
         Bundle args = getIntent().getExtras();
 
@@ -80,22 +84,29 @@ public class AdminViewEventActivity extends AppCompatActivity {
         firebaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
-        deleteQRButton = findViewById(R.id.btn_notify_me);
+        deleteQRButton = findViewById(R.id.delete_QR_btn);
         deleteQRButton.setText("Delete QR Hash");
-        deleteEventButton = findViewById(R.id.btn_register);
+        deleteEventButton = findViewById(R.id.delete_event_btn);
         deleteEventButton.setText("Delete Event");
-        eventDetailsTV = findViewById(R.id.event_details);
-        eventNameTV = findViewById(R.id.event_name);
-        eventDateTV = findViewById(R.id.event_date);
-        drawDateTV = findViewById(R.id.event_draw_date);
-        eventPoster = findViewById(R.id.event_image);
-        eventQR = findViewById(R.id.event_qr_code);
+        eventDetailsTV = findViewById(R.id.eventDescriptionAdmin);
+        eventNameTV = findViewById(R.id.eventTitleAdmin);
+        eventDateTV = findViewById(R.id.eventDateAdmin);
+        drawDateTV = findViewById(R.id.eventDrawDateTextAdmin);
+        sampleSizeTV = findViewById(R.id.eventSampleSizeTextAdmin);
+        entrantLimitTV = findViewById(R.id.eventEntrantLimitTextAdmin);
+        eventPoster = findViewById(R.id.eventPosterImageAdmin);
+        eventQR = findViewById(R.id.admin_qr_code);
 
         eventNameTV.setText(selectedEvent.getEventName());
         String eventDetails = selectedEvent.getEventDetails();
-        eventDetailsTV.setText((eventDetails != null) ? ("Event Details: " + eventDetails) : "No Details Set");
-        eventDateTV.setText("Event Date: " + selectedEvent.getEventDate().toString());
-        drawDateTV.setText("Event's Draw Date: " + selectedEvent.getDrawDate().toString());
+        eventDetailsTV.setText((eventDetails != null) ? eventDetails : "No Details Set");
+        eventDateTV.setText(selectedEvent.getEventDate().toString());
+        drawDateTV.setText(selectedEvent.getDrawDate().toString());
+        sampleSizeTV.setText(selectedEvent.getSampleSize().toString());
+        Integer entrantLimit = selectedEvent.getMaxEntrants();
+        if (entrantLimit != null) {
+            entrantLimitTV.setText(entrantLimit.toString());
+        }
 
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {
