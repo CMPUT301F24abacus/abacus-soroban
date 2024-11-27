@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Allows organizers to create new events by providing details such as
@@ -54,6 +55,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private EditText eventNameEditText;
     private EditText eventDescriptionEditText;
     private EditText sampleSizeEditText;
+    private EditText entrantLimitEditText;
     private Button eventDateSelectButton;
     private ImageButton eventPosterUploadButton;
     private Button drawDateSelectButton;
@@ -124,12 +126,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         eventNameEditText = findViewById(R.id.eventNameEditText);
         eventDescriptionEditText = findViewById(R.id.eventDescriptionEditText);
         sampleSizeEditText = findViewById(R.id.sampleSizeEditText);
+        entrantLimitEditText = findViewById(R.id.entrantLimitEditText);
         eventPosterUploadButton = findViewById(R.id.buttonUploadPoster);
         eventDateSelectButton = findViewById(R.id.eventDateSelectButton);
         drawDateSelectButton = findViewById(R.id.drawDateSelectButton);
         saveEventButton = findViewById(R.id.saveEventButton);
         selectedEventDateTextView = findViewById(R.id.event_date_view);
         selectedDrawDateTextView = findViewById(R.id.draw_date_view);
+        geoReqButton = findViewById(R.id.eventGeoReqSwitch);
 
 
         // Set up date pickers
@@ -193,6 +197,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         String eventName = eventNameEditText.getText().toString().trim();
         String eventDetails = eventDescriptionEditText.getText().toString().trim();
         int eventSampleSize;
+        Integer eventEntrantLimit = null;
         boolean geoRequirement = geoReqButton.isChecked();
 
         // Validate input
@@ -213,6 +218,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             eventSampleSize = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
         }
 
+        if (!entrantLimitEditText.getText().toString().isEmpty()) {
+            eventEntrantLimit = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
+            if(eventEntrantLimit <= 0){
+                Toast.makeText(this, "Please enter a max entrant capacity that is greater than 0 for your event.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         if (eventSampleSize <= 0) {
             Toast.makeText(this, "Sample size must be greater than zero.", Toast.LENGTH_SHORT).show();
             return;
@@ -227,6 +240,9 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         // Create a new Event object
         newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
         newOrganizerEvent.setRequiresGeolocation(requiresLocation);
+        if(eventEntrantLimit != null){
+            newOrganizerEvent.setMaxEntrants(eventEntrantLimit);
+        }
 
         // Generate and set a random QR code hash
         String qrCodeHash = generateHash();
@@ -294,7 +310,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
      * @return a UUID string.
      */
     private String generateHash() {
-        return java.util.UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
 
     /**
