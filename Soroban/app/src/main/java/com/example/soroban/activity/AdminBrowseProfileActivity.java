@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
     private User appUser;
     private RecyclerView profileRecycler;
     private SearchView profileSearch;
+    private Switch searchSwitch;
     private AdminBrowseProfileActivity.BrowseProfilesAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<User> browseProfilesList;
@@ -82,10 +84,21 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
         }
 
         CollectionReference userRf = db.collection("users");
+        searchSwitch = findViewById(R.id.searchSwitch);
+        searchSwitch.setChecked(false);
+        searchSwitch.setOnCheckedChangeListener((view, isChecked) -> {
+            if (searchSwitch.isChecked()) {
+                searchSwitch.setText("Name Search");
+            } else {
+                searchSwitch.setText("ID Search");
+            }
+        });
+
         profileSearch = findViewById(R.id.profile_search_bar);
         profileSearch.clearFocus();
         profileRecycler = findViewById(R.id.user_admin_recycler);
         profileRecycler.setLayoutManager(new LinearLayoutManager(this));
+
 
         // Customize SearchView text and hint color programmatically
         // Reference: Customize SearchView EditText color programmatically
@@ -276,8 +289,16 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
     private void filter(String enteredText) {
         ArrayList<User> filteredList = new ArrayList<>();
         for (User filteredUser : browseProfilesList) {
-            if (filteredUser.getDeviceId().toLowerCase().contains(enteredText.toLowerCase())) {
-                filteredList.add(filteredUser);
+            if (searchSwitch.isChecked()) {
+                if (filteredUser.getFirstName() != null) {
+                    if (filteredUser.getFirstName().toLowerCase().contains(enteredText.toLowerCase())) {
+                        filteredList.add(filteredUser);
+                    }
+                }
+            } else {
+                if (filteredUser.getDeviceId().toLowerCase().contains(enteredText.toLowerCase())) {
+                    filteredList.add(filteredUser);
+                }
             }
         }
 
