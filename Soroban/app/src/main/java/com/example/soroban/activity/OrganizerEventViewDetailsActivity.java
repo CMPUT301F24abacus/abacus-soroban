@@ -122,21 +122,34 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         FireBaseController fireBaseController = new FireBaseController(this);
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
-                    // Success: Update the poster URL in the UI
-                    selectedEvent.setPosterUrl(posterUrl);
+                    // Check if the fetched posterUrl is null or empty
+                    if (posterUrl == null || posterUrl.isEmpty()) {
+                        Log.d("EventPosterURL", "Poster URL is null or empty, setting default image.");
+                        // Set default image if no poster URL is available
+                        eventPoster.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        Log.d("EventPosterURL 3.0", "Poster URL: " + selectedEvent.getPosterUrl());
 
-                    // Update the ImageView with Glide
-                    Glide.with(this)
-                            .load(posterUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(eventPoster);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventPoster);
+                    }
                 },
                 error -> {
-                    // Failure: Log the error and show a toast
+                    // Handle errors and set a default image
                     Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
                     Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventPoster.setImageResource(R.drawable.ic_event_image);
                 });
-        Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+
+        Log.d("EventPosterURL 2.0", "Poster URL: " + selectedEvent.getPosterUrl());
+
+        /*
         if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
             Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
             Glide.with(this)
@@ -147,6 +160,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         } else {
             eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
         }
+
+         */
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {
