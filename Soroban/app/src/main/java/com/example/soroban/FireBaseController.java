@@ -1414,4 +1414,19 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    public void fetchEventPosterUrl(Event event, OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        String posterUrl = document.getString("posterUrl"); // Fetch the "posterUrl" field
+                        onSuccessListener.onSuccess(posterUrl); // Pass the poster URL to the success listener
+                    } else {
+                        onFailureListener.onFailure(task.getException()); // Pass the exception to the failure listener
+                    }
+                });
+    }
+
+
 }

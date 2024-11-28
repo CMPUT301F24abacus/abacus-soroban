@@ -117,13 +117,24 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         // geoReq.setActivated();
         // autoReplace.setActivated();
 
+
         Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
-        FirebaseDatabase.getInstance().getReference("events")
-                .child(selectedEvent.getEventName()) // Using eventName as the child key
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    String posterUrl = snapshot.child("posterUrl").getValue(String.class);
+        FireBaseController fireBaseController = new FireBaseController(this);
+        fireBaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Success: Update the poster URL in the UI
                     selectedEvent.setPosterUrl(posterUrl);
+
+                    // Update the ImageView with Glide
+                    Glide.with(this)
+                            .load(posterUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(eventPoster);
+                },
+                error -> {
+                    // Failure: Log the error and show a toast
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
                 });
         Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
         if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {

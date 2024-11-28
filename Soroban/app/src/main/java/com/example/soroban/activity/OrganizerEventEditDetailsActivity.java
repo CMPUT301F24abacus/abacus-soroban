@@ -159,12 +159,6 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
             resultIntent.putExtra("updatedUrl", posterUrl);
         }
         setResult(RESULT_OK, resultIntent);
-        //Intent intent = new Intent(OrganizerEventEditDetailsActivity.this, OrganizerEventViewDetailsActivity.class);
-
-        // Pass the updated event back to the target activity
-        //Bundle newArgs = new Bundle();
-        //newArgs.putSerializable("selectedEvent", selectedEvent); // Pass the updated event object
-        //intent.putExtras(newArgs);
 
         // Start the target activity
         Toast.makeText(this, "Event changes confirmed!", Toast.LENGTH_SHORT).show();
