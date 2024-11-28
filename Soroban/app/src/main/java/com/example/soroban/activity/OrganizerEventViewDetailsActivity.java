@@ -21,6 +21,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
+import com.example.soroban.activity.EventEntrantsGeolocationActivity;
+import com.example.soroban.activity.EventEntrantsListActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
@@ -159,7 +161,16 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
 
         eventGeolocation.setOnClickListener(v -> {
-            Toast.makeText(this, "WIP - Implement viewing where entrants are located", Toast.LENGTH_SHORT).show();
+            if(selectedEvent.requiresGeolocation()){
+                Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, EventEntrantsGeolocationActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("selectedEvent", selectedEvent);
+                newArgs.putSerializable("appUser", appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "Your event does not have geolocation enabled", Toast.LENGTH_SHORT).show();
+            }
         });
 
         viewEntrants.setOnClickListener(v -> {
