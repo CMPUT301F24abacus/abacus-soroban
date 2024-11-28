@@ -1,166 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/admin_dashboard"
-        android:layout_width="265dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
         android:text="Admin Dashboard"
         android:textAlignment="center"
         android:textAllCaps="true"
-
         android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.079" />
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/browse_event_btn"
-        android:layout_width="109dp"
-        android:layout_height="101dp"
-        android:layout_marginTop="36dp"
-        android:background="@color/color_registration_open"
-        android:backgroundTint="@color/color_registration_open"
-        android:drawable="@drawable/ic_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/admin_dashboard" />
-
-    <Button
-        android:id="@+id/browse_profile_btn"
-        android:layout_width="110dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/admin_dashboard_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/browse_event_btn" />
-
-    <Button
-        android:id="@+id/browse_image_btn"
-        android:layout_width="113dp"
-        android:layout_height="101dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/admin_dashboard_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/browse_profile_btn" />
-
-    <Button
-        android:id="@+id/browse_facility_btn"
-        android:layout_width="110dp"
-        android:layout_height="103dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/admin_dashboard_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/browse_image_btn" />
-
-    <ImageView
-        android:id="@+id/events_image"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        app:layout_constraintBottom_toBottomOf="@+id/browse_event_btn"
-        app:layout_constraintEnd_toEndOf="@+id/browse_event_btn"
-        app:layout_constraintStart_toStartOf="@+id/browse_event_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_event_btn"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_event"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/browse_events_text"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Browse Events"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/events_image"
-        app:layout_constraintEnd_toEndOf="@+id/browse_event_btn"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="@+id/browse_event_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_event_btn"
-        app:layout_constraintVertical_bias="0.607" />
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/browse_profiles_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="Browse Profiles"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/people_image"
-        app:layout_constraintEnd_toEndOf="@+id/browse_profile_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_profile_btn"
-        app:layout_constraintVertical_bias="0.714" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:textAlignment="viewEnd">
 
-    <TextView
-        android:id="@+id/browse_images_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Browse Images"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView5"
-        app:layout_constraintEnd_toEndOf="@+id/browse_image_btn"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="@+id/browse_image_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_image_btn" />
+            <ImageView
+                android:id="@+id/events_image"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/ic_event" />
 
-    <TextView
-        android:id="@+id/browse_facilities_text2"
-        android:layout_width="101dp"
-        android:layout_height="16dp"
-        android:text="Browse Facilities"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView6"
-        app:layout_constraintEnd_toEndOf="@+id/browse_facility_btn"
-        app:layout_constraintStart_toStartOf="@+id/browse_facility_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_facility_btn" />
+            <Button
+                android:id="@+id/browse_event_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#8C9EFF"
+                android:maxLines="1"
+                android:text="Browse Events"
+                app:cornerRadius="10dp" />
 
-    <ImageView
-        android:id="@+id/people_image"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        app:layout_constraintBottom_toBottomOf="@+id/browse_profile_btn"
-        app:layout_constraintEnd_toEndOf="@+id/browse_profile_btn"
-        app:layout_constraintStart_toStartOf="@+id/browse_profile_btn"
-        app:srcCompat="@drawable/ic_youth" />
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/ic_gallery" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        app:layout_constraintBottom_toBottomOf="@+id/browse_image_btn"
-        app:layout_constraintEnd_toEndOf="@+id/browse_image_btn"
-        app:layout_constraintHorizontal_bias="0.576"
-        app:layout_constraintStart_toStartOf="@+id/browse_image_btn"
-        app:layout_constraintTop_toTopOf="@+id/browse_image_btn"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_gallery" />
+            <Button
+                android:id="@+id/browse_image_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#8C9EFF"
+                android:maxLines="1"
+                android:text="Browse Images"
+                app:cornerRadius="10dp" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        app:layout_constraintBottom_toBottomOf="@+id/browse_facility_btn"
-        app:layout_constraintEnd_toEndOf="@+id/browse_facility_btn"
-        app:layout_constraintStart_toStartOf="@+id/browse_facility_btn"
-        app:srcCompat="@drawable/ic_factory" />
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/ic_youth" />
+
+            <Button
+                android:id="@+id/browse_profile_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#8C9EFF"
+                android:maxLines="1"
+                android:text="Browse Profiles"
+                app:cornerRadius="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/ic_factory" />
+
+            <Button
+                android:id="@+id/browse_facility_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#8C9EFF"
+                android:maxLines="1"
+                android:text="Browse Facilities"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
