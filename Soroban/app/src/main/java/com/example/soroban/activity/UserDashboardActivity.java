@@ -3,10 +3,12 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -16,7 +18,17 @@ import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
+import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Displays the user's dashboard with options to scan QR codes,
@@ -37,6 +49,7 @@ import com.example.soroban.model.User;
 public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
     private FireBaseController fireBaseController;
+    private FirebaseFirestore db;
     private ListView waitlistedEventsListView;
     private EventList waitlistedEventsListData;
     private EventArrayAdapter waitlistedAdapter;
@@ -77,8 +90,10 @@ public class UserDashboardActivity extends AppCompatActivity {
         }
 
         // Grab event data from appUser
-        waitlistedEventsListData = appUser.getWaitList();
-        confirmedEventsListData = appUser.getRegisteredEvents();
+        waitlistedEventsListData = new EventList();
+        confirmedEventsListData = new EventList();
+        db = FirebaseFirestore.getInstance();
+        fireBaseController = new FireBaseController(this);
 
         /**
          * Set up button actions.
@@ -155,6 +170,80 @@ public class UserDashboardActivity extends AppCompatActivity {
             newArgs.putString("listType", "registeredEvents");
             intent.putExtras(newArgs);
             startActivity(intent);
+        });
+
+        // Add snapshot listener for Firestore
+        db.collection("users").document(appUser.getDeviceId()).collection("waitList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    waitlistedEventsListData.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found WaitList Events!");
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        User owner = new User((String) document.get("owner"));
+                        fireBaseController.fetchUserDoc(owner);
+                        owner.createFacility();
+                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        if (eventData.get("maxEntrants") != null) {
+                            Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                            event.setMaxEntrants(maxEntrants);
+                        }
+                        if (eventData.get("eventDetails") != null) {
+                            event.setEventDetails((String) eventData.get("eventDetails"));
+                        }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
+                        waitlistedEventsListData.addEvent(event);
+                    }
+                    waitlistedAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        db.collection("users").document(appUser.getDeviceId()).collection("registeredEvents").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    confirmedEventsListData.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found Registered Events!");
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        User owner = new User((String) document.get("owner"));
+                        fireBaseController.fetchUserDoc(owner);
+                        owner.createFacility();
+                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        if (eventData.get("maxEntrants") != null) {
+                            Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                            event.setMaxEntrants(maxEntrants);
+                        }
+                        if (eventData.get("eventDetails") != null) {
+                            event.setEventDetails((String) eventData.get("eventDetails"));
+                        }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
+                        confirmedEventsListData.addEvent(event);
+                    }
+                    confirmedAdapter.notifyDataSetChanged();
+                }
+            }
         });
 
 
