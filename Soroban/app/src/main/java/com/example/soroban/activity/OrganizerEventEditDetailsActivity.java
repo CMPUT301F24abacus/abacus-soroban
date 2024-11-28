@@ -152,7 +152,7 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
      */
     private void confirmChanges() {
         FireBaseController fireBaseController = new FireBaseController(this);
-        Intent resultIntent = new Intent();
+        Intent resultIntent = new Intent(OrganizerEventEditDetailsActivity.this, OrganizerEventViewDetailsActivity.class);
         if (posterUrl != null | deletedFlag) {
             fireBaseController.updateEventPoster(selectedEvent);
             selectedEvent.setPosterUrl(posterUrl);
@@ -169,9 +169,9 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
         // Start the target activity
         Toast.makeText(this, "Event changes confirmed!", Toast.LENGTH_SHORT).show();
         Log.d("POSTER URL:", posterUrl);
-        finish();
+        Log.d("POSTER URL:", "ITASADASDASDADASDASd");
+        startActivity(resultIntent);
 
-        // Optionally, display a confirmation message
 
     }
 

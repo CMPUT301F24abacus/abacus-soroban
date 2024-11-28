@@ -91,8 +91,6 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
-
-
         // Assign button variables to views
         viewQRcode = findViewById(R.id.buttonScanQRCode);
         eventGeolocation = findViewById(R.id.buttonEventGeolocation);
@@ -189,29 +187,6 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("does it reach here", "yes it does!");
-        if (requestCode == EDIT_EVENT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            selectedEvent = (Event) data.getSerializableExtra("updatedEvent");
-            updateUI(); // Refresh the UI with the updated event data
-        }
-    }
-
-    private void updateUI() {
-        if (selectedEvent != null) {
-
-            if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
-                Glide.with(this)
-                        .load(selectedEvent.getPosterUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(eventPoster);
-            } else {
-                eventPoster.setImageResource(R.drawable.ic_event_image); // Default image
-            }
-        }
-    }
 
 
 
