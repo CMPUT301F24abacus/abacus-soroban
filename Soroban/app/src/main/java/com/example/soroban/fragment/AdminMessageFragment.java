@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -71,12 +72,12 @@ public class AdminMessageFragment extends DialogFragment {
         }
 
         firebaseController = new FireBaseController(getContext());
+        TextView titleText = view.findViewById(R.id.setMessageTitle);
         EditText messageEdit = view.findViewById(R.id.organizerMessageEdit);
-        Button sendButton = view.findViewById(R.id.buttonSendMessage);
-        sendButton.setVisibility(View.INVISIBLE);
+        titleText.setVisibility(View.INVISIBLE);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Send Which Violation User's Facility has Violated: ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        builder.setTitle("What Violation has the Facility Violated? ");
         builder.setView(view);
         builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("Send", (dialog, which) -> {
