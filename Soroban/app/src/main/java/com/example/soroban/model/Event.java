@@ -36,6 +36,7 @@ public class Event implements Serializable {
     private int numberOfNotifications = 0; // Does not need to be stored in Firebase.
     private String qrCodeHash;
     private String posterUrl;
+    private boolean requiresGeolocation = false; // Set to false by default
 
     /**
      * No-argument constructor required by Firestore.
@@ -214,6 +215,26 @@ public class Event implements Serializable {
      */
     public void setSampleSize(Integer sampleSize) {
         this.sampleSize = sampleSize;
+    }
+
+    /**
+     * Getter method for an Event's requirement of geolocation.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @return: True if Event requires geolocation. False otherwise.
+     */
+    public boolean requiresGeolocation() {
+        return requiresGeolocation;
+    }
+
+    /**
+     * Setter method for an Event's requirement of geolocation.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param requiresGeolocation True if Event requires geolocation. False otherwise.
+     */
+    public void setRequiresGeolocation(boolean requiresGeolocation) {
+        this.requiresGeolocation = requiresGeolocation;
     }
 
     /**

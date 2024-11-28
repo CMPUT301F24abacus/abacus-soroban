@@ -14,6 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.fragment.ConfirmGiveLocationFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
+import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
+import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
@@ -31,7 +36,7 @@ import java.util.Calendar;
  * @see QRCodeGenerator
  * @see AlertDialog
  */
-public class EventDetailsActivity extends AppCompatActivity {
+public class EventDetailsActivity extends AppCompatActivity implements GeolocationListener {
     private FireBaseController firebaseController;
     private Event selectedEvent;
     private User appUser;
@@ -44,6 +49,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
+    private boolean allowLocation;
     private boolean isRegistered; // Store the registration status
 
     /**
@@ -116,7 +122,15 @@ public class EventDetailsActivity extends AppCompatActivity {
         updateRegistrationButtons();
 
         // Set button click listeners
-        registerButton.setOnClickListener(v -> handleRegister());
+        registerButton.setOnClickListener(v ->{
+            // Check if Event has geolocation requirement
+            if(selectedEvent.requiresGeolocation()){
+                ConfirmGiveLocationFragment fragment = new ConfirmGiveLocationFragment();
+                fragment.show(getSupportFragmentManager(), "Confirm geolocation");
+            }else{
+                handleRegister();
+            }
+        });
         unregisterButton.setOnClickListener(v -> handleUnregister());
     }
 
@@ -141,8 +155,8 @@ public class EventDetailsActivity extends AppCompatActivity {
      * Handles user registration for the event.
      */
     private void handleRegister() {
-        // Check if current date is passed drawDate
 
+        // Check if current date is passed drawDate
         if(!(Calendar.getInstance().getTimeInMillis() > selectedEvent.getDrawDate().getTime())){
             // Add user to event waitlist
             boolean joinResult = selectedEvent.addToWaitingEntrants(appUser);
@@ -198,4 +212,20 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void returnResult(boolean result) {
+        if(result){
+            // Allow user to register
+            handleRegister();
+        }
+    }
+
+    @Override
+    public void setLocation(double latitude, double longitude) {
+        if(appUser != null) {
+            appUser.setLocation(latitude, longitude);
+            firebaseController.userUpdate(appUser);
+        }
+    }
 }

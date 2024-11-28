@@ -48,6 +48,11 @@
         <item name="android:elevation">4dp</item>
     </style>
 
+    <style name="ThemeOverlay.Soroban.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+
     <!-- Alert Dialog Style -->
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/gray_i_want</item>
@@ -58,14 +63,14 @@
 <!--        style="@style/AppButton"-->
 <!--        android:text="Click Me"/>-->
 
-<!--    <ListView-->
-<!--        style="@style/AppListView"-->
-<!--        android:id="@+id/list_view"/>-->
+    <!--    <ListView-->
+    <!--        style="@style/AppListView"-->
+    <!--        android:id="@+id/list_view"/>-->
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        style="@style/DashboardCard">-->
-<!--        &lt;!&ndash; Card content here &ndash;&gt;-->
-<!--    </androidx.cardview.widget.CardView>-->
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        style="@style/DashboardCard">-->
+    <!--        &lt;!&ndash; Card content here &ndash;&gt;-->
+    <!--    </androidx.cardview.widget.CardView>-->
 
 
 </resources>
