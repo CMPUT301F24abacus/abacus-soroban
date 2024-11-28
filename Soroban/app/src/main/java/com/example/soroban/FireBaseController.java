@@ -1314,6 +1314,24 @@ public class FireBaseController implements Serializable {
                     }
                 });
 
+        // remove event from owner's hosted list
+        userRf.document(event.getOwner().getDeviceId()).collection("hostedEvents")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started hosted events deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                removeFromHostedEventsDoc(event, event.getOwner());
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find facility list!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
+
         // remove event
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .delete()
