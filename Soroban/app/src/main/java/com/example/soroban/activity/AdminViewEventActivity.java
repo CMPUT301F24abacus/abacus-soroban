@@ -37,6 +37,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
     private TextView eventNameTV;
+    private TextView eventOwnerTV;
     private TextView eventDetailsTV;
     private TextView eventDateTV;
     private TextView drawDateTV;
@@ -89,6 +90,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
         deleteEventButton = findViewById(R.id.delete_event_btn);
         deleteEventButton.setText("Delete Event");
         eventDetailsTV = findViewById(R.id.eventDescriptionAdmin);
+        eventOwnerTV = findViewById(R.id.eventOwnerTextAdmin);
         eventNameTV = findViewById(R.id.eventTitleAdmin);
         eventDateTV = findViewById(R.id.eventDateAdmin);
         drawDateTV = findViewById(R.id.eventDrawDateTextAdmin);
@@ -98,6 +100,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
         eventQR = findViewById(R.id.admin_qr_code);
 
         eventNameTV.setText(selectedEvent.getEventName());
+        eventOwnerTV.setText(selectedEvent.getOwner().getDeviceId());
         String eventDetails = selectedEvent.getEventDetails();
         eventDetailsTV.setText((eventDetails != null) ? eventDetails : "No Details Set");
         eventDateTV.setText(selectedEvent.getEventDate().toString());

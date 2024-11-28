@@ -2,6 +2,7 @@ package com.example.soroban.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -16,6 +17,13 @@ import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Map;
 
 /**
  * Displays the list of users who have confirmed their participation
@@ -31,6 +39,7 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
     private FireBaseController fireBaseController;
+    private FirebaseFirestore db;
     private ListView listView;
     private UserList listData;
     private UserArrayAdapter listAdapter;
@@ -70,6 +79,7 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
         }
 
         fireBaseController = new FireBaseController(this);
+        db = FirebaseFirestore.getInstance();
 
         // Grab event data from appUser
         listData = selectedEvent.getAttendees();
@@ -88,6 +98,31 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
         sendMessage.setOnClickListener(v -> {
             SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "attendees");
             fragment.show(getSupportFragmentManager(), "Send Message");
+        });
+
+        // Add snapshot listener for Firestore
+        db.collection("events").document(selectedEvent.getEventName() + ", " + appUser.getDeviceId()).collection("attendees").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    listData.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found WaitList Users!");
+                        Map<String, Object> userData = document.getData();
+                        String deviceId = (String) userData.get("deviceId");
+                        User newUser = new User(deviceId);
+                        newUser.setFirstName((String) userData.get("firstName"));
+                        newUser.setLastName((String) userData.get("lastName"));
+
+                        listData.addUser(newUser);
+                    }
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
         });
     }
 }
