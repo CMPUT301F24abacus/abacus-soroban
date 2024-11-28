@@ -23,6 +23,7 @@ import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -42,6 +43,7 @@ import java.util.Locale;
  * @see Glide
  */
 public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
+    private static final int EDIT_EVENT_REQUEST_CODE = 1;
     private Event selectedEvent;
     private User appUser;
     private ImageView viewQRcode;
@@ -117,6 +119,15 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         // geoReq.setActivated();
         // autoReplace.setActivated();
 
+        Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+        FirebaseDatabase.getInstance().getReference("events")
+                .child(selectedEvent.getEventName()) // Using eventName as the child key
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    String posterUrl = snapshot.child("posterUrl").getValue(String.class);
+                    selectedEvent.setPosterUrl(posterUrl);
+                });
+        Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
         if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
             Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
             Glide.with(this)
@@ -173,7 +184,35 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         editEvent.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, OrganizerEventEditDetailsActivity.class);
+            intent.putExtra("selectedEvent", selectedEvent);
             startActivity(intent);
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("does it reach here", "yes it does!");
+        if (requestCode == EDIT_EVENT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            selectedEvent = (Event) data.getSerializableExtra("updatedEvent");
+            updateUI(); // Refresh the UI with the updated event data
+        }
+    }
+
+    private void updateUI() {
+        if (selectedEvent != null) {
+
+            if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
+                Glide.with(this)
+                        .load(selectedEvent.getPosterUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(eventPoster);
+            } else {
+                eventPoster.setImageResource(R.drawable.ic_event_image); // Default image
+            }
+        }
+    }
+
+
+
 }
