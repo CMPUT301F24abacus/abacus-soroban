@@ -211,7 +211,7 @@ public class UserDashboardActivity extends AppCompatActivity {
             newArgs.putSerializable("appUser",appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
-        } else if (itemId == R.id.item_admin) {
+        } else if (itemId == R.id.admin_dashboard) {
             Intent intent = new Intent(this, AdminDashboardActivity.class);
             Bundle args = new Bundle();
             args.putSerializable("appUser", appUser);

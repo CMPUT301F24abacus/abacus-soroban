@@ -61,10 +61,15 @@
         </menu>
     </item>
     <item
-        android:id="@+id/item_admin"
-        android:icon="@drawable/baseline_admin_panel_settings_24"
-        android:title="Admin Panel"
-        android:visible="false"
-        android:checkable="true">
+        android:id="@+id/submenu_admin"
+        android:title="Admin"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/admin_dashboard"
+                android:icon="@drawable/baseline_admin_panel_settings_24"
+                android:title="Admin Panel"
+                android:checkable="true" />
+        </menu>
     </item>
 </menu>
