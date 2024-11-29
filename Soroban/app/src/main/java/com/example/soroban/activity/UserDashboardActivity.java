@@ -188,6 +188,10 @@ public class UserDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(this, QrCodeScanActivity.class);
             intent.putExtra("appUser", appUser);
             startActivity(intent);
+        } else if (itemId == R.id.user_preferences) {
+            Intent intent = new Intent(this, PreferencesActivity.class);
+            intent.putExtra("appUser", appUser);
+            startActivity(intent);
         } else if (itemId == R.id.org_dashboard) {
             Intent organizerIntent = new Intent(this, OrganizerDashboardActivity.class);
             organizerIntent.putExtra("appUser", appUser); // Pass the appUser object

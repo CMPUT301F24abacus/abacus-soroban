@@ -210,6 +210,10 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(this, QrCodeScanActivity.class);
             intent.putExtra("appUser", appUser);
             startActivity(intent);
+        } else if (itemId == R.id.user_preferences) {
+            Intent intent = new Intent(this, PreferencesActivity.class);
+            intent.putExtra("appUser", appUser);
+            startActivity(intent);
         } else if (itemId == R.id.org_dashboard) {
             // Do nothing
         } else if (itemId == R.id.org_manage_facility) {
@@ -283,5 +287,10 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
                     int defaultImageID = getDefaultPictureID(appUser.getFirstName(), this);
                     profileImageView.setImageResource(defaultImageID);
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }
