@@ -171,8 +171,6 @@ public class UserDashboardActivity extends AppCompatActivity {
         });
     }
 
-
-
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Get the ID of the selected menu item
         int itemId = item.getItemId();
@@ -225,6 +223,8 @@ public class UserDashboardActivity extends AppCompatActivity {
 
         // Close the drawer after handling the click
         drawerLayout.closeDrawers();
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(false);
         return true;
     }
 
