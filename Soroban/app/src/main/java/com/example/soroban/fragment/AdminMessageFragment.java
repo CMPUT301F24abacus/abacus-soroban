@@ -87,7 +87,7 @@ public class AdminMessageFragment extends DialogFragment {
             if(message.isEmpty()){
                 Toast.makeText(getContext(), "You must first write a message!", Toast.LENGTH_SHORT).show();
             }else{
-                firebaseController.updateUserNotificationsAdmin(selectedFacility.getOwner(), new Notification("Your Facility Has Been Deleted", message, Calendar.getInstance().getTime(), selectedFacility));
+                firebaseController.updateUserNotificationsAdmin(selectedFacility.getOwner(), new Notification("Your Facility Has Been Deleted", message, Calendar.getInstance().getTime(), selectedFacility), "facilityDelete");
                 firebaseController.removeFacilityDoc(selectedFacility);
                 Intent intent;
                 intent = new Intent(getContext(), AdminBrowseFacilityActivity.class);

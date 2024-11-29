@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +37,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -216,8 +218,13 @@ public class AdminBrowseImagesActivity extends AppCompatActivity {
                                 if (newKey == "From Profile: ") {
                                     FirebaseDatabase.getInstance().getReference("users").child(id)
                                             .removeValue();
+                                    User user = new User(id);
+                                    firebaseController.updateUserNotificationsAdmin(user, new Notification("Profile Picture Deleted", "Your Profile Picture has Been Deleted.", Calendar.getInstance().getTime(), user), "pictureDelete");
+
                                 } else if (newKey == "From Event: ") {
                                     db.collection("events").document(id).update("posterUrl", FieldValue.delete());
+                                    User user = new User(splitId[1]);
+                                    firebaseController.updateUserNotificationsAdmin(user, new Notification("Event Poster Deleted", splitId[0] + "'s Poster has Been Deleted", Calendar.getInstance().getTime(), user), "posterDelete");
                                     firebaseRead(browseImageList, idList, keyList);
                                 }
 
