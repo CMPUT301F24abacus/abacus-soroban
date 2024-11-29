@@ -2,73 +2,31 @@
 <!-- nav_header.xml -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="@drawable/search_view_background">
+    android:background="#044389"
+    android:fadingEdge="horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- Profile Picture and Name -->
     <ImageView
         android:id="@+id/profile_pic"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/ic_profile"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:src="@drawable/ic_profile" />
 
     <TextView
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
-        android:textStyle="bold"
-        android:textSize="18sp"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:layout_gravity="center"/>
+        android:text="User Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <!-- Authorized Profiles -->
-    <TextView
-        android:text="Authorized Profiles"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        android:layout_marginTop="8dp">
-
-        <CheckBox
-            android:id="@+id/admin_checkbox"
-            android:text="Admin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Switch
-            android:id="@+id/admin_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        android:layout_marginTop="8dp">
-
-        <CheckBox
-            android:id="@+id/organizer_checkbox"
-            android:text="Organizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Switch
-            android:id="@+id/organizer_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 </LinearLayout>
