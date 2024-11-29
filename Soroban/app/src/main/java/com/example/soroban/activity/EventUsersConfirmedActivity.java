@@ -96,7 +96,7 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "attendees");
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent, appUser, listData, "attendees");
             fragment.show(getSupportFragmentManager(), "Send Message");
         });
 

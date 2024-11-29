@@ -105,7 +105,7 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "waitList");
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent, appUser, listData, "waitList");
             fragment.show(getSupportFragmentManager(), "Send Message");
         });
 

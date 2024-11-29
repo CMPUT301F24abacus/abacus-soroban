@@ -47,11 +47,12 @@ public class SendMessageFragment extends DialogFragment {
      * @param selectedEvent the event whose participants will receive the message.
      * @return a new {@code SendMessageFragment} instance.
      */
-    public static SendMessageFragment newInstance(Event selectedEvent, User appUser, String listType) {
+    public static SendMessageFragment newInstance(Event selectedEvent, User appUser, UserList currentList, String listType) {
 
         Bundle args = new Bundle();
         args.putSerializable("selectedEvent", selectedEvent);
         args.putSerializable("appUser", appUser);
+        args.putSerializable("currentList", currentList);
         args.putSerializable("listType", listType);
 
         SendMessageFragment fragment = new SendMessageFragment();
@@ -72,24 +73,17 @@ public class SendMessageFragment extends DialogFragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 selectedEvent = args.getSerializable("selectedEvent", Event.class);
                 appUser = args.getSerializable("appUser", User.class);
+                currentList = args.getSerializable("currentList",UserList.class);
             }else{
                 appUser = (User) args.getSerializable("appUser");
                 selectedEvent = (Event) args.getSerializable("selectedEvent");
+                currentList = (UserList) args.getSerializable("currentList");
             }
 
             if(appUser == null || selectedEvent == null){
                 throw new IllegalArgumentException("Must pass object of type User and Event to initialize appUser.");
             }
 
-            if(Objects.equals(listType, "waitList")){
-                currentList = selectedEvent.getWaitingEntrants();
-            }else if(Objects.equals(listType, "attendees")){
-                currentList = selectedEvent.getAttendees();
-            }else if(Objects.equals(listType, "cancelled")){
-                currentList = selectedEvent.getNotGoing();
-            }else if(Objects.equals(listType, "invited")){
-                currentList = selectedEvent.getInvitedEntrants();
-            }
 
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
