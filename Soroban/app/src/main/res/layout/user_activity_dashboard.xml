@@ -1,130 +1,292 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".activity.UserDashboardActivity"> <!-- Set background image -->
+    tools:context=".activity.UserDashboardActivity">
 
-    <!-- Top Dashboard title and Icons -->
-
+    <!-- Main content -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/tv_dashboard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Dashboard"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <!-- Notification, Profile, and Settings Icons -->
-        <ImageView
-            android:id="@+id/icon_settings"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Settings"
-
-            android:scaleType="center"
-            android:src="@drawable/ic_settings" />
-
-        <ImageView
-            android:id="@+id/icon_notifications"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-
-            android:background="@android:color/transparent"
-            android:contentDescription="Notifications"
-            android:scaleType="center"
-            android:src="@drawable/ic_notifications1" />
-
-        <ImageView
-            android:id="@+id/icon_profile"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Profile"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_profile" />
-    </LinearLayout>
-
-    <!-- Events Wait-listed For -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="Waitlisted Events:"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <ListView
-            android:id="@+id/list_waitlisted_events"
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="196dp"
-            android:background="#33334F"
-            android:divider="@color/white"
-            android:dividerHeight="1dp" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <!-- Dashboard Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Top Dashboard Title and Icons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center">
+
+                <!-- Notification, Profile, and Settings Icons -->
+                <TextView
+                    android:id="@+id/tv_dashboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Dashboard"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icon_settings"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Settings"
+                    android:src="@drawable/ic_settings" />
+
+                <ImageView
+                    android:id="@+id/icon_notifications"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Notifications"
+                    android:src="@drawable/ic_notifications1" />
+
+                <ImageView
+                    android:id="@+id/icon_profile"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Profile"
+                    android:src="@drawable/ic_profile" />
+            </LinearLayout>
+
+            <!-- Events Waitlisted For -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Waitlisted Events:"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/list_waitlisted_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="196dp"
+                    android:background="#33334F"
+                    android:divider="@color/white"
+                    android:dividerHeight="1dp" />
+            </LinearLayout>
+
+            <!-- Confirmed Events -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Confirmed Registrations:"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/list_confirmed_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="196dp"
+                    android:background="#33334F"
+                    android:divider="@color/white"
+                    android:dividerHeight="1dp" />
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_scan_qr_code"
+                    style="@style/AppButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Scan QR Code" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Confirmed Events -->
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/navigation_menu"
+        app:headerLayout="@layout/nav_header" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
+</androidx.drawerlayout.widget.DrawerLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="Confirmed Registrations:"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/list_confirmed_events"
-            android:layout_width="match_parent"
-            android:layout_height="196dp"
-            android:background="#33334F"
-            android:divider="@color/white"
-            android:dividerHeight="1dp" />
-    </LinearLayout>
 
-    <!-- Action Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_scan_qr_code"
-            style="@style/AppButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="Scan QR Code" />
-    </LinearLayout>
 
-</LinearLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:padding="16dp"-->
+<!--    tools:context=".activity.UserDashboardActivity"> &lt;!&ndash; Set background image &ndash;&gt;-->
+
+<!--    &lt;!&ndash; Top Dashboard title and Icons &ndash;&gt;-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:gravity="center">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_dashboard"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Dashboard"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        &lt;!&ndash; Notification, Profile, and Settings Icons &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/icon_settings"-->
+<!--            android:layout_width="42dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="Settings"-->
+
+<!--            android:scaleType="center"-->
+<!--            android:src="@drawable/ic_settings" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/icon_notifications"-->
+<!--            android:layout_width="42dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:layout_marginLeft="8dp"-->
+<!--            android:layout_marginRight="8dp"-->
+
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="Notifications"-->
+<!--            android:scaleType="center"-->
+<!--            android:src="@drawable/ic_notifications1" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/icon_profile"-->
+<!--            android:layout_width="42dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="Profile"-->
+<!--            android:scaleType="centerInside"-->
+<!--            android:src="@drawable/ic_profile" />-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; Events Wait-listed For &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="4dp"-->
+<!--            android:text="Waitlisted Events:"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        <ListView-->
+<!--            android:id="@+id/list_waitlisted_events"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="196dp"-->
+<!--            android:background="#33334F"-->
+<!--            android:divider="@color/white"-->
+<!--            android:dividerHeight="1dp" />-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; Confirmed Events &ndash;&gt;-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="4dp"-->
+<!--            android:text="Confirmed Registrations:"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        <ListView-->
+<!--            android:id="@+id/list_confirmed_events"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="196dp"-->
+<!--            android:background="#33334F"-->
+<!--            android:divider="@color/white"-->
+<!--            android:dividerHeight="1dp" />-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; Action Buttons &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_scan_qr_code"-->
+<!--            style="@style/AppButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Scan QR Code" />-->
+<!--    </LinearLayout>-->
+
+<!--</LinearLayout>-->

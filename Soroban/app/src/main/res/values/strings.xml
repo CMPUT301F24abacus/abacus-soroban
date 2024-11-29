@@ -19,4 +19,6 @@
     <string name="lorem_ipsum_paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a orci a felis porta condimentum. Suspendisse convallis lectus quis sapien venenatis, eget faucibus lorem rutrum. Quisque malesuada blandit auctor. Fusce accumsan sed erat a hendrerit. Vivamus eu laoreet augue, vel vehicula purus. Nunc ac lacus id nisl tempor rutrum. Ut convallis lobortis auctor. Donec maximus vestibulum nulla, nec ullamcorper erat auctor fringilla. Vivamus est mauris, commodo quis tempus ut, commodo nec dolor. Nullam eget neque commodo, viverra ante non, facilisis nulla. Duis efficitur eget nisi vel fermentum. Donec metus mi, tempus quis ultrices nec, vehicula ut libero. Phasellus fringilla mattis sapien. Nulla et enim vestibulum, porta magna a, hendrerit orci. Morbi at lorem augue. Fusce eget pulvinar massa.</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="drawer_open">Open</string>"
+    <string name="drawer_close">Close</string>
 </resources>
