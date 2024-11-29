@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/submenu_user"
+        android:title="User">
+        <menu>
+            <item
+                android:id="@+id/user_dashboard"
+                android:icon="@drawable/ic_people"
+                android:title="User Dashboard"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_profile"
+                android:icon="@drawable/ic_people"
+                android:title="User Profile"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_invitations"
+                android:icon="@drawable/ic_people"
+                android:title="User Invitations"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_scan_qr"
+                android:icon="@drawable/ic_people"
+                android:title="Scan QR Code"
+                android:checkable="true"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_organizer"
+        android:title="Organizer">
+        <menu>
+            <item
+                android:id="@+id/org_create_facility"
+                android:icon="@drawable/ic_people"
+                android:title="Create Facility"
+                android:checkable="true"
+                android:visible="true"/>
+            <item
+                android:id="@+id/org_dashboard"
+                android:icon="@drawable/ic_people"
+                android:title="Organizer Dashboard"
+                android:checkable="true"
+                android:visible="true"/>
+            <item
+                android:id="@+id/org_manage_facility"
+                android:icon="@drawable/ic_people"
+                android:title="Manage Facility"
+                android:visible="true"/>
+            <item
+                android:id="@+id/org_create_event"
+                android:icon="@drawable/ic_people"
+                android:title="Create Event"
+                android:visible="true"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/item_admin"
+        android:title="Admin Dashboard"
+        android:visible="true">
+    </item>
+</menu>
