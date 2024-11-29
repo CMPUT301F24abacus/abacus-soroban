@@ -3,6 +3,7 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -76,8 +77,26 @@ public class UserDashboardActivity extends AppCompatActivity {
         waitlistedEventsListData = appUser.getWaitList();
         confirmedEventsListData = appUser.getRegisteredEvents();
 
+        setupNavMenu(navigationView, appUser);
         setupButtons();
         setupEventLists();
+    }
+
+    private void setupNavMenu(NavigationView navigationView, User appUser) {
+        Menu menu = navigationView.getMenu();
+
+        if (appUser.getAdminCheck()) {
+            menu.getItem(3).setVisible(true);
+        }
+
+        if (appUser.getFacility() != null) {
+            menu.getItem(1).setVisible(true);
+        }
+        else {
+            menu.getItem(2).setVisible(true);
+        }
+
+        menu.getItem(0).getSubMenu().getItem(0).setChecked(true);
     }
 
     private void setupButtons() {
@@ -138,28 +157,50 @@ public class UserDashboardActivity extends AppCompatActivity {
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Get the ID of the selected menu item
         int itemId = item.getItemId();
-
-        // Check which menu item was selected
-        if (itemId == R.id.nav_user_dashboard) {
-            // Navigate to User Dashboard
-            startActivity(new Intent(this, UserDashboardActivity.class));
-        } else if (itemId == R.id.nav_organizer_dashboard) {
-            // Navigate to Organizer Dashboard
+        // Handle operations related to selected menu item
+        if (itemId == R.id.user_dashboard) {
+            // Do nothing
+        } else if (itemId == R.id.user_profile) {
+            ViewProfileFragment dialogFragment = ViewProfileFragment.newInstance(appUser);
+            dialogFragment.show(getSupportFragmentManager(), "View profile");
+        } else if (itemId == R.id.user_invitations) {
+            Intent intent = new Intent(this, InvitationActivity.class);
+            intent.putExtra("appUser", appUser);
+            startActivity(intent);
+        } else if (itemId == R.id.user_scan_qr) {
+            Intent intent = new Intent(this, QrCodeScanActivity.class);
+            intent.putExtra("appUser", appUser);
+            startActivity(intent);
+        } else if (itemId == R.id.org_dashboard) {
             Intent organizerIntent = new Intent(this, OrganizerDashboardActivity.class);
             organizerIntent.putExtra("appUser", appUser); // Pass the appUser object
             organizerIntent.putExtra("facilityName", appUser.getFacility() != null ? appUser.getFacility().getName() : ""); // Pass facility name if available
             startActivity(organizerIntent);
-
-        } else if (itemId == R.id.nav_admin_dashboard) {
-            // Navigate to Admin Dashboard
+        } else if (itemId == R.id.org_manage_facility) {
+            Intent intent = new Intent(this, FacilityDisplayActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+        } else if (itemId == R.id.org_create_event) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+        } else if (itemId == R.id.org_create_facility) {
+            Intent intent = new Intent(this, CreateFacilityActivity.class);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("appUser",appUser);
+            intent.putExtras(newArgs);
+            startActivity(intent);
+        } else if (itemId == R.id.item_admin) {
             Intent intent = new Intent(this, AdminDashboardActivity.class);
             Bundle args = new Bundle();
-            args.putSerializable("appUser", appUser); // user is the instance of User class
+            args.putSerializable("appUser", appUser);
             intent.putExtras(args);
             startActivity(intent);
-
         } else {
-            // Handle any unexpected cases
             return false;
         }
 
