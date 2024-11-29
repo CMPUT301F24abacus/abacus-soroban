@@ -28,35 +28,42 @@
     </item>
     <item
         android:id="@+id/submenu_organizer"
-        android:title="Organizer">
+        android:title="Organizer"
+        android:visible="false">
         <menu>
-            <item
-                android:id="@+id/org_create_facility"
-                android:icon="@drawable/ic_people"
-                android:title="Create Facility"
-                android:checkable="true"
-                android:visible="true"/>
             <item
                 android:id="@+id/org_dashboard"
                 android:icon="@drawable/ic_people"
                 android:title="Organizer Dashboard"
-                android:checkable="true"
-                android:visible="true"/>
+                android:checkable="true"/>
             <item
                 android:id="@+id/org_manage_facility"
                 android:icon="@drawable/ic_people"
                 android:title="Manage Facility"
-                android:visible="true"/>
+                android:checkable="true"/>
             <item
                 android:id="@+id/org_create_event"
                 android:icon="@drawable/ic_people"
                 android:title="Create Event"
-                android:visible="true"/>
+                android:checkable="true"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_not_organizer"
+        android:title="Organizer"
+        android:visible="false">
+        <menu>
+            <item
+            android:id="@+id/org_create_facility"
+            android:icon="@drawable/ic_people"
+            android:title="Create Facility"
+            android:checkable="true" />
         </menu>
     </item>
     <item
         android:id="@+id/item_admin"
         android:title="Admin Dashboard"
-        android:visible="true">
+        android:visible="false"
+        android:checkable="true">
     </item>
 </menu>
