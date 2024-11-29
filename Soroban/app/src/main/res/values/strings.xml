@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Soroban</string>
-    <string name="user_dashboard_title">Dashboard\n</string>
     <string name="confirmEventRegistrationText">Confirm registration for \"Event Name\"?</string>
     <string name="unregisterEventText">Unregister from \"Event Name\"?</string>
     <string name="DeclineButtonText">Decline</string>
@@ -21,4 +20,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="drawer_open">Open</string>"
     <string name="drawer_close">Close</string>
+
+    <string name="dashboard">Dashboard</string>
 </resources>
