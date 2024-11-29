@@ -31,8 +31,7 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
-public class OrganizerDashboardTest {
-
+public class TestOrganizerDashboard {
     private User mockUser(){
         return new User("testId");
     }
@@ -118,5 +117,4 @@ public class OrganizerDashboardTest {
                 .onChildView(withId(R.id.tv_event_name))
                 .check(matches((withText(mockEvent.getEventName()))));
     }
-
 }

@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/activity_event_details">
 
     <ImageView
         android:id="@+id/event_image"

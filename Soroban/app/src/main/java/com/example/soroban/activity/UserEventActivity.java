@@ -39,7 +39,7 @@ public class UserEventActivity extends AppCompatActivity {
     private Button unregisterButton;
     private ImageView eventPoster;
     private ImageView eventQR;
-    private FireBaseController firebaseController;
+    private FireBaseController fireBaseController;
     String listType;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class UserEventActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        firebaseController = new FireBaseController(this);
+        fireBaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
         notifyButton = findViewById(R.id.btn_notify_me);
@@ -98,9 +98,6 @@ public class UserEventActivity extends AppCompatActivity {
         }
         // Finish when event posters are uploadable
         // FirebaseDatabase.getInstance().getReference("events").child(...).get()
-
-        // Initialize controllers to update User
-        FireBaseController fireBaseController = new FireBaseController(this);
 
         // Remove Event from User waitlist
         unregisterButton.setOnClickListener( v -> {

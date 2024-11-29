@@ -432,6 +432,9 @@ public class Event implements Serializable {
         Random random = new Random();
         ArrayList<Integer> sampledIndices = new ArrayList<>();
         int sampleNumber = Math.min(entrantNumber, waitingEntrants.size()); // Either sample specified number or all waitingEntrants
+        if(sampleNumber == 0){
+            return sampledIndices;
+        }
         int newRand = random.nextInt(waitingEntrants.size());
         for(int i = 0; i < sampleNumber; i++) {
             User sampledUser = waitingEntrants.get(newRand);
