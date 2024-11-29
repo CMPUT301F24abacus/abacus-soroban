@@ -1,20 +1,26 @@
 package com.example.soroban.activity;
 
+import static com.example.soroban.fragment.ViewProfileFragment.getDefaultPictureID;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
+//import androidx.navigation.ui.AppBarConfiguration;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
@@ -22,6 +28,7 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Displays the User Dashboard with functionalities like viewing events,
@@ -80,6 +87,8 @@ public class UserDashboardActivity extends AppCompatActivity {
         setupNavMenu(navigationView, appUser);
         setupButtons();
         setupEventLists();
+
+        updateNavigationDrawer(); // Update navigation drawer with user info
     }
 
     private void setupNavMenu(NavigationView navigationView, User appUser) {
@@ -139,20 +148,30 @@ public class UserDashboardActivity extends AppCompatActivity {
         waitlistedEventsListView.setAdapter(waitlistedAdapter);
         confirmedEventsListView.setAdapter(confirmedAdapter);
 
-        waitlistedEventsListView.setOnItemClickListener((adapterView, view, index, id) -> {
-            Intent intent = new Intent(this, UserEventActivity.class);
-            intent.putExtra("appUser", appUser);
-            intent.putExtra("event", waitlistedEventsListData.get(index));
+        waitlistedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = waitlistedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            newArgs.putString("listType", "waitList");
+            intent.putExtras(newArgs);
             startActivity(intent);
         });
 
-        confirmedEventsListView.setOnItemClickListener((adapterView, view, index, id) -> {
-            Intent intent = new Intent(this, UserEventActivity.class);
-            intent.putExtra("appUser", appUser);
-            intent.putExtra("event", confirmedEventsListData.get(index));
+        confirmedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
+            Event selectedEvent = confirmedEventsListData.get(i);
+            Bundle newArgs = new Bundle();
+            newArgs.putSerializable("selectedEvent", selectedEvent);
+            newArgs.putSerializable("appUser", appUser);
+            newArgs.putString("listType", "registeredEvents");
+            intent.putExtras(newArgs);
             startActivity(intent);
         });
     }
+
+
 
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Get the ID of the selected menu item
@@ -209,12 +228,51 @@ public class UserDashboardActivity extends AppCompatActivity {
         return true;
     }
 
+    // Method to update the profile image and username in the navigation drawer
+    private void updateNavigationDrawer() {
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        View headerView = navigationView.getHeaderView(0); // Get the header view
+
+        // Get references to the TextView and ImageView for the profile
+        TextView usernameTextView = headerView.findViewById(R.id.profile_name);
+        ImageView profileImageView = headerView.findViewById(R.id.profile_pic);
+
+        // Set the username dynamically
+        usernameTextView.setText(appUser.getFirstName() + " " + appUser.getLastName());
+
+        // Fetch and set the profile image using Firebase
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(appUser.getDeviceId())
+                .child("profileImageUrl")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    String imageUrl = snapshot.getValue(String.class);
+                    if (imageUrl != null) {
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(profileImageView);
+                    } else {
+                        // If no image URL, generate default image based on first letter of first name
+                        int defaultImageID = getDefaultPictureID(appUser.getFirstName(), this);
+                        profileImageView.setImageResource(defaultImageID);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // If fetching fails, set default profile picture
+                    int defaultImageID = getDefaultPictureID(appUser.getFirstName(), this);
+                    profileImageView.setImageResource(defaultImageID);
+                });
+    }
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
+
+
 }
 
 
