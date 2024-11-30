@@ -105,7 +105,7 @@ public class UserEventActivity extends AppCompatActivity {
         eventDateTV.setText("Event Date: " + selectedEvent.getEventDate().toString());
         drawDateTV.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
         // QR Code
-        firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+        fireBaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {
                 // Generate the QR code bitmap using the hash from firebase
                 Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);

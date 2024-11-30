@@ -29,7 +29,7 @@ public class User implements Serializable {
     private EventList invitedEvents;
     private Facility facility;
     private GeoPoint location;
-    private Boolean adminCheck;
+    private Boolean adminCheck = false;
 
     /**
      * Constructor method for User.

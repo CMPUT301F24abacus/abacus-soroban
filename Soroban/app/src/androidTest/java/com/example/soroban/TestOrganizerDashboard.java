@@ -57,7 +57,7 @@ public class TestOrganizerDashboard {
         ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createOrganizerDashboardIntent(appUser));
         // Check if the dashboard title "Organizer Dashboard" is displayed
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.organizer_dashboard_tv)).check(matches(withText("Organizer Dashboard")));
+        onView(withId(R.id.facilityNameTextView)).check(matches(withText("My Facility")));
     }
 
     @Test
