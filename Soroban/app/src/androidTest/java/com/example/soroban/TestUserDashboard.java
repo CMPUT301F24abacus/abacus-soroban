@@ -134,7 +134,8 @@ public class TestUserDashboard {
                 .check(matches((withText(mockEvent.getEventName()))));
     }
 
-    // For some reason, these two succeed when ran individually, but not when the entire class is run
+
+    // These test do not pass when the entire test clas is run, however they do pass when ran individually
 
     @Test
     public void testWaitingEventClick(){
@@ -148,6 +149,8 @@ public class TestUserDashboard {
             EventArrayAdapter mockEventAdapter = new EventArrayAdapter(activity, mockWaitList);
             ListView listView = activity.findViewById(R.id.list_waitlisted_events);
             listView.setAdapter(mockEventAdapter);
+
+            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
         });
 
         onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_waitlisted_events))
@@ -171,6 +174,7 @@ public class TestUserDashboard {
             ListView listView = activity.findViewById(R.id.list_confirmed_events);
             listView.setAdapter(mockEventAdapter);
 
+            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
         });
 
         onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_confirmed_events))

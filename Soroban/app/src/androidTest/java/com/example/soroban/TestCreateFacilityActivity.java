@@ -33,7 +33,6 @@ public class TestCreateFacilityActivity {
         intent.setClassName("com.example.soroban", "com.example.soroban.activity.CreateFacilityActivity");
         Bundle newArgs = new Bundle();
         newArgs.putSerializable("appUser",appUser);
-        newArgs.putSerializable("thisFacility",appUser.getFacility());
         intent.putExtras(newArgs);
         return intent;
     }

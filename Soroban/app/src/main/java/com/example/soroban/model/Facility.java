@@ -12,7 +12,7 @@ import java.util.Objects;
  * @see Event
  * @see EventList
  */
-public class Facility implements Serializable {
+public class Facility {
     private final User owner;
     private String name;
     private EventList hostedEvents;
@@ -75,7 +75,6 @@ public class Facility implements Serializable {
         this.name = updatedFacilityName;
         this.owner = owner;
         this.hostedEvents = new EventList();
-
     }
 
 

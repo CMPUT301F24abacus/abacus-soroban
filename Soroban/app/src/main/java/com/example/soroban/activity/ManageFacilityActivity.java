@@ -51,10 +51,8 @@ public class ManageFacilityActivity extends AppCompatActivity {
         if(args != null){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 appUser = args.getSerializable("appUser", User.class);
-                thisFacility = args.getSerializable("thisFacility", Facility.class);
             }else{
                 appUser = (User) args.getSerializable("appUser");
-                thisFacility = (Facility) args.getSerializable("thisFacility");
             }
 
             if(appUser == null ){
@@ -72,6 +70,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
         buttonSaveChanges = findViewById(R.id.buttonCreateFacility);
 
         // Retrieve the facility data from the facility
+        thisFacility = appUser.getFacility();
 
         // Set the facility data in the EditText fields
         editTextFacilityName.setText(thisFacility.getName());

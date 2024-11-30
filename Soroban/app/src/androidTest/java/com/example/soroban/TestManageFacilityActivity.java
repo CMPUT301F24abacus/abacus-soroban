@@ -36,7 +36,6 @@ public class TestManageFacilityActivity {
         intent.setClassName("com.example.soroban", "com.example.soroban.activity.ManageFacilityActivity");
         Bundle newArgs = new Bundle();
         newArgs.putSerializable("appUser",appUser);
-        newArgs.putSerializable("thisFacility",appUser.getFacility());
         intent.putExtras(newArgs);
         return intent;
     }
