@@ -21,9 +21,11 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -38,17 +40,7 @@ import java.util.Objects;
 public class AdminViewEventActivity extends AppCompatActivity {
     private Event selectedEvent;
     private User appUser;
-    private TextView eventNameTV;
-    private TextView eventOwnerTV;
-    private TextView eventDetailsTV;
-    private TextView eventDateTV;
-    private TextView drawDateTV;
-    private TextView sampleSizeTV;
-    private TextView entrantLimitTV;
-    private Button deleteQRButton;
-    private Button deleteEventButton;
     private Switch geoSwitch;
-    private ImageView eventPoster;
     private ImageView eventQR;
     private FireBaseController firebaseController;
 
@@ -87,18 +79,18 @@ public class AdminViewEventActivity extends AppCompatActivity {
         firebaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
-        deleteQRButton = findViewById(R.id.delete_QR_btn);
+        Button deleteQRButton = findViewById(R.id.delete_QR_btn);
         deleteQRButton.setText("Delete QR Hash");
-        deleteEventButton = findViewById(R.id.delete_event_btn);
+        Button deleteEventButton = findViewById(R.id.delete_event_btn);
         deleteEventButton.setText("Delete Event");
-        eventDetailsTV = findViewById(R.id.eventDescriptionAdmin);
-        eventOwnerTV = findViewById(R.id.eventOwnerTextAdmin);
-        eventNameTV = findViewById(R.id.eventTitleAdmin);
-        eventDateTV = findViewById(R.id.eventDateAdmin);
-        drawDateTV = findViewById(R.id.eventDrawDateTextAdmin);
-        sampleSizeTV = findViewById(R.id.eventSampleSizeTextAdmin);
-        entrantLimitTV = findViewById(R.id.eventEntrantLimitTextAdmin);
-        eventPoster = findViewById(R.id.eventPosterImageAdmin);
+        TextView eventDetailsTV = findViewById(R.id.eventDescriptionAdmin);
+        TextView eventOwnerTV = findViewById(R.id.eventOwnerTextAdmin);
+        TextView eventNameTV = findViewById(R.id.eventTitleAdmin);
+        TextView eventDateTV = findViewById(R.id.eventDateAdmin);
+        TextView drawDateTV = findViewById(R.id.eventDrawDateTextAdmin);
+        TextView sampleSizeTV = findViewById(R.id.eventSampleSizeTextAdmin);
+        TextView entrantLimitTV = findViewById(R.id.eventEntrantLimitTextAdmin);
+        ImageView eventPoster = findViewById(R.id.eventPosterImageAdmin);
         eventQR = findViewById(R.id.admin_qr_code);
 
         eventNameTV.setText(selectedEvent.getEventName());
@@ -139,6 +131,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
                     .setMessage("Would you like to delete \"" + selectedEvent.getEventName() + "\"?")
                     .setPositiveButton("Delete", (dialog, which) -> {
                         firebaseController.removeEventDoc(selectedEvent);
+                        firebaseController.updateUserNotifications(selectedEvent.getOwner(), new Notification("Deleted Event", "Deleted " + selectedEvent.getEventName(), Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications()));
                         Intent intent;
                         intent = new Intent(AdminViewEventActivity.this, AdminBrowseEventActivity.class);
                         Bundle argsEvent = new Bundle();
@@ -160,7 +153,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
                             .setPositiveButton("Delete", (dialog, which) -> {
                                 firebaseController.deleteQRCodeHash(selectedEvent);
                                 eventQR.setImageResource(R.drawable.ic_qr_code);
-
+                                firebaseController.updateUserNotifications(selectedEvent.getOwner(), new Notification("Deleted Event's QR Hash", "Deleted " + selectedEvent.getEventName() + "'s QR Hash.", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications()));
                             })
                             .setNegativeButton("No", null)
                             .show();

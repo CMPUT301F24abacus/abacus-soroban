@@ -551,7 +551,7 @@ public class FireBaseController implements Serializable {
      * @param user: User for which the notification is being added.
      * @param notification: Notification which is being added.
      */
-    public void updateUserNotificationsAdmin(User user, Notification notification) {
+    public void updateUserNotificationsAdmin(User user, Notification notification, String deleteType) {
 
         CollectionReference notifcationRef = userRf.document(user.getDeviceId()).collection("notifications");
         // Count current number of notifications
@@ -570,9 +570,19 @@ public class FireBaseController implements Serializable {
                             data.put("title", notification.getTitle());
                             data.put("date", notification.getTime());
                             data.put("message", notification.getMessage());
-                            data.put("eventName", notification.getFacility().getName());
-                            notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
-                                    .set(data);
+                            if (deleteType == "pictureDelete") {
+                                data.put("eventName", notification.getUser().getDeviceId());
+                                notifcationRef.document(notification.getUser().getDeviceId() + ", " + numNotifs)
+                                        .set(data);
+                            } else if (deleteType == "facilityDelete") {
+                                data.put("eventName", notification.getFacility().getName());
+                                notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
+                                        .set(data);
+                            } else {
+                                data.put("eventName", notification.getUser().getDeviceId());
+                                notifcationRef.document(notification.getUser().getDeviceId() + ", " + numNotifs)
+                                        .set(data);
+                            }
                         } else {
                             Log.e("Firestore", "Something went wrong.");
                         }
