@@ -28,6 +28,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
+import com.example.soroban.model.User;
 //import com.example.soroban.activity.CreateEventActivity;
 
 public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
@@ -47,6 +48,7 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     private boolean deletedFlag = false;
     private Button buttonConfirm;
     private Button buttonCancel;
+    private User appUser;
 
     /**
      * Called when this activity is first created. Initializes UI components and sets up listeners.
@@ -61,6 +63,10 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             selectedEvent = (Event) extras.getSerializable("selectedEvent");
+            // This Activity doesn't use appUser, but OrganizerEventViewDetailsActivity expects a
+            // User object to be passed to it when it opens. So we need this for when we switch back
+            // to the view page.
+            appUser = (User) extras.getSerializable("appUser");
             if (selectedEvent == null) {
                 throw new IllegalArgumentException("Event details not passed to OrganizerEventEditDetailsActivity");
             }
@@ -103,6 +109,7 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
             deletedFlag = true;
             selectedEvent.setPosterUrl(null);
             eventPoster.setImageResource(R.drawable.ic_event_image);
+            Log.d("deleted flag", String.valueOf(deletedFlag));
         });
 
         buttonConfirm.setOnClickListener(v -> {
@@ -153,20 +160,22 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     private void confirmChanges() {
         FireBaseController fireBaseController = new FireBaseController(this);
         Intent resultIntent = new Intent(OrganizerEventEditDetailsActivity.this, OrganizerEventViewDetailsActivity.class);
-        if (posterUrl != null | deletedFlag) {
+        if (deletedFlag) {
+            // Set posterUrl to "no poster" in the Firebase.
+            selectedEvent.setPosterUrl("no poster");
             fireBaseController.updateEventPoster(selectedEvent);
+        } else if (posterUrl != null) {
             selectedEvent.setPosterUrl(posterUrl);
-            resultIntent.putExtra("updatedUrl", posterUrl);
+            fireBaseController.updateEventPoster(selectedEvent);
         }
+        resultIntent.putExtra("selectedEvent", selectedEvent);
+        resultIntent.putExtra("appUser", appUser);
         setResult(RESULT_OK, resultIntent);
 
-        // Start the target activity
+        // Go back to the view event page.
         Toast.makeText(this, "Event changes confirmed!", Toast.LENGTH_SHORT).show();
-        Log.d("POSTER URL:", posterUrl);
-        Log.d("POSTER URL:", "ITASADASDASDADASDASd");
         startActivity(resultIntent);
-
-
+        finish();
     }
 
 }

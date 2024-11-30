@@ -120,20 +120,17 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         // autoReplace.setActivated();
 
 
-        Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+        //Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
         FireBaseController fireBaseController = new FireBaseController(this);
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
                     // Check if the fetched posterUrl is null or empty
-                    if (posterUrl == null || posterUrl.isEmpty()) {
-                        Log.d("EventPosterURL", "Poster URL is null or empty, setting default image.");
+                    if ("no poster".equals(posterUrl)) {
                         // Set default image if no poster URL is available
                         eventPoster.setImageResource(R.drawable.ic_event_image);
                     } else {
                         // Success: Update the poster URL in the UI
                         selectedEvent.setPosterUrl(posterUrl);
-                        Log.d("EventPosterURL 3.0", "Poster URL: " + selectedEvent.getPosterUrl());
-
                         // Load the poster image with Glide
                         Glide.with(this)
                                 .load(selectedEvent.getPosterUrl())
@@ -149,21 +146,6 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
                     eventPoster.setImageResource(R.drawable.ic_event_image);
                 });
 
-        Log.d("EventPosterURL 2.0", "Poster URL: " + selectedEvent.getPosterUrl());
-
-        /*
-        if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
-            Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
-            Glide.with(this)
-                    .load(selectedEvent.getPosterUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(eventPoster);
-
-        } else {
-            eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
-        }
-
-         */
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {
@@ -220,6 +202,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         editEvent.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, OrganizerEventEditDetailsActivity.class);
             intent.putExtra("selectedEvent", selectedEvent);
+            intent.putExtra("appUser", appUser);
             startActivity(intent);
         });
     }

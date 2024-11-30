@@ -1456,10 +1456,16 @@ public class FireBaseController implements Serializable {
      */
     public void updateEventPoster(Event event) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String eventId = event.getQrCodeHash();
-        if (eventId == null || eventId.isEmpty()) {
+        String eventId = event.getEventName() + ", " + event.getOwner().getDeviceId();
+        if (eventId.equals(", ")) {
             Log.e("FireBaseController", "Event ID is null or empty. Cannot update poster.");
             return;
+        }
+
+        String posterUrl = event.getPosterUrl();
+        if (posterUrl == null || posterUrl.equals("no poster")) {
+            posterUrl = "no poster";
+            event.setPosterUrl("no poster"); // Use "no poster" as the default value
         }
 
         Map<String, Object> updates = new HashMap<>();
@@ -1476,6 +1482,10 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    /**
+     * Gets an event's poster url (posterUrl field) from the Firebase.
+     * @param event: the event who's posterUrl is being fetched.
+     */
     public void fetchEventPosterUrl(Event event, OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
                 .get()
