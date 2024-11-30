@@ -1,6 +1,7 @@
 package com.example.soroban.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Notification;
@@ -35,6 +39,8 @@ public class UserEventActivity extends AppCompatActivity {
     private User appUser;
     private TextView eventNameTV;
     private TextView eventDetailsTV;
+    private TextView eventDateTV;
+    private TextView drawDateTV;
     private Button notifyButton;
     private Button unregisterButton;
     private ImageView eventPoster;
@@ -47,6 +53,11 @@ public class UserEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_details);
 
         Bundle args = getIntent().getExtras();
+        if (args != null) {
+            Log.d("UserEventActivity", "Extras: " + args.toString());
+        } else {
+            Log.e("UserEventActivity", "No extras passed!");
+        }
 
         // Initialize appUser and selected Event for this activity.
         if(args != null){
@@ -80,6 +91,8 @@ public class UserEventActivity extends AppCompatActivity {
         unregisterButton = findViewById(R.id.btn_register);
         eventDetailsTV = findViewById(R.id.event_details);
         eventNameTV = findViewById(R.id.event_name);
+        eventDateTV = findViewById(R.id.event_date);
+        drawDateTV = findViewById(R.id.event_draw_date);
         eventPoster = findViewById(R.id.event_image);
         eventQR = findViewById(R.id.event_qr_code);
 
@@ -90,14 +103,30 @@ public class UserEventActivity extends AppCompatActivity {
             unregisterButton.setText("Unregister");
         }
         eventNameTV.setText(selectedEvent.getEventName());
-        String eventDetails = "Event Date: " + selectedEvent.getEventDate().toString() + "\nEvent Details: " + selectedEvent.getEventDetails();
+        String eventDetails = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
         eventDetailsTV.setText(eventDetails);
-        // Still a work in progress
-        if (selectedEvent.getQRCode() != null) {
-            eventQR.setImageBitmap(selectedEvent.getQRCode());
+        eventDateTV.setText("Event Date: " + selectedEvent.getEventDate().toString());
+        drawDateTV.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
+        // QR Code
+        firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+            if (qrCodeHash != null) {
+                // Generate the QR code bitmap using the hash from firebase
+                Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
+                if (qrCodeBitmap != null) {
+                    eventQR.setImageBitmap(qrCodeBitmap); // Set the QR code bitmap
+                }
+            }
+        });
+        // Posters
+        if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
+            Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+            Glide.with(this)
+                    .load(selectedEvent.getPosterUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(eventPoster);
+        } else {
+            eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
         }
-        // Finish when event posters are uploadable
-        // FirebaseDatabase.getInstance().getReference("events").child(...).get()
 
         // Initialize controllers to update User
         FireBaseController fireBaseController = new FireBaseController(this);
@@ -133,6 +162,7 @@ public class UserEventActivity extends AppCompatActivity {
             newArgs.putSerializable("appUser",appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
+            finish();
 
         });
     }

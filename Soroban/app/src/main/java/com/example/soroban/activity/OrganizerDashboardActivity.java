@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
@@ -30,8 +32,15 @@ import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Serves as the main dashboard for organizers.
@@ -45,7 +54,8 @@ import java.util.Calendar;
  * @see OrganizerEventViewDetailsActivity
  */
 public class OrganizerDashboardActivity extends AppCompatActivity {
-
+    private FireBaseController fireBaseController;
+    private FirebaseFirestore db;
     private User appUser;
     private TextView facilityNameTextView;
     private ListView eventsListView;
@@ -109,6 +119,8 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
+        db = FirebaseFirestore.getInstance();
+        fireBaseController = new FireBaseController(this);
 
         // Initialize views
         facilityNameTextView = findViewById(R.id.facilityNameTextView);
@@ -121,7 +133,7 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         facilityNameTextView.setText(facilityName != null ? facilityName : "My Facility");
 
         // Initialize events list
-        events = appUser.getHostedEvents();
+        events = new EventList();
 
         // Set up RecyclerView
         eventAdapter = new EventArrayAdapter(this, events);
@@ -166,6 +178,45 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             newArgs.putSerializable("appUser",appUser);
             intent.putExtras(newArgs);
             startActivity(intent);
+        });
+
+
+        // Add snapshot listener for Firestore
+        db.collection("users").document(appUser.getDeviceId()).collection("hostedEvents").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    events.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found WaitList Events!");
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        User owner = new User((String) document.get("owner"));
+                        fireBaseController.fetchUserDoc(owner);
+                        owner.createFacility();
+                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        if (eventData.get("maxEntrants") != null) {
+                            Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                            event.setMaxEntrants(maxEntrants);
+                        }
+                        if (eventData.get("eventDetails") != null) {
+                            event.setEventDetails((String) eventData.get("eventDetails"));
+                        }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
+                        events.addEvent(event);
+                    }
+                    eventAdapter.notifyDataSetChanged();
+                }
+            }
         });
 
         setupNavMenu(navigationView, appUser);
