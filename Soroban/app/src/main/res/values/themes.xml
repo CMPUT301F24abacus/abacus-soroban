@@ -7,8 +7,8 @@
 
         <!-- Customize theme colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/primary</item>
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
         <!-- Customize text colors -->
         <item name="android:textColor">#FFFFFF</item>
@@ -21,7 +21,7 @@
 
     <!-- Button Style -->
     <style name="AppButton">
-        <item name="android:backgroundTint">@color/accent</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:padding">12dp</item>
         <item name="android:textSize">16sp</item>

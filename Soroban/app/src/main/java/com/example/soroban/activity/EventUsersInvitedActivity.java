@@ -103,7 +103,7 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "invited");
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent, appUser, listData, "invited");
             fragment.show(getSupportFragmentManager(), "Send Message");
         });
 

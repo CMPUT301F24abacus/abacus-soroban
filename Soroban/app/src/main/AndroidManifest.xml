@@ -45,7 +45,7 @@
         <activity
             android:name=".activity.UserDashboardActivity"
             android:exported="false"
-            android:label="@string/user_dashboard_title" />
+            android:label="@string/user_dashboard" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
@@ -54,12 +54,16 @@
         <activity android:name=".activity.QrCodeScanActivity" />
         <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.InvitationActivity" />
-        <activity android:name=".activity.OrganizerDashboardActivity" />
+        <activity
+            android:name=".activity.OrganizerDashboardActivity"
+            android:label="@string/organizer_dashboard"/>
         <activity android:name=".activity.FacilityDisplayActivity" />
         <activity android:name=".activity.ManageFacilityActivity" />
         <activity android:name=".activity.CreateEventActivity" />
         <activity android:name=".activity.UserEventActivity" />
-        <activity android:name=".activity.AdminDashboardActivity" />
+        <activity
+            android:name=".activity.AdminDashboardActivity"
+            android:label="@string/admin_dashboard"/>
         <activity android:name=".activity.AdminBrowseEventActivity" />
         <activity android:name=".activity.AdminBrowseFacilityActivity" />
         <activity android:name=".activity.AdminBrowseProfileActivity" />

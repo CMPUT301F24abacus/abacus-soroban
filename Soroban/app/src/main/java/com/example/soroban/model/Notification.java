@@ -17,6 +17,7 @@ public class Notification {
     private Date time;
     private Event event;
     private Facility facility;
+    private User user;
     private int number;
 
     /**
@@ -43,6 +44,13 @@ public class Notification {
         this.facility = facility;
     }
 
+    public Notification(String title, String message, Date time, User user) {
+        this.title = title;
+        this.message = message;
+        this.time = time;
+        this.user = user;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -64,4 +72,6 @@ public class Notification {
     }
 
     public Facility getFacility() { return facility; }
+
+    public User getUser() { return user; }
 }

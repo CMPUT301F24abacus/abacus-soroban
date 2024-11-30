@@ -61,6 +61,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         // Initialize appUser and selected Event for this activity.
         if(args != null){
+
             listType = args.getString("listType");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 selectedEvent = args.getSerializable("selectedEvent", Event.class);
@@ -74,11 +75,7 @@ public class UserEventActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("Must pass object of type User and Event to initialize appUser.");
             }
 
-            if(Objects.equals(listType, "waitList")){
-                selectedEvent = appUser.getWaitList().find(selectedEvent);
-            }else if(Objects.equals(listType, "registeredEvents")){
-                selectedEvent = appUser.getRegisteredEvents().find(selectedEvent);
-            }
+
 
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
