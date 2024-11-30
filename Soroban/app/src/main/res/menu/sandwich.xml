@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/submenu_user"
+        android:title="User">
+        <menu>
+            <item
+                android:id="@+id/user_dashboard"
+                android:icon="@drawable/baseline_list_alt_24"
+                android:title="User Dashboard"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_profile"
+                android:icon="@drawable/baseline_account_circle_24"
+                android:title="User Profile"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_invitations"
+                android:icon="@drawable/baseline_event_available_24"
+                android:title="User Invitations"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_scan_qr"
+                android:icon="@drawable/baseline_document_scanner_24"
+                android:title="Scan QR Code"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/user_preferences"
+                android:icon="@drawable/baseline_edit_notifications_24"
+                android:title="Notification Preferences"
+                android:checkable="true"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_organizer"
+        android:title="Organizer"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/org_dashboard"
+                android:icon="@drawable/baseline_list_alt_24"
+                android:title="Organizer Dashboard"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/org_manage_facility"
+                android:icon="@drawable/baseline_business_24"
+                android:title="Manage Facility"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/org_create_event"
+                android:icon="@drawable/baseline_event_note_24"
+                android:title="Create Event"
+                android:checkable="true"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_not_organizer"
+        android:title="Organizer"
+        android:visible="false">
+        <menu>
+            <item
+            android:id="@+id/org_create_facility"
+            android:icon="@drawable/baseline_business_24"
+            android:title="Create Facility"
+            android:checkable="true" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_admin"
+        android:title="Admin"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/admin_dashboard"
+                android:icon="@drawable/baseline_admin_panel_settings_24"
+                android:title="Admin Panel"
+                android:checkable="true" />
+        </menu>
+    </item>
+</menu>
