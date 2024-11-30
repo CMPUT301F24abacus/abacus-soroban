@@ -97,6 +97,7 @@ public class ViewProfileFragment extends DialogFragment {
                             } else {
                                 // Get the users first name and set the user's pfp to a default letter
                                 // corresponding to their first name's first letter.
+                                // Log.d("User's first name:", appUser.getFirstName());
                                 defaultPictureID = getDefaultPictureID(appUser.getFirstName(), requireContext());
                                 userProfilePhoto.setImageResource(defaultPictureID);
                             }

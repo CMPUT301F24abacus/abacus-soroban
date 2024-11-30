@@ -69,8 +69,10 @@ public class FireBaseController implements Serializable {
      * @Author: Matthieu Larochelle, Kevin Li
      * @Version: 1.0
      * @param progressBar: Progress bar which will be made invisible upon data retrieval.
-     * @param layout: Layout which will be made visible upon data retrieval.
+     * @param userBtn: Button to user dashboard which will be made visible upon data retrieval.
+     * @param organizerBtn: Button to organizer dashboard which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
+     * @param adminDashboard: Button to admin dashboard which will be made visible if user's an admin.
      */
     public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
         DocumentReference docRef = userRf.document(user.getDeviceId());
@@ -568,7 +570,7 @@ public class FireBaseController implements Serializable {
                             data.put("title", notification.getTitle());
                             data.put("date", notification.getTime());
                             data.put("message", notification.getMessage());
-                            data.put("facilityName", notification.getFacility().getName());
+                            data.put("eventName", notification.getFacility().getName());
                             notifcationRef.document(notification.getFacility().getName() + ", " + numNotifs)
                                     .set(data);
                         } else {
@@ -762,6 +764,19 @@ public class FireBaseController implements Serializable {
     }
 
     /**
+     * Delete QR Hash from Event
+     * @author Kevin Li
+     * @version 1.0
+     */
+    public void deleteQRCodeHash(Event event) {
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("QRHash", FieldValue.delete());
+
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .update(updates);
+    }
+
+    /**
      * Retrieves an event from Firestore using its QR code hash.
      * Resolves event details and the associated owner to construct a complete {@link Event} object.
      *
@@ -769,7 +784,6 @@ public class FireBaseController implements Serializable {
      * @param qrCodeHash        the QR code hash identifying the event.
      * @param onSuccessListener callback triggered with the {@link Event} if found, or {@code null} if not.
      */
-
     public void fetchEventByQRCodeHash(String qrCodeHash, OnSuccessListener<Event> onSuccessListener) {
         eventRf.whereEqualTo("QRHash", qrCodeHash)
                 .get()
@@ -1319,6 +1333,24 @@ public class FireBaseController implements Serializable {
                         }
                     }
                 });
+
+        // remove event from owner's hosted list
+        userRf.document(event.getOwner().getDeviceId()).collection("hostedEvents")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started hosted events deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                removeFromHostedEventsDoc(event, event.getOwner());
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find facility list!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting facility's hosted events.", e));
 
         // remove event
         eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
