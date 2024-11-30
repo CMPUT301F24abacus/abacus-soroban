@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,15 @@ import com.example.soroban.model.UserList;
 import java.util.Calendar;
 import java.util.Objects;
 
+/**
+ * Provides a dialog for sending administrative messages to facility owners
+ * regarding violations or other important notifications.
+ *
+ * @see FireBaseController
+ * @see Facility
+ * @see Notification
+ * @see AdminBrowseFacilityActivity
+ */
 public class AdminMessageFragment extends DialogFragment {
     private Facility selectedFacility;
     private User appUser;
@@ -71,12 +81,12 @@ public class AdminMessageFragment extends DialogFragment {
         }
 
         firebaseController = new FireBaseController(getContext());
+        TextView titleText = view.findViewById(R.id.setMessageTitle);
         EditText messageEdit = view.findViewById(R.id.organizerMessageEdit);
-        Button sendButton = view.findViewById(R.id.buttonSendMessage);
-        sendButton.setVisibility(View.INVISIBLE);
+        titleText.setVisibility(View.INVISIBLE);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Send Which Violation User's Facility has Violated: ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        builder.setTitle("What Violation has the Facility Violated? ");
         builder.setView(view);
         builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("Send", (dialog, which) -> {
@@ -86,7 +96,7 @@ public class AdminMessageFragment extends DialogFragment {
             if(message.isEmpty()){
                 Toast.makeText(getContext(), "You must first write a message!", Toast.LENGTH_SHORT).show();
             }else{
-                firebaseController.updateUserNotificationsAdmin(selectedFacility.getOwner(), new Notification("Your Facility Has Been Deleted", message, Calendar.getInstance().getTime(), selectedFacility));
+                firebaseController.updateUserNotificationsAdmin(selectedFacility.getOwner(), new Notification("Your Facility Has Been Deleted", message, Calendar.getInstance().getTime(), selectedFacility), "facilityDelete");
                 firebaseController.removeFacilityDoc(selectedFacility);
                 Intent intent;
                 intent = new Intent(getContext(), AdminBrowseFacilityActivity.class);

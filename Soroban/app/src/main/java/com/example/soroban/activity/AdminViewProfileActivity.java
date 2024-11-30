@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
-import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AdminViewProfileActivity extends AppCompatActivity {
     private User selectedUser;
     private User appUser;
+    private TextView idName;
     private TextView userFirstName;
     private TextView userLastName;
     private TextView userEmail;
@@ -88,8 +88,10 @@ public class AdminViewProfileActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.user_emailAddressField);
         userPhoneNumber = findViewById(R.id.user_phoneNumberField);
         userProfilePic = findViewById(R.id.userProfilePhoto);
+        idName = findViewById(R.id.userName);
 
         // Populate user details
+        idName.setText(selectedUser.getDeviceId());
         userFirstName.setText(selectedUser.getFirstName());
         userLastName.setText(selectedUser.getLastName());
         userEmail.setText(selectedUser.getEmail());

@@ -29,8 +29,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 /**
  * Allows the admin to browse events from Firebase, search for events using a search bar,
@@ -134,6 +136,15 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
                         }
+                        if (eventData.get("eventDetails") != null) {
+                            event.setEventDetails((String) eventData.get("eventDetails"));
+                        }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
+                        if (eventData.get("geoLocation") != null) {
+                            // do later
+                        }
                         browseEventList.add(event);
                     }
                     adapter.notifyDataSetChanged();
@@ -200,17 +211,17 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
          */
         @Override
         public void onBindViewHolder(BrowseEventsAdapter.ViewHolder holder, int position) {
-            String eventName = browseEventsList.get(position).getEventName();
+            Event selectedEvent = browseEventList.get(position);
+            String eventName = selectedEvent.getEventName();
             String eventDate = "No Date"; // Temporary, for events without dates
-            if (browseEventsList.get(position).getEventDate() != null) {
-                eventDate = browseEventsList.get(position).getEventDate().toString();
+            if (selectedEvent.getEventDate() != null) {
+                eventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
             }
 
             holder.eventNameTV.setText(eventName);
             holder.eventDateTV.setText(eventDate);
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(AdminBrowseEventActivity.this, AdminViewEventActivity.class);
-                Event selectedEvent = browseEventList.get(position);
                 Bundle newArgs = new Bundle();
                 newArgs.putSerializable("selectedEvent", selectedEvent);
                 newArgs.putSerializable("appUser", appUser);

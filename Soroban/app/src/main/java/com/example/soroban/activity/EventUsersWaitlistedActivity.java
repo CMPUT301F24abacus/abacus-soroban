@@ -2,6 +2,7 @@ package com.example.soroban.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,7 +19,14 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
 import com.example.soroban.model.User;
 import com.example.soroban.model.UserList;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -37,6 +45,7 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
     private User appUser;
     private Event selectedEvent;
     private FireBaseController fireBaseController;
+    private FirebaseFirestore db;
     private ListView listView;
     private UserList listData;
     private UserArrayAdapter listAdapter;
@@ -79,6 +88,7 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
         }
 
         fireBaseController = new FireBaseController(this);
+        db = FirebaseFirestore.getInstance();
 
         // Grab event data from appUser
         listData = selectedEvent.getWaitingEntrants();
@@ -95,8 +105,34 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
 
         // Set up reactions for when the buttons are clicked
         sendMessage.setOnClickListener(v -> {
-            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent,appUser, "waitList");
+            SendMessageFragment fragment = SendMessageFragment.newInstance(selectedEvent, appUser, listData, "waitList");
             fragment.show(getSupportFragmentManager(), "Send Message");
+        });
+
+
+        // Add snapshot listener for Firestore
+        db.collection("events").document(selectedEvent.getEventName() + ", " + appUser.getDeviceId()).collection("waitList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    listData.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found WaitList Users!");
+                        Map<String, Object> userData = document.getData();
+                        String deviceId = (String) userData.get("deviceId");
+                        User newUser = new User(deviceId);
+                        newUser.setFirstName((String) userData.get("firstName"));
+                        newUser.setLastName((String) userData.get("lastName"));
+
+                        listData.addUser(newUser);
+                    }
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
         });
 
 

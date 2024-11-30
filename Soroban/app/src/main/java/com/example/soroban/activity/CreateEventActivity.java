@@ -267,6 +267,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         startActivity(intent);
 
         Toast.makeText(this, "Event saved successfully.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

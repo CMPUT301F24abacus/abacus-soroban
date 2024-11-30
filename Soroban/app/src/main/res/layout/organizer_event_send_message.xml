@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Set Message:"
-        android:textColor="@color/text_secondary"
-        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <EditText
@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Send Message" />
+        android:text="Send Message"
+        android:visibility="invisible"/>
 
 </LinearLayout>

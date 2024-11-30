@@ -39,6 +39,15 @@ import org.osmdroid.views.overlay.Marker;
 / https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
 / https://sachankapil.medium.com/latest-method-how-to-get-current-location-latitude-and-longitude-in-android-give-support-for-c5132474c864
 */
+/**
+ * Displays the geolocation of entrants for a selected event
+ * Allows organizers to view and interact with user locations on a map.
+ * @see Event
+ * @see User
+ * @see FireBaseController
+ * @see <a href="https://help.famoco.com/developers/media/display-map/">Famoco Map Display Guide</a>
+ * @see <a href="https://github.com/johnjohndoe/OSMDroidOfflineDemo">OSMDroid Demo</a>
+ */
 public class EventEntrantsGeolocationActivity extends AppCompatActivity{
     private Event selectedEvent;
     private User appUser;
