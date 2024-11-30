@@ -200,6 +200,7 @@ public class ManageProfileFragment extends DialogFragment {
                     );
                     fireBaseController.userUpdate(appUser);
 
+                    Toast.makeText(getContext(), "User profile updated.", Toast.LENGTH_SHORT).show();
                     newDialog.dismiss();
                 });
             } else {

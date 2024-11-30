@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/browse_event_text"
-        android:layout_width="355dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="20dp"
         android:text="BROWSE EVENTS"
@@ -20,7 +20,7 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/event_search_bar"
-        android:layout_width="347dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/search_view_bg"
         app:defaultQueryHint="Search Events"

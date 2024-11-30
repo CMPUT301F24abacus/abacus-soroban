@@ -1,5 +1,7 @@
 package com.example.soroban.model;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,7 +10,7 @@ import java.util.Objects;
  * Manages user's roles, events, and facilities.
  *
  * @Author: Matthieu Larochelle
- * @Version: 1.3
+ * @Version: 1.4
  * @see Event
  * @see Facility
  * @see EventList
@@ -26,6 +28,7 @@ public class User implements Serializable {
     private EventList hostedEvents;
     private EventList invitedEvents;
     private Facility facility;
+    private GeoPoint location;
     private Boolean adminCheck;
 
     /**
@@ -169,6 +172,26 @@ public class User implements Serializable {
      */
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Getter method for User's location.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Return: OMS GeoPoint.
+     */
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    /**
+     * Setter method for User's location.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @Param: OMS GeoPoint.
+     */
+    public void setLocation(double lattitude, double longitude) {
+        this.location = new GeoPoint(lattitude,longitude);
     }
 
     /**

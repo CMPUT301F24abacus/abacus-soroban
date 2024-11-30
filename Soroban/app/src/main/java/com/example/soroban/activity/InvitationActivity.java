@@ -98,8 +98,12 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
      * Called to refresh the displayed data.
      */
     @Override
-    public void updateAdapter() {
+    public void update() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void returnResult (boolean result) {
     }
 
 }

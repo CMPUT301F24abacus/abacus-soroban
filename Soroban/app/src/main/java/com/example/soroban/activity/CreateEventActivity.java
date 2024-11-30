@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +20,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.controller.UserController;
+import com.example.soroban.fragment.AcceptInviteFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerFragment;
 import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
+import com.example.soroban.fragment.SendMessageFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
@@ -29,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Allows organizers to create new events by providing details such as
@@ -42,17 +50,21 @@ import java.util.Locale;
  * @see DatePickerListener
  * @see OrganizerDashboardActivity
  */
-public class CreateEventActivity extends AppCompatActivity implements DatePickerListener {
+public class CreateEventActivity extends AppCompatActivity implements DatePickerListener, DialogFragmentListener {
 
     private EditText eventNameEditText;
     private EditText eventDescriptionEditText;
     private EditText sampleSizeEditText;
+    private EditText entrantLimitEditText;
     private Button eventDateSelectButton;
     private ImageButton eventPosterUploadButton;
     private Button drawDateSelectButton;
+    private Switch geoReqButton;
+    private Button autoReplaceButton;
     private Button saveEventButton;
     private TextView selectedEventDateTextView;
     private TextView selectedDrawDateTextView;
+    private boolean requiresLocation;
     private ActivityResultLauncher<Intent> posterPickerLauncher;
     private String posterUrl = null;
 
@@ -90,6 +102,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Get arguments passed from the previous activity
         Bundle args = getIntent().getExtras();
+
+        // Initialize appUser for this activity.
         if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 appUser = args.getSerializable("appUser", User.class);
@@ -112,12 +126,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         eventNameEditText = findViewById(R.id.eventNameEditText);
         eventDescriptionEditText = findViewById(R.id.eventDescriptionEditText);
         sampleSizeEditText = findViewById(R.id.sampleSizeEditText);
+        entrantLimitEditText = findViewById(R.id.entrantLimitEditText);
         eventPosterUploadButton = findViewById(R.id.buttonUploadPoster);
         eventDateSelectButton = findViewById(R.id.eventDateSelectButton);
         drawDateSelectButton = findViewById(R.id.drawDateSelectButton);
         saveEventButton = findViewById(R.id.saveEventButton);
         selectedEventDateTextView = findViewById(R.id.event_date_view);
         selectedDrawDateTextView = findViewById(R.id.draw_date_view);
+        geoReqButton = findViewById(R.id.eventGeoReqSwitch);
 
 
         // Set up date pickers
@@ -164,6 +180,12 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         );
 
         // Update the date views with initial values
+        geoReqButton.setOnCheckedChangeListener((view, isChecked) ->{
+            ConfirmRequireLocationFragment fragment = new ConfirmRequireLocationFragment();
+            fragment.show(getSupportFragmentManager(), "Confirm geolocation");
+        });
+
+        // Display initial dates
         updateDateTextViews();
     }
 
@@ -175,6 +197,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         String eventName = eventNameEditText.getText().toString().trim();
         String eventDetails = eventDescriptionEditText.getText().toString().trim();
         int eventSampleSize;
+        Integer eventEntrantLimit = null;
+        boolean geoRequirement = geoReqButton.isChecked();
 
         // Validate input
         if (eventName.isEmpty()) {
@@ -194,6 +218,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             eventSampleSize = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
         }
 
+        if (!entrantLimitEditText.getText().toString().isEmpty()) {
+            eventEntrantLimit = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
+            if(eventEntrantLimit <= 0){
+                Toast.makeText(this, "Please enter a max entrant capacity that is greater than 0 for your event.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         if (eventSampleSize <= 0) {
             Toast.makeText(this, "Sample size must be greater than zero.", Toast.LENGTH_SHORT).show();
             return;
@@ -205,8 +237,15 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             return;
         }
 
-        // Create the event
+        // Create a new Event object
         newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
+        newOrganizerEvent.setRequiresGeolocation(requiresLocation);
+        if(eventEntrantLimit != null){
+            newOrganizerEvent.setMaxEntrants(eventEntrantLimit);
+        }
+
+        // Generate and set a random QR code hash
+        String qrCodeHash = generateHash();
         newOrganizerEvent.setEventDetails(eventDetails);
         newOrganizerEvent.setQrCodeHash(generateHash());
         if (posterUrl != null) {
@@ -228,6 +267,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         startActivity(intent);
 
         Toast.makeText(this, "Event saved successfully.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
@@ -271,7 +311,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
      * @return a UUID string.
      */
     private String generateHash() {
-        return java.util.UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
 
     /**
@@ -326,4 +366,13 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
     }
 
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void returnResult(boolean result) {
+        requiresLocation = result;
+        geoReqButton.setChecked(result);
+    }
 }
