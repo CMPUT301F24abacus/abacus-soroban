@@ -51,6 +51,7 @@ public class ManageProfileFragment extends DialogFragment {
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private ImageView userProfilePhoto;
     private User appUser;
+    String imageUrl;
 
     /**
      * Creates a new instance of {@code ManageProfileFragment}.
@@ -129,7 +130,7 @@ public class ManageProfileFragment extends DialogFragment {
                         .child("profileImageUrl")
                         .get()
                         .addOnSuccessListener(snapshot -> {
-                            String imageUrl = snapshot.getValue(String.class);
+                            imageUrl = snapshot.getValue(String.class);
                             Log.d("ViewProfileFragment", "Fetched image URL: " + imageUrl);  // Logging URL for debugging
                             if (imageUrl != null) {
                                 Log.e("ViewProfileFragment", "before glide");
@@ -156,8 +157,10 @@ public class ManageProfileFragment extends DialogFragment {
 
                 ImageButton removeProfileButton = view.findViewById(R.id.editProfilePhotoButton2);
                 removeProfileButton.setOnClickListener(v -> {
-                    profileRepository.deleteProfileImage(appUser.getDeviceId());
-                    userProfilePhoto.setImageResource(R.drawable.ic_profile); // Reset to default image
+                    if (imageUrl != null) {
+                        profileRepository.deleteProfileImage(appUser.getDeviceId());
+                        userProfilePhoto.setImageResource(R.drawable.ic_profile); // Reset to default image
+                    }
                 });
 
                 // Set up discard and confirm buttons
