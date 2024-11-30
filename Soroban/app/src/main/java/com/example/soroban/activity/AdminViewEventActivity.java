@@ -23,6 +23,8 @@ import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -103,8 +105,8 @@ public class AdminViewEventActivity extends AppCompatActivity {
         eventOwnerTV.setText(selectedEvent.getOwner().getDeviceId());
         String eventDetails = selectedEvent.getEventDetails();
         eventDetailsTV.setText((eventDetails != null) ? eventDetails : "No Details Set");
-        eventDateTV.setText(selectedEvent.getEventDate().toString());
-        drawDateTV.setText(selectedEvent.getDrawDate().toString());
+        eventDateTV.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate()));
+        drawDateTV.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate()));
         sampleSizeTV.setText(selectedEvent.getSampleSize().toString());
         Integer entrantLimit = selectedEvent.getMaxEntrants();
         if (entrantLimit != null) {
@@ -158,6 +160,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
                             .setPositiveButton("Delete", (dialog, which) -> {
                                 firebaseController.deleteQRCodeHash(selectedEvent);
                                 eventQR.setImageResource(R.drawable.ic_qr_code);
+
                             })
                             .setNegativeButton("No", null)
                             .show();

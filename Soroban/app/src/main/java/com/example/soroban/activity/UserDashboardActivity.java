@@ -150,6 +150,7 @@ public class UserDashboardActivity extends AppCompatActivity {
 
 
         waitlistedEventsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Log.d("Firestore", "Intent Has Begun!");
             Intent intent = new Intent(UserDashboardActivity.this, UserEventActivity.class);
             Event selectedEvent = waitlistedEventsListData.get(i);
             Bundle newArgs = new Bundle();
@@ -191,7 +192,6 @@ public class UserDashboardActivity extends AppCompatActivity {
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                         User owner = new User((String) document.get("owner"));
                         fireBaseController.fetchUserDoc(owner);
-                        owner.createFacility();
                         Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
@@ -227,7 +227,6 @@ public class UserDashboardActivity extends AppCompatActivity {
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                         User owner = new User((String) document.get("owner"));
                         fireBaseController.fetchUserDoc(owner);
-                        owner.createFacility();
                         Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
