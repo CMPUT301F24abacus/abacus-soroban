@@ -71,6 +71,9 @@ dependencies {
 
     // Add missing Espresso dependencies explicitly
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation ("com.android.support.test:rules:1.0.2")
+    androidTestImplementation ("com.android.support.test:runner:1.0.2")
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("org.mockito:mockito-core:2.19.0")
     androidTestImplementation ("androidx.test:rules:1.5.0")

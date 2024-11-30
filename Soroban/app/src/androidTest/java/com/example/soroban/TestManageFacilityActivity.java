@@ -28,7 +28,7 @@ public class TestManageFacilityActivity {
         return new User("testId");
     }
 
-    private static Intent manageFacilityActivityIntent(User appUser) {
+    private static Intent createManageFacilityActivityIntent(User appUser) {
         appUser.createFacility();
         appUser.getFacility().setName("MockFacility");
         appUser.getFacility().setDetails("Mock Facility Test Details");
@@ -44,7 +44,7 @@ public class TestManageFacilityActivity {
     @Test
     public void testManageFacilityActivityDisplayed() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(manageFacilityActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createManageFacilityActivityIntent(appUser));
 
         // Check if the button and details are displayed
         onView(withId(R.id.buttonCreateFacility)).check(matches(isDisplayed()));
@@ -56,7 +56,7 @@ public class TestManageFacilityActivity {
     @Test
     public void testFacilityManage() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(manageFacilityActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createManageFacilityActivityIntent(appUser));
 
         // Perform facility changes
         onView(withId(R.id.editTextFacilityName)).perform(ViewActions.clearText());

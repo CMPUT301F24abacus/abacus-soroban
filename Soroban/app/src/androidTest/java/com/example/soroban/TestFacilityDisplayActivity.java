@@ -28,7 +28,7 @@ public class TestFacilityDisplayActivity {
         return new User("testId");
     }
 
-    private static Intent facilityDisplayActivityIntent(User appUser) {
+    private static Intent createFacilityDisplayActivityIntent(User appUser) {
         appUser.createFacility();
         appUser.getFacility().setName("MockFacility");
         appUser.getFacility().setDetails("Mock Facility Test Details");
@@ -44,7 +44,7 @@ public class TestFacilityDisplayActivity {
     @Test
     public void testFacilityDisplayActivityDisplayed() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(facilityDisplayActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createFacilityDisplayActivityIntent(appUser));
 
         // Check if  details are displayed
         onView(withId(R.id.tv_facility_name)).check(matches(withText("MockFacility")));
@@ -55,7 +55,7 @@ public class TestFacilityDisplayActivity {
     @Test
     public void testManageFacilityActivityDisplayed() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(facilityDisplayActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createFacilityDisplayActivityIntent(appUser));
 
         // Check if
         onView(withId(R.id.tv_edit_facility)).perform(click());

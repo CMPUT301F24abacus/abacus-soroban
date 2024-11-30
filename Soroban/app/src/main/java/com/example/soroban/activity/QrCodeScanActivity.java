@@ -16,7 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.databinding.ActivityScanQrCodeBinding;
 import com.journeyapps.barcodescanner.ScanContract;

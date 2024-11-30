@@ -1,6 +1,5 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
-import com.example.soroban.fragment.ConfirmRequireLocationFragment;
-import com.example.soroban.fragment.DatePickerListener;
-import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;

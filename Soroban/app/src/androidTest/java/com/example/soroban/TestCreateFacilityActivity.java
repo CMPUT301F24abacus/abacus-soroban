@@ -27,7 +27,7 @@ public class TestCreateFacilityActivity {
         return new User("testId");
     }
 
-    private static Intent createFacilityActivityIntent(User appUser) {
+    private static Intent createCreateFacilityActivityIntent(User appUser) {
         appUser.createFacility();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.example.soroban", "com.example.soroban.activity.CreateFacilityActivity");
@@ -41,7 +41,7 @@ public class TestCreateFacilityActivity {
     @Test
     public void testCreateFacilityActivityDisplayed() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createFacilityActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createCreateFacilityActivityIntent(appUser));
 
         // Check if the button and details are displayed
         onView(withId(R.id.buttonCreateFacility)).check(matches(isDisplayed()));
@@ -51,7 +51,7 @@ public class TestCreateFacilityActivity {
     @Test
     public void testFacilityCreate() {
         User appUser = mockUser();
-        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createFacilityActivityIntent(appUser));
+        ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createCreateFacilityActivityIntent(appUser));
 
         // Perform facility changes
         onView(withId(R.id.editTextFacilityName)).perform(ViewActions.clearText());
@@ -64,6 +64,7 @@ public class TestCreateFacilityActivity {
 
         // Click to view facility changes
         onView(withId(R.id.btn_go_to_facility)).perform(click());
+        onView(withId(R.id.activity_facility_display)).check(matches(isDisplayed()));
 
         onView(withId(R.id.tv_facility_name)).check(matches(withText("New MockFacility")));
         onView(withId(R.id.tv_facility_details)).check(matches(withText("Read A Certain Magical Index")));

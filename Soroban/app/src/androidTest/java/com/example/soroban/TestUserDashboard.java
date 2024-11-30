@@ -68,6 +68,7 @@ public class TestUserDashboard {
         onView(withId(R.id.btn_scan_qr_code)).perform(click());
         onView(withId(R.id.layout_result)).check(matches(isDisplayed()));
         // Add more checks based on what happens after clicking
+
     }
 
     @Test
