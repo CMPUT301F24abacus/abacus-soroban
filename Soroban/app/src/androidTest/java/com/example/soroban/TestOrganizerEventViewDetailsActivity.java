@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Intent;
+import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
@@ -25,6 +26,7 @@ import com.example.soroban.model.User;
 
 
 import org.hamcrest.Matchers;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -104,19 +106,28 @@ public class TestOrganizerEventViewDetailsActivity {
         onView(withId(R.id.eventNameTitle)).check(matches(isDisplayed()));
     }
 
+    /* Ideally, permission for Coarse Location would be automatically granted with the following:
+        @Rule
+            public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+        Reference: https://stackoverflow.com/questions/50403128/how-to-grant-permissions-to-android-instrumented-tests
+
+       However, an error is thrown when this rule is applied, causing all tests to fail when otherwise they succeed.
+       As such, for now, the step to grant permission to location is manual.
+     */
 
     @Test
     public void testGeolocationBtn() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
-
         appUser.addHostedEvent(mockEvent);
+        mockEvent.setRequiresGeolocation(true);
         ActivityScenario<OrganizerEventViewDetailsActivity> scenario = ActivityScenario.launch(createOrganizerEventViewActivityIntent(appUser, mockEvent));
 
         onView(withId(R.id.buttonEventGeolocation)).check(matches(isDisplayed()));
 
         // Event with geolocation requirement
-        mockEvent.setRequiresGeolocation(true);
         onView(withId(R.id.buttonEventGeolocation)).perform(click());
         onView(withId(R.id.map_view)).check(matches(isDisplayed()));
     }

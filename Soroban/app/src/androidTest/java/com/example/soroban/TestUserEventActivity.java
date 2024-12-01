@@ -69,6 +69,7 @@ public class TestUserEventActivity {
         Event mockEvent = mockEvent(appUser);
         appUser.addRegisteredEvent(mockEvent);
         ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+
         // Check if the unregister button is displayed
         onView(withId(R.id.btn_register)).check(matches(withText("Unregister")));
     }
@@ -83,8 +84,12 @@ public class TestUserEventActivity {
 
         // Check if details are correctly displayed
         onView(withId(R.id.event_name)).check(matches(withText(mockEvent.getEventName())));
-        String eventDetails = "Event Date: " + mockEvent.getEventDate().toString() + "\nEvent Details: " + mockEvent.getEventDetails();
+        String eventDetails = "Event Details: " + mockEvent.getEventDetails();
         onView(withId(R.id.event_details)).check(matches(withText(eventDetails)));
+        String eventDate = "Event Date: " + mockEvent.getEventDate();
+        onView(withId(R.id.event_date)).check(matches(withText(eventDate)));
+        String drawDate = "Draw Date: " + mockEvent.getDrawDate();
+        onView(withId(R.id.event_draw_date)).check(matches(withText(drawDate)));
     }
 
     @Test
@@ -121,8 +126,12 @@ public class TestUserEventActivity {
 
         // Check if details are correctly displayed
         onView(withId(R.id.event_name)).check(matches(withText(mockEvent.getEventName())));
-        String eventDetails = "Event Date: " + mockEvent.getEventDate().toString() + "\nEvent Details: " + mockEvent.getEventDetails();
+        String eventDetails = "Event Details: " + mockEvent.getEventDetails();
         onView(withId(R.id.event_details)).check(matches(withText(eventDetails)));
+        String eventDate = "Event Date: " + mockEvent.getEventDate();
+        onView(withId(R.id.event_date)).check(matches(withText(eventDate)));
+        String drawDate = "Draw Date: " + mockEvent.getDrawDate();
+        onView(withId(R.id.event_draw_date)).check(matches(withText(drawDate)));
     }
 
     @Test
@@ -137,5 +146,7 @@ public class TestUserEventActivity {
         onView(withText("mockEvent")).check(doesNotExist());
 
     }
+
+    // Currently no means to display QR codes as they are retrieved from Firebase.
 
 }

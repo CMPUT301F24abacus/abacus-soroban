@@ -4,10 +4,10 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-//import static androidx.test.espresso.intent.Intents.intended;
-//import static androidx.test.espresso.intent.Intents.intending;
-//import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-//import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -32,7 +32,7 @@ import android.view.View;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
-//import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -90,7 +90,6 @@ public class TestCreateEventActivity {
 
         onView(withId(R.id.sampleSizeEditText)).perform(ViewActions.typeText("6"));
 
-        /*
         Resources resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
         Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 resources.getResourcePackageName(R.mipmap.ic_launcher) + '/' +
@@ -121,7 +120,7 @@ public class TestCreateEventActivity {
 
         onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.eventsListView))
                 .atPosition(0)
-                .perform(click());        */
+                .perform(click());
 
     }
 }

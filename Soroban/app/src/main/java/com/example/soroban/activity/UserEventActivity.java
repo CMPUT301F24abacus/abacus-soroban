@@ -83,8 +83,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         fireBaseController = new FireBaseController(this);
 
-        // Initialize buttons, etc.
-        notifyButton = findViewById(R.id.btn_notify_me);
+        // Initialize buttons
         unregisterButton = findViewById(R.id.btn_register);
         eventDetailsTV = findViewById(R.id.event_details);
         eventNameTV = findViewById(R.id.event_name);

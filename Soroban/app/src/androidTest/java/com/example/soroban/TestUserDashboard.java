@@ -134,6 +134,8 @@ public class TestUserDashboard {
                 .check(matches((withText(mockEvent.getEventName()))));
     }
 
+    // For some reason, these two succeed when ran individually, but not when the entire class is run
+
     @Test
     public void testWaitingEventClick(){
         User appUser = mockUser();
@@ -146,10 +148,12 @@ public class TestUserDashboard {
             EventArrayAdapter mockEventAdapter = new EventArrayAdapter(activity, mockWaitList);
             ListView listView = activity.findViewById(R.id.list_waitlisted_events);
             listView.setAdapter(mockEventAdapter);
-
-            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
         });
 
+        onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_waitlisted_events))
+                .atPosition(0)
+                .onChildView(withId(R.id.tv_event_name))
+                .perform(click());
         onView(withId(R.id.activity_event_details)).check(matches(isDisplayed()));
     }
 
@@ -167,9 +171,12 @@ public class TestUserDashboard {
             ListView listView = activity.findViewById(R.id.list_confirmed_events);
             listView.setAdapter(mockEventAdapter);
 
-            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
         });
 
+        onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_confirmed_events))
+                .atPosition(0)
+                .onChildView(withId(R.id.tv_event_name))
+                .perform(click());
         onView(withId(R.id.activity_event_details)).check(matches(isDisplayed()));
     }
 }

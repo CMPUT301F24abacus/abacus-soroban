@@ -123,8 +123,8 @@ public class UserDashboardActivity extends AppCompatActivity {
         }
 
         // Grab event data from appUser
-        waitlistedEventsListData = new EventList();
-        confirmedEventsListData = new EventList();
+        waitlistedEventsListData = appUser.getWaitList();
+        confirmedEventsListData = appUser.getRegisteredEvents();
         db = FirebaseFirestore.getInstance();
         fireBaseController = new FireBaseController(this);
 
