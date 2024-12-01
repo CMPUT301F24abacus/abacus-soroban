@@ -2,6 +2,8 @@ package com.example.soroban;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +50,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private ImageView eventQRCode;
     private TextView eventDrawDate;
     private TextView eventDate;
-    private Button notifyMeButton;
+    // private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
     private boolean allowLocation;
@@ -88,7 +90,8 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
-        notifyMeButton = findViewById(R.id.btn_notify_me);
+        eventQRCode.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN); // make image fill white
+        // notifyMeButton = findViewById(R.id.btn_notify_me);
         registerButton = findViewById(R.id.btn_register);
         unregisterButton = findViewById(R.id.btn_unregister);
 
@@ -115,9 +118,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         });
 
         // Set button click listeners
-        notifyMeButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
-        });
+        //notifyMeButton.setOnClickListener(v -> {
+        //    Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
+        //});
 
         // Set up registration status
         isRegistered = getIntent().getBooleanExtra("isRegistered", false);
