@@ -134,10 +134,8 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         String facilityName = getIntent().getStringExtra("facilityName");
         facilityNameTextView.setText(facilityName != null ? facilityName : "My Facility");
 
-        // Initialize events list
-        events = new EventList();
-
         // Set up RecyclerView
+        events = appUser.getHostedEvents();
         eventAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventAdapter);
 
@@ -182,44 +180,6 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-        // Add snapshot listener for Firestore
-        db.collection("users").document(appUser.getDeviceId()).collection("hostedEvents").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    events.clear();
-                    for (QueryDocumentSnapshot document : querySnapshots) {
-                        Log.d("Firestore", "Found WaitList Events!");
-                        Map<String, Object> eventData = document.getData();
-                        String eventName = (String) eventData.get("eventName");
-                        Date eventDate = document.getDate("eventDate");
-                        Date drawDate = document.getDate("drawDate");
-                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        User owner = new User((String) document.get("owner"));
-                        fireBaseController.fetchUserDoc(owner);
-                        owner.createFacility();
-                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
-                        if (eventData.get("maxEntrants") != null) {
-                            Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
-                            event.setMaxEntrants(maxEntrants);
-                        }
-                        if (eventData.get("eventDetails") != null) {
-                            event.setEventDetails((String) eventData.get("eventDetails"));
-                        }
-                        if (eventData.get("posterUrl") != null) {
-                            event.setPosterUrl((String) eventData.get("posterUrl"));
-                        }
-                        events.addEvent(event);
-                    }
-                    eventAdapter.notifyDataSetChanged();
-                }
-            }
-        });
 
         setupNavMenu(navigationView, appUser);
         updateNavigationDrawer();
