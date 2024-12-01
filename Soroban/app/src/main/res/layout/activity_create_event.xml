@@ -18,11 +18,12 @@
             <!-- Event Title -->
             <TextView
                 android:id="@+id/eventCreateTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="Create Event"
-                android:textColor="@color/color_registration_open"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -65,8 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/button_background_green"
-                android:text="Select Event Date" />
+                android:backgroundTint="@color/background_light"
+                android:text="Select Event Date"
+                app:cornerRadius="8dp" />
 
             <!-- Event Description -->
             <TextView
@@ -101,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/button_background_green"
+                android:backgroundTint="@color/background_light"
                 android:contentDescription="Upload event poster"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
 
@@ -125,8 +127,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/button_background_green"
-                android:text="Select Draw Date" />
+                android:backgroundTint="@color/colorAccent"
+                android:text="Select Draw Date"
+                app:cornerRadius="8dp" />
 
             <!-- Sample Size -->
             <TextView
@@ -222,7 +225,9 @@
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/notification_positive_background"
                 android:text="Save Event"
-                android:textColor="#FFFFFF" />
+                android:background="@drawable/search_view_bg"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="8dp" />
 
         </LinearLayout>
     </ScrollView>
