@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 //import androidx.navigation.ui.AppBarConfiguration;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
@@ -72,6 +75,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private ListView confirmedEventsListView;
     private EventList confirmedEventsListData;
     private EventArrayAdapter confirmedAdapter;
+    private long TimeSinceBackPressed;
 
     /**
      * Called when the activity is first created.
@@ -240,6 +244,21 @@ public class UserDashboardActivity extends AppCompatActivity {
         setupButtons();
 
         updateNavigationDrawer(); // Update navigation drawer with user info
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (TimeSinceBackPressed + 2000 > System.currentTimeMillis()) {
+                    finishAffinity();
+                }
+                else {
+                    Toast toast = Toast.makeText(UserDashboardActivity.this, "Press back again to exit the app!", Toast.LENGTH_SHORT);
+                    toast.show();
+                    TimeSinceBackPressed = System.currentTimeMillis();
+                }
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void setupNavMenu(NavigationView navigationView, User appUser) {
