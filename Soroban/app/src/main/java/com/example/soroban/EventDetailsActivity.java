@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
@@ -117,6 +119,29 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             });
         });
 
+        firebaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Check if the fetched posterUrl is null or empty
+                    if ("no poster".equals(posterUrl)) {
+                        // Set default image if no poster URL is available
+                        eventImage.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventImage);
+                    }
+                },
+                error -> {
+                    // Handle errors and set a default image
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventImage.setImageResource(R.drawable.ic_event_image);
+                });
         // Set button click listeners
         //notifyMeButton.setOnClickListener(v -> {
         //    Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
