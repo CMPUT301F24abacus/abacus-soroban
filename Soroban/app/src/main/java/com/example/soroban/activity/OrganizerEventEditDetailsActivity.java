@@ -203,7 +203,7 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
 
         // Go back to the view event page.
         Toast.makeText(this, "Event changes confirmed!", Toast.LENGTH_SHORT).show();
-        //startActivity(resultIntent);
+        startActivity(resultIntent);
         finish();
     }
 
