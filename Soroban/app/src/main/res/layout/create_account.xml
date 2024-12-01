@@ -42,6 +42,14 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <!-- First Name -->
         <EditText
             android:id="@+id/etFirstName"
@@ -82,7 +90,7 @@
             android:id="@+id/etPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number"
+            android:hint="Phone Number (Optional)"
             android:inputType="phone"
             android:padding="12dp"
             android:background="@drawable/search_view_bg"
