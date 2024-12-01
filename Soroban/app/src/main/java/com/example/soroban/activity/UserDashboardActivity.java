@@ -25,7 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 //import androidx.navigation.ui.AppBarConfiguration;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.soroban.EventDetailsActivity;
+import com.example.soroban.activity.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
