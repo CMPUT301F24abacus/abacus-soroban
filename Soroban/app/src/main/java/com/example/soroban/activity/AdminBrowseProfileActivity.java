@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -159,6 +160,19 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
             }
 
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(AdminBrowseProfileActivity.this, AdminDashboardActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("appUser",appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
 
     }
 
