@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerListener;
@@ -132,6 +134,19 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             }
         });
         unregisterButton.setOnClickListener(v -> handleUnregister());
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(EventDetailsActivity.this, UserDashboardActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("appUser",appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     /**
