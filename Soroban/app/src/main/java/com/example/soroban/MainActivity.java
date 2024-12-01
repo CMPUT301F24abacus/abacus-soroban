@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.soroban.activity.CreateAccountActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private String deviceId;
     private FirebaseFirestore db;
     private ProgressBar progressBar;
+    private User appUser;
+    private FireBaseController firebasecontroller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,46 +33,44 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         db = FirebaseFirestore.getInstance();
+        firebasecontroller = new FireBaseController(this);
 
         // Get the device ID
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d(TAG, "Device ID: " + deviceId);
+        appUser = new User(deviceId);
+        progressBar.setVisibility(View.VISIBLE);
+        firebasecontroller.initialize(progressBar, appUser);
 
         // Check if user profile exists and is complete
-        checkUserProfile();
-    }
+        db.collection("users").document(deviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        // Document exists, check if profile fields are complete
+                        String firstName = document.getString("firstName");
+                        String lastName = document.getString("lastName");
+                        String email = document.getString("email");
 
-    private void checkUserProfile() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        db.collection("users").document(deviceId).get().addOnCompleteListener(task -> {
-            progressBar.setVisibility(ProgressBar.GONE);
-
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    // Document exists, check if profile fields are complete
-                    String firstName = document.getString("firstName");
-                    String lastName = document.getString("lastName");
-                    String email = document.getString("email");
-
-                    if (firstName != null && lastName != null && email != null) {
-                        // Profile is complete, redirect to UserDashboardActivity
-                        Log.d(TAG, "User profile is complete. Redirecting to UserDashboardActivity.");
-                        User appUser = document.toObject(User.class);
-                        redirectToDashboard(appUser);
+                        if (firstName != null && lastName != null && email != null) {
+                            // Profile is complete, redirect to UserDashboardActivity
+                            Log.d(TAG, "User profile is complete. Redirecting to UserDashboardActivity.");
+                            redirectToDashboard(appUser);
+                        } else {
+                            // Profile is incomplete, redirect to CreateAccountActivity
+                            Log.d(TAG, "User profile is incomplete. Redirecting to CreateAccountActivity.");
+                            redirectToCreateAccount();
+                        }
                     } else {
-                        // Profile is incomplete, redirect to CreateAccountActivity
-                        Log.d(TAG, "User profile is incomplete. Redirecting to CreateAccountActivity.");
+                        // Document does not exist, redirect to CreateAccountActivity
+                        Log.d(TAG, "User document does not exist. Redirecting to CreateAccountActivity.");
                         redirectToCreateAccount();
                     }
                 } else {
-                    // Document does not exist, redirect to CreateAccountActivity
-                    Log.d(TAG, "User document does not exist. Redirecting to CreateAccountActivity.");
-                    redirectToCreateAccount();
+                    Log.e(TAG, "Error fetching user profile", task.getException());
                 }
-            } else {
-                Log.e(TAG, "Error fetching user profile", task.getException());
             }
         });
     }
@@ -76,14 +79,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, UserDashboardActivity.class);
         intent.putExtra("appUser", user);
         startActivity(intent);
-        finish();
     }
 
     private void redirectToCreateAccount() {
         Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
         intent.putExtra("deviceId", deviceId);
         startActivity(intent);
-        finish();
     }
 }
 

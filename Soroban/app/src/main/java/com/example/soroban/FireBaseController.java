@@ -69,12 +69,9 @@ public class FireBaseController implements Serializable {
      * @Author: Matthieu Larochelle, Kevin Li
      * @Version: 1.0
      * @param progressBar: Progress bar which will be made invisible upon data retrieval.
-     * @param userBtn: Button to user dashboard which will be made visible upon data retrieval.
-     * @param organizerBtn: Button to organizer dashboard which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
-     * @param adminDashboard: Button to admin dashboard which will be made visible if user's an admin.
      */
-    public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
+    public void initialize(ProgressBar progressBar, User user){
         DocumentReference docRef = userRf.document(user.getDeviceId());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
@@ -94,9 +91,6 @@ public class FireBaseController implements Serializable {
                         // remove the if statement later, this is just so preexisting accounts without adminCheck will run
                         if (userData.get("adminCheck") != null) {
                             user.setAdminCheck((Boolean) userData.get("adminCheck"));
-                            if (user.getAdminCheck()) {
-                                adminDashboard.setVisibility(View.VISIBLE);
-                            }
                         }
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
@@ -112,8 +106,6 @@ public class FireBaseController implements Serializable {
                         createUserDb(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    userBtn.setVisibility(View.VISIBLE);
-                    organizerBtn.setVisibility(View.VISIBLE);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
