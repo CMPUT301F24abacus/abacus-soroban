@@ -1466,4 +1466,19 @@ public class FireBaseController implements Serializable {
                 });
     }
 
+    public void checkIfUserExists(String deviceId, ProgressBar progressBar, OnCompleteListener<DocumentSnapshot> listener) {
+        if (progressBar != null) {
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+        }
+
+        userRf.document(deviceId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(ProgressBar.GONE);
+                    }
+                    listener.onComplete(task);
+                })
+                .addOnFailureListener(e -> Log.e("FireBaseController", "Error checking user existence", e));
+    }
 }

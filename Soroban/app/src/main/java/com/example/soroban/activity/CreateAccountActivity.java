@@ -3,6 +3,7 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -12,11 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
-import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
+    private static final String TAG = "CreateAccountActivity"; // For logging
     private EditText etFirstName, etLastName, etEmail, etPhoneNumber;
     private Button btnCreateAccount;
     private ProgressBar progressBar;
@@ -42,9 +44,46 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // Get the device ID passed from MainActivity
         deviceId = getIntent().getStringExtra("deviceId");
+        if (deviceId == null) {
+            Log.e(TAG, "Device ID is null. Cannot proceed.");
+            Toast.makeText(this, "Error: Device ID is null.", Toast.LENGTH_SHORT).show();
+            finish(); // End the activity if device ID is missing
+            return;
+        }
+        Log.d(TAG, "Device ID: " + deviceId);
 
         // Set button click listener
-        btnCreateAccount.setOnClickListener(v -> createAccount());
+        btnCreateAccount.setOnClickListener(v -> {
+            try {
+                checkIfUserExistsAndCreate();
+            } catch (Exception e) {
+                Log.e(TAG, "Error on create account button click", e);
+                Toast.makeText(this, "Unexpected error occurred.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Checks if a user already exists in Firebase and proceeds accordingly.
+     */
+    private void checkIfUserExistsAndCreate() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        firebaseController.checkIfUserExists(deviceId, progressBar, task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    Log.d(TAG, "User already exists in Firestore.");
+                    User existingUser = document.toObject(User.class);
+                    redirectToDashboard(existingUser);
+                } else {
+                    createAccount();
+                }
+            } else {
+                Log.e(TAG, "Error checking user in Firestore", task.getException());
+                Toast.makeText(CreateAccountActivity.this, "Error checking user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -57,46 +96,68 @@ public class CreateAccountActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String phoneNumber = etPhoneNumber.getText().toString().trim();
 
+        Log.d(TAG, "Creating account with details - First Name: " + firstName + ", Last Name: " + lastName +
+                ", Email: " + email + ", Phone Number: " + (TextUtils.isEmpty(phoneNumber) ? "Not Provided" : phoneNumber));
+
         // Validate inputs
         if (TextUtils.isEmpty(firstName)) {
             etFirstName.setError("First name is required");
             etFirstName.requestFocus();
+            progressBar.setVisibility(ProgressBar.GONE);
             return;
         }
 
         if (TextUtils.isEmpty(lastName)) {
             etLastName.setError("Last name is required");
             etLastName.requestFocus();
+            progressBar.setVisibility(ProgressBar.GONE);
             return;
         }
 
         if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.setError("Enter a valid email address");
             etEmail.requestFocus();
+            progressBar.setVisibility(ProgressBar.GONE);
             return;
         }
+        try {
+            // Create User object
+            User newUser;
+            if (TextUtils.isEmpty(phoneNumber)) {
+                // If phone number is not provided
+                newUser = new User(deviceId, firstName, lastName, email, 0); // Use 0 or a default value for phoneNumber
+            } else {
+                // If phone number is provided
+                newUser = new User(deviceId, firstName, lastName, email, Long.parseLong(phoneNumber));
+            }
 
-        if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10) {
-            etPhoneNumber.setError("Enter a valid phone number");
-            etPhoneNumber.requestFocus();
+            // Save user to Firebase using FireBaseController
+            firebaseController.createUserDb(newUser);
+            progressBar.setVisibility(ProgressBar.GONE);
+            Log.d(TAG, "Account created successfully. Redirecting to dashboard.");
+            Toast.makeText(CreateAccountActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+            redirectToDashboard(newUser);
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating user account", e);
+            progressBar.setVisibility(ProgressBar.GONE);
+            Toast.makeText(this, "Failed to create account. Please try again.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Redirects the user to the dashboard activity.
+     *
+     * @param user The user object to pass to the dashboard.
+     */
+    private void redirectToDashboard(User user) {
+        if (user == null) {
+            Log.e(TAG, "User object is null. Cannot redirect to dashboard.");
+            Toast.makeText(this, "Error: User data is invalid.", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // Show progress bar
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        // Create User object
-        User newUser = new User(deviceId);
-
-
-        // Save user to Firebase using FireBaseController
-        firebaseController.createUserDb(newUser);
-
-        // Redirect to User Dashboard
-        Toast.makeText(CreateAccountActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(CreateAccountActivity.this, UserDashboardActivity.class);
-        intent.putExtra("appUser", newUser);
+        intent.putExtra("appUser", user);
         startActivity(intent);
-        finish(); // Close CreateAccountActivity
+        finish();
     }
 }
