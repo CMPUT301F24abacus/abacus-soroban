@@ -137,7 +137,7 @@ public class FireBaseController implements Serializable {
         data.put("phoneNumber", user.getPhoneNumber());
         data.put("facility", user.getFacility());
         data.put("username", user.getDeviceId());
-        data.put("adminCheck", false);
+        data.put("adminCheck", user.getAdminCheck());
         userRf
                 .document(user.getDeviceId())
                 .set(data)

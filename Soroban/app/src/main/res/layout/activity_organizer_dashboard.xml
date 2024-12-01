@@ -32,20 +32,34 @@
 
             <TextView
                 android:id="@+id/facilityNameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="My Facility"
-                android:textColor="@color/background_light"
+                android:textAlignment="viewStart"
+                android:textColor="@color/color_registration_open"
                 android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8sp"
+                android:text="Your Events"
+                android:textAlignment="center"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <ListView
                 android:id="@+id/eventsListView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="408dp"
+                android:layout_marginTop="8sp"
                 android:layout_weight="1"
-                android:background="#BBC3F2"
+                android:background="#9eb3c2"
+                android:cacheColorHint="#000000"
+                android:textColor="#000000"
                 android:padding="8dp" />
 
             <LinearLayout
@@ -62,7 +76,9 @@
                     android:layout_marginRight="8dp"
                     android:backgroundTint="@color/colorAccent"
                     android:text="Manage Facility"
-                    android:textSize="16sp" />
+                    android:background="@drawable/search_view_bg"
+                    android:textSize="16sp"
+                    app:cornerRadius="8dp" />
 
                 <Button
                     android:id="@+id/createEventButton"
@@ -71,7 +87,9 @@
                     android:layout_marginLeft="8dp"
                     android:backgroundTint="@color/colorAccent"
                     android:text="Create Event"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:background="@drawable/search_view_bg"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
 
 
