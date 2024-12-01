@@ -72,27 +72,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_notify_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="#A1CDA8"
-            android:text="Notify Me" />
-
-        <Button
             android:id="@+id/btn_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#A1CDA8"
-            android:text="Register"/>
-
+            android:text="Join Waitlist"/>
 
         <Button
             android:id="@+id/btn_unregister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#FFCDD2"
-            android:text="Unregister"
+            android:text="Leave Waitlist"
             android:textColor="#000000"
             android:visibility="gone" />
 
