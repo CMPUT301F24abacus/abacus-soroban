@@ -1,138 +1,228 @@
 package com.example.soroban;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.soroban.activity.AdminDashboardActivity;
-import com.example.soroban.activity.CreateFacilityActivity;
-import com.example.soroban.activity.OrganizerDashboardActivity;
+import com.example.soroban.activity.CreateAccountActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
-import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
-    private User appUser;
-    private FireBaseController firebaseController;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+    private static final String TAG = "MainActivity";
+    private String deviceId;
+    private FirebaseFirestore db;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar setup
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        progressBar = findViewById(R.id.progressBar);
+        db = FirebaseFirestore.getInstance();
 
-        // Drawer setup
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        // Get the device ID
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d(TAG, "Device ID: " + deviceId);
 
-        // Firebase and UI initialization
-        firebaseController = new FireBaseController(this);
-        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
-        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
-
-        // Handle passed arguments
-        Bundle args = getIntent().getExtras();
-        if (args != null) {
-            appUser = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    ? args.getSerializable("appUser", User.class)
-                    : (User) args.getSerializable("appUser");
-        }
-
-        if (appUser == null) {
-            appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-            firebaseController.initialize(progressBar, btnOpenDashboard, btnOpenOrganizerDashboard, appUser, btnOpenAdminDashboard);
-        }
-
-        // Notification permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            askNotificationPermission();
-        }
-
-        // Adjust layout for system bars
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
-        // Navigation drawer item selection
-        navigationView.setNavigationItemSelectedListener(this::handleNavigation);
-
-        // Button click listeners
-        btnOpenDashboard.setOnClickListener(v -> openActivity(UserDashboardActivity.class));
-        btnOpenOrganizerDashboard.setOnClickListener(v -> openActivity(OrganizerDashboardActivity.class));
-        btnOpenAdminDashboard.setOnClickListener(v -> openActivity(AdminDashboardActivity.class));
+        // Check if user profile exists and is complete
+        checkUserProfile();
     }
 
-    /**
-     * Handle navigation drawer item clicks.
-     *
-     * @param item the selected menu item
-     */
-    private boolean handleNavigation(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_user_dashboard) {
-            openActivity(UserDashboardActivity.class);
-        } else if (id == R.id.nav_organizer_dashboard) {
-            openActivity(OrganizerDashboardActivity.class);
-        } else if (id == R.id.nav_admin_dashboard) {
-            openActivity(AdminDashboardActivity.class);
-        }
-        drawerLayout.closeDrawers();
-        return true;
-    }
+    private void checkUserProfile() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
 
-    /**
-     * Open the specified activity and pass the current user object.
-     *
-     * @param activityClass the target activity class
-     */
-    private void openActivity(Class<?> activityClass) {
-        Intent intent = new Intent(MainActivity.this, activityClass);
-        intent.putExtra("appUser", appUser);
-        startActivity(intent);
-    }
+        db.collection("users").document(deviceId).get().addOnCompleteListener(task -> {
+            progressBar.setVisibility(ProgressBar.GONE);
 
-    /**
-     * Ask for notification permissions if not already granted.
-     */
-    private void askNotificationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED) {
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    Log.d("MainActivity", "Notification permission granted");
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    // Document exists, check if profile fields are complete
+                    String firstName = document.getString("firstName");
+                    String lastName = document.getString("lastName");
+                    String email = document.getString("email");
+
+                    if (firstName != null && lastName != null && email != null) {
+                        // Profile is complete, redirect to UserDashboardActivity
+                        Log.d(TAG, "User profile is complete. Redirecting to UserDashboardActivity.");
+                        User appUser = document.toObject(User.class);
+                        redirectToDashboard(appUser);
+                    } else {
+                        // Profile is incomplete, redirect to CreateAccountActivity
+                        Log.d(TAG, "User profile is incomplete. Redirecting to CreateAccountActivity.");
+                        redirectToCreateAccount();
+                    }
                 } else {
-                    Log.d("MainActivity", "Notification permission denied");
+                    // Document does not exist, redirect to CreateAccountActivity
+                    Log.d(TAG, "User document does not exist. Redirecting to CreateAccountActivity.");
+                    redirectToCreateAccount();
                 }
-            }).launch(Manifest.permission.POST_NOTIFICATIONS);
-        }
+            } else {
+                Log.e(TAG, "Error fetching user profile", task.getException());
+            }
+        });
+    }
+
+    private void redirectToDashboard(User user) {
+        Intent intent = new Intent(MainActivity.this, UserDashboardActivity.class);
+        intent.putExtra("appUser", user);
+        startActivity(intent);
+        finish();
+    }
+
+    private void redirectToCreateAccount() {
+        Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
+        intent.putExtra("deviceId", deviceId);
+        startActivity(intent);
+        finish();
     }
 }
+
+
+//package com.example.soroban;
+//
+//import android.Manifest;
+//import android.content.Intent;
+//import android.content.pm.PackageManager;
+//import android.os.Build;
+//import android.os.Bundle;
+//import android.provider.Settings;
+//import android.util.Log;
+//import android.view.MenuItem;
+//import android.view.View;
+//import android.widget.Button;
+//import android.widget.ProgressBar;
+//
+//import androidx.activity.result.contract.ActivityResultContracts;
+//import androidx.annotation.NonNull;
+//import androidx.appcompat.app.ActionBarDrawerToggle;
+//import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.widget.Toolbar;
+//import androidx.core.content.ContextCompat;
+//import androidx.core.view.WindowCompat;
+//import androidx.drawerlayout.widget.DrawerLayout;
+//
+//import com.example.soroban.activity.AdminDashboardActivity;
+//import com.example.soroban.activity.CreateFacilityActivity;
+//import com.example.soroban.activity.OrganizerDashboardActivity;
+//import com.example.soroban.activity.UserDashboardActivity;
+//import com.example.soroban.model.User;
+//import com.google.android.material.navigation.NavigationView;
+//
+//public class MainActivity extends AppCompatActivity {
+//    private User appUser;
+//    private FireBaseController firebaseController;
+//    private DrawerLayout drawerLayout;
+//    private NavigationView navigationView;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        // Toolbar setup
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//
+//        // Drawer setup
+//        drawerLayout = findViewById(R.id.drawer_layout);
+//        navigationView = findViewById(R.id.navigation_view);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+//        drawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        // Firebase and UI initialization
+//        firebaseController = new FireBaseController(this);
+//        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
+//        ProgressBar progressBar = findViewById(R.id.progressBar);
+//        Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
+//        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
+//
+//        // Handle passed arguments
+//        Bundle args = getIntent().getExtras();
+//        if (args != null) {
+//            appUser = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+//                    ? args.getSerializable("appUser", User.class)
+//                    : (User) args.getSerializable("appUser");
+//        }
+//
+//        if (appUser == null) {
+//            appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+//            firebaseController.initialize(progressBar, btnOpenDashboard, btnOpenOrganizerDashboard, appUser, btnOpenAdminDashboard);
+//        }
+//
+//        // Notification permission
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            askNotificationPermission();
+//        }
+//
+//        // Adjust layout for system bars
+//        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+//
+//        // Navigation drawer item selection
+//        navigationView.setNavigationItemSelectedListener(this::handleNavigation);
+//
+//        // Button click listeners
+//        btnOpenDashboard.setOnClickListener(v -> openActivity(UserDashboardActivity.class));
+//        btnOpenOrganizerDashboard.setOnClickListener(v -> openActivity(OrganizerDashboardActivity.class));
+//        btnOpenAdminDashboard.setOnClickListener(v -> openActivity(AdminDashboardActivity.class));
+//    }
+//
+//    /**
+//     * Handle navigation drawer item clicks.
+//     *
+//     * @param item the selected menu item
+//     */
+//    private boolean handleNavigation(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.nav_user_dashboard) {
+//            openActivity(UserDashboardActivity.class);
+//        } else if (id == R.id.nav_organizer_dashboard) {
+//            openActivity(OrganizerDashboardActivity.class);
+//        } else if (id == R.id.nav_admin_dashboard) {
+//            openActivity(AdminDashboardActivity.class);
+//        }
+//        drawerLayout.closeDrawers();
+//        return true;
+//    }
+//
+//    /**
+//     * Open the specified activity and pass the current user object.
+//     *
+//     * @param activityClass the target activity class
+//     */
+//    private void openActivity(Class<?> activityClass) {
+//        Intent intent = new Intent(MainActivity.this, activityClass);
+//        intent.putExtra("appUser", appUser);
+//        startActivity(intent);
+//    }
+//
+//    /**
+//     * Ask for notification permissions if not already granted.
+//     */
+//    private void askNotificationPermission() {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+//                if (isGranted) {
+//                    Log.d("MainActivity", "Notification permission granted");
+//                } else {
+//                    Log.d("MainActivity", "Notification permission denied");
+//                }
+//            }).launch(Manifest.permission.POST_NOTIFICATIONS);
+//        }
+//    }
+//}
 
 // * The MainActivity class serves as the entry point for the application, initializing the user
 // * and navigating to appropriate dashboards based on user actions.
