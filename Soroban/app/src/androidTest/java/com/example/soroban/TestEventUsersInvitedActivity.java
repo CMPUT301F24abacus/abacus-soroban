@@ -58,7 +58,7 @@ public class TestEventUsersInvitedActivity {
     }
 
     @Test
-    public void testConfirmedDisplayed() {
+    public void testInvitedDisplayed() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
         appUser.addHostedEvent(mockEvent);
@@ -101,6 +101,8 @@ public class TestEventUsersInvitedActivity {
         onView(withId(R.id.organizerMessageEdit)).check(matches(isDisplayed()));
 
         onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.buttonSendMessageToUsers)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -133,26 +135,12 @@ public class TestEventUsersInvitedActivity {
         mockEvent.addInvited(mockEntrant);
 
         User mockEntrant2 = new User("mockEntrantId2");
-        mockEntrant.setFirstName("Kirk");
+        mockEntrant2.setFirstName("Kirk");
         mockEvent.addToWaitingEntrants(mockEntrant2);
         ActivityScenario<EventUsersInvitedActivity> scenario = ActivityScenario.launch(createEventUsersInvitedActivityIntent(appUser, mockEvent));
 
         onView(withId(R.id.buttonWithdrawUsersInvite)).check(matches(isDisplayed()));
-
-        UserList mockList = mockEvent.getInvitedEntrants();
-        scenario.onActivity( activity -> {
-            UserArrayAdapter mockUserAdapter = new UserArrayAdapter(activity, mockList);
-            ListView listView = activity.findViewById(R.id.usersInvitedView);
-            listView.setAdapter(mockUserAdapter);
-        });
-
         onView(withId(R.id.buttonWithdrawUsersInvite)).perform(click());
-
-        onView(withId(R.id.usersInvitedView)).check(matches(isDisplayed()));
-        onData(is(instanceOf(User.class))).inAdapterView(withId(R.id.usersInvitedView))
-                .atPosition(0)
-                .onChildView(withId(R.id.userUsername))
-                .check(matches(not(withText(mockEntrant.getFirstName()))));
 
         onView(withId(R.id.usersInvitedView)).check(matches(isDisplayed()));
         onData(is(instanceOf(User.class))).inAdapterView(withId(R.id.usersInvitedView))

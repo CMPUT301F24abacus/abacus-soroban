@@ -97,8 +97,8 @@ public class TestEventUsersConfirmedActivity {
         onView(withId(R.id.buttonSendMessageToUsers)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSendMessageToUsers)).perform(click());
 
-        onView(withId(R.id.organizerMessageEdit)).perform(ViewActions.typeText("MockEvent Message"));
         onView(withId(R.id.organizerMessageEdit)).check(matches(isDisplayed()));
+        onView(withId(R.id.organizerMessageEdit)).perform(ViewActions.typeText("MockEvent Message"));
 
         onView(withId(android.R.id.button1)).perform(click());
     }
@@ -116,7 +116,6 @@ public class TestEventUsersConfirmedActivity {
 
         onView(withId(R.id.buttonSendMessageToUsers)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSendMessageToUsers)).perform(click());
-        onView(withId(R.id.organizerMessageEdit)).check(matches(isDisplayed()));
         onView(withId(R.id.organizerMessageEdit)).check(matches(isDisplayed()));
 
         onView(withId(android.R.id.button2)).perform(click());

@@ -12,7 +12,7 @@ import java.util.Objects;
  * @see Event
  * @see EventList
  */
-public class Facility {
+public class Facility implements Serializable {
     private final User owner;
     private String name;
     private EventList hostedEvents;
