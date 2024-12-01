@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/edit_facility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:paddingEnd="16dp"
+        android:text="Edit Facility"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="122dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:paddingBottom="16dp"
+        app:srcCompat="@drawable/ic_factory" />
 
     <EditText
         android:id="@+id/editTextFacilityName"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="48dp"
-        android:hint="Facility name"
-        android:textColorHint="@color/white"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/search_view_bg"
+        android:hint="    Facility name"
+        android:textColor="#000000"
+        android:textColorHint="@color/dark_gray"
         android:textSize="18sp" />
 
     <EditText
         android:id="@+id/editTextFacilityDetails"
-        android:layout_width="match_parent"
+        android:layout_width="396dp"
         android:layout_height="48dp"
-        android:hint="Facility information"
-        android:textColorHint="@color/white"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/search_view_bg"
+        android:hint="    Facility information"
+        android:textColor="#000000"
+        android:textColorHint="@color/dark_gray"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonCreateFacility"
-        android:layout_width="wrap_content"
+        android:layout_width="391dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/search_view_bg"
         android:text="Confirm Changes"
-        android:layout_gravity="center"/>
+        app:cornerRadius="8dp" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="392dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#AD0707"
+        android:foregroundTint="#D10C0C"
+        android:text="Cancel"
+        app:cornerRadius="8dp" />
+
 </LinearLayout>
