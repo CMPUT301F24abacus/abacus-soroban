@@ -29,7 +29,32 @@ public class User implements Serializable {
     private EventList invitedEvents;
     private Facility facility;
     private GeoPoint location;
-    private Boolean adminCheck;
+    private Boolean adminCheck = false;
+
+    // Required no-argument constructor for Firestore
+    public User() {
+    }
+
+    /**
+     * Constructor method for User with all fields to create account.
+     *
+     * @param deviceId the unique identifier for the user.
+     * @param firstName the user's first name.
+     * @param lastName the user's last name.
+     * @param email the user's email address.
+     * @param phoneNumber the user's phone number.
+     */
+    public User(String deviceId, String firstName, String lastName, String email, long phoneNumber) {
+        this.deviceId = deviceId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = 0; // optional phone number
+        this.waitList = new EventList();
+        this.registeredEvents = new EventList();
+        this.hostedEvents = new EventList();
+        this.invitedEvents = new EventList();
+    }
 
     /**
      * Constructor method for User.
@@ -210,7 +235,7 @@ public class User implements Serializable {
      * @Version: 1.0
      */
     public Boolean getAdminCheck() {
-        return adminCheck;
+        return adminCheck != null ? adminCheck : false;
     }
 
     /**
