@@ -58,7 +58,7 @@ public class AdminMessageFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = getLayoutInflater().inflate(R.layout.organizer_event_send_message, null);z
+        View view = getLayoutInflater().inflate(R.layout.organizer_event_send_message, null);
 
         Bundle args = getArguments();
 

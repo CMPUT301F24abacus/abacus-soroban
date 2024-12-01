@@ -105,7 +105,6 @@ public class TestCreateEventActivity {
 
         intending(expectedIntent).respondWith(result);
 
-
         //Click select button
         onView(withId(R.id.buttonUploadPoster)).perform(click());
         intended(expectedIntent);
@@ -117,10 +116,5 @@ public class TestCreateEventActivity {
                 .atPosition(0)
                 .onChildView(withId(R.id.tv_event_name))
                 .check(matches((withText("MockEventName"))));
-
-        onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.eventsListView))
-                .atPosition(0)
-                .perform(click());
-
     }
 }
