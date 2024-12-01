@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,10 +16,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.activity.UserDashboardActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
-import com.example.soroban.fragment.ConfirmRequireLocationFragment;
-import com.example.soroban.fragment.DatePickerListener;
-import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -48,6 +50,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private ImageView eventQRCode;
     private TextView eventDrawDate;
     private TextView eventDate;
+    private ImageView eventPoster;
     private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
@@ -88,15 +91,15 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
-        notifyMeButton = findViewById(R.id.btn_notify_me);
+        eventPoster = findViewById(R.id.event_image);
         registerButton = findViewById(R.id.btn_register);
         unregisterButton = findViewById(R.id.btn_unregister);
 
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
-        eventDetails.setText(selectedEvent.getEventDetails());
-        eventDate.setText(selectedEvent.getEventDate().toString());
-        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+        eventDetails.setText("Event Details: " + selectedEvent.getEventDetails());
+        eventDate.setText("Event Date: " + selectedEvent.getEventDate().toString());
+        eventDrawDate.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
 
         // Set up QR code image
         eventQRCode.setOnClickListener(v -> {
@@ -114,10 +117,6 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             });
         });
 
-        // Set button click listeners
-        notifyMeButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
-        });
 
         // Set up registration status
         isRegistered = getIntent().getBooleanExtra("isRegistered", false);

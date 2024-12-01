@@ -54,7 +54,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         // Initialize/Retrieve appUser and selectedFacility from the passed arguments
         if (args != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                selectedFacility = args.getSerializable("selectedFacility", Facility.class);
+                //selectedFacility = args.getSerializable("selectedFacility", Facility.class);
                 appUser = args.getSerializable("appUser", User.class);
             } else {
                 appUser = (User) args.getSerializable("appUser");

@@ -223,8 +223,8 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
                 Intent intent = new Intent(AdminBrowseFacilityActivity.this, AdminViewFacilityActivity.class);
                 Facility selectedFacility = browseFacilityList.get(position);
                 Bundle newArgs = new Bundle();
-                newArgs.putSerializable("selectedFacility", selectedFacility);
-                newArgs.putSerializable("appUser", appUser);
+                //newArgs.putSerializable("selectedFacility", selectedFacility);
+                //newArgs.putSerializable("appUser", appUser);
                 intent.putExtras(newArgs);
                 startActivity(intent);
             });
