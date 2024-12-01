@@ -3,6 +3,7 @@ package com.example.soroban.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,7 +25,7 @@ public class FacilityDisplayActivity extends AppCompatActivity {
     private User appUser;
     private TextView facilityNameTextView;
     private TextView facilityDetailsTextView;
-    private TextView editFacilityButton;
+    private Button editFacilityButton;
 
     private static final int EDIT_FACILITY_REQUEST_CODE = 2;
 
@@ -62,7 +63,7 @@ public class FacilityDisplayActivity extends AppCompatActivity {
         // Initialize views with correct IDs from the XML layout
         facilityNameTextView = findViewById(R.id.tv_facility_name);
         facilityDetailsTextView = findViewById(R.id.tv_facility_details);
-        editFacilityButton = findViewById(R.id.tv_edit_facility);
+        editFacilityButton = findViewById(R.id.edit_facility_button);
 
         // Get facility data from User
         Facility userFacility = appUser.getFacility();

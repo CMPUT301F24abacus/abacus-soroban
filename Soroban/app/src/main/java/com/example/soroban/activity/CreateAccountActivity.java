@@ -86,7 +86,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
         // Create User object
-        User newUser = new User(deviceId, firstName, lastName, email, Long.parseLong(phoneNumber));
+        User newUser = new User(deviceId);
+
 
         // Save user to Firebase using FireBaseController
         firebaseController.createUserDb(newUser);
