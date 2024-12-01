@@ -1,5 +1,3 @@
-///**
-
 package com.example.soroban;
 
 import android.Manifest;
@@ -135,18 +133,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // * The MainActivity class serves as the entry point for the application, initializing the user
 // * and navigating to appropriate dashboards based on user actions.
