@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (appUser == null) {
             appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            appUser.setAdminCheck(false);
             firebaseController.initialize(progressBar, btnOpenDashboard, btnOpenOrganizerDashboard, appUser, btnOpenAdminDashboard);
         }
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
@@ -226,6 +228,19 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
 
         setupNavMenu(navigationView, appUser);
         updateNavigationDrawer();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(OrganizerDashboardActivity.this, UserDashboardActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("appUser",appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void setupNavMenu(NavigationView navigationView, User appUser) {

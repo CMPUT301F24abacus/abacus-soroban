@@ -1,5 +1,6 @@
 package com.example.soroban.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,16 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.soroban.activity.UserDashboardActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
+import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -114,6 +120,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             });
         });
 
+        // Set button click listeners
+        notifyMeButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
+        });
 
         // Set up registration status
         isRegistered = getIntent().getBooleanExtra("isRegistered", false);
@@ -130,6 +140,19 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             }
         });
         unregisterButton.setOnClickListener(v -> handleUnregister());
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(EventDetailsActivity.this, UserDashboardActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("appUser",appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     /**

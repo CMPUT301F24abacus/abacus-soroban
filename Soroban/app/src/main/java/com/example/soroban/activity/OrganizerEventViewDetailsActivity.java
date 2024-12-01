@@ -25,6 +25,7 @@ import com.example.soroban.activity.EventEntrantsGeolocationActivity;
 import com.example.soroban.activity.EventEntrantsListActivity;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -44,6 +45,7 @@ import java.util.Locale;
  * @see Glide
  */
 public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
+    private static final int EDIT_EVENT_REQUEST_CODE = 1;
     private Event selectedEvent;
     private User appUser;
     private ImageView viewQRcode;
@@ -91,8 +93,6 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
-
-
         // Assign button variables to views
         viewQRcode = findViewById(R.id.buttonScanQRCode);
         eventGeolocation = findViewById(R.id.buttonEventGeolocation);
@@ -119,16 +119,33 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         // geoReq.setActivated();
         // autoReplace.setActivated();
 
-        if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
-            Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
-            Glide.with(this)
-                    .load(selectedEvent.getPosterUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(eventPoster);
 
-        } else {
-            eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
-        }
+        //Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
+        FireBaseController fireBaseController = new FireBaseController(this);
+        fireBaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Check if the fetched posterUrl is null or empty
+                    if ("no poster".equals(posterUrl)) {
+                        // Set default image if no poster URL is available
+                        eventPoster.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventPoster);
+                    }
+                },
+                error -> {
+                    // Handle errors and set a default image
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventPoster.setImageResource(R.drawable.ic_event_image);
+                });
+
 
         // Set up listeners for applicable buttons
         viewQRcode.setOnClickListener(v -> {
@@ -184,7 +201,13 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         editEvent.setOnClickListener(v -> {
             Intent intent = new Intent(OrganizerEventViewDetailsActivity.this, OrganizerEventEditDetailsActivity.class);
+            intent.putExtra("selectedEvent", selectedEvent);
+            intent.putExtra("appUser", appUser);
             startActivity(intent);
         });
     }
+
+
+
+
 }

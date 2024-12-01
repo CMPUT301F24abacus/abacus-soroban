@@ -30,6 +30,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
     private Facility thisFacility;
     private EditText editTextFacilityName, editTextFacilityDetails;
     private Button buttonSaveChanges;
+    private Button cancelButton;
 
     /**
      * Called when the activity is first created.
@@ -68,6 +69,7 @@ public class ManageFacilityActivity extends AppCompatActivity {
         editTextFacilityName = findViewById(R.id.editTextFacilityName);
         editTextFacilityDetails = findViewById(R.id.editTextFacilityDetails);
         buttonSaveChanges = findViewById(R.id.buttonCreateFacility);
+        cancelButton = findViewById(R.id.cancel_button);
 
         // Retrieve the facility data from the facility
         thisFacility = appUser.getFacility();
@@ -75,6 +77,16 @@ public class ManageFacilityActivity extends AppCompatActivity {
         // Set the facility data in the EditText fields
         editTextFacilityName.setText(thisFacility.getName());
         editTextFacilityDetails.setText(thisFacility.getDetails());
+
+        // Set up the button click listener to cancel changes
+        cancelButton.setOnClickListener(v -> {
+            // Show Toast message
+            Toast.makeText(ManageFacilityActivity.this, "Changes not saved", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(ManageFacilityActivity.this, OrganizerDashboardActivity.class);
+            intent.putExtra("appUser", appUser);
+            startActivity(intent);
+        });
 
         // Set up the button click listener to save changes
         buttonSaveChanges.setOnClickListener(v -> {
@@ -95,6 +107,9 @@ public class ManageFacilityActivity extends AppCompatActivity {
 
             facilityController.updateFacility(updatedFacilityName, updatedFacilityDetails);
             fireBaseController.facilityUpdate(appUser.getFacility());
+
+            // Show Toast message
+            Toast.makeText(ManageFacilityActivity.this, "Changes saved", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(ManageFacilityActivity.this, OrganizerDashboardActivity.class);
             intent.putExtra("appUser", appUser);
