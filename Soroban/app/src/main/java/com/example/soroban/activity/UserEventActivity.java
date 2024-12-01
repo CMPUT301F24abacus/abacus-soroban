@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -84,7 +85,7 @@ public class UserEventActivity extends AppCompatActivity {
         firebaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
-        notifyButton = findViewById(R.id.btn_notify_me);
+        // notifyButton = findViewById(R.id.btn_notify_me);
         unregisterButton = findViewById(R.id.btn_register);
         eventDetailsTV = findViewById(R.id.event_details);
         eventNameTV = findViewById(R.id.event_name);
@@ -95,9 +96,11 @@ public class UserEventActivity extends AppCompatActivity {
 
         // Change the text
         if(Objects.equals(listType, "waitList")){
-            unregisterButton.setText("Leave wait list");
+            unregisterButton.setText("Leave Waitlist");
+            unregisterButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.notification_negative_background));
         }else if(Objects.equals(listType, "registeredEvents")){
             unregisterButton.setText("Unregister");
+            unregisterButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.notification_negative_background));
         }
         eventNameTV.setText(selectedEvent.getEventName());
         String eventDetails = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
