@@ -8,20 +8,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 
 import com.example.soroban.activity.OrganizerDashboardActivity;
-import com.example.soroban.model.Event;
-import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Date;
 
 @RunWith(JUnit4.class)
 public class TestManageFacilityActivity {
@@ -33,36 +31,47 @@ public class TestManageFacilityActivity {
     private static Intent createManageFacilityActivityIntent(User appUser) {
         appUser.createFacility();
         appUser.getFacility().setName("MockFacility");
+        appUser.getFacility().setDetails("Mock Facility Test Details");
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.example.soroban", "com.example.soroban.activity.ManageFacilityActivity");
-        intent.putExtra("appUser", appUser);
+        Bundle newArgs = new Bundle();
+        newArgs.putSerializable("appUser",appUser);
+        intent.putExtras(newArgs);
         return intent;
     }
 
-    // Facility.getName() invokes null object for some reason...
     @Test
     public void testManageFacilityActivityDisplayed() {
         User appUser = mockUser();
-
         ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createManageFacilityActivityIntent(appUser));
-        // Check if the button is displayed
+
+        // Check if the button and details are displayed
         onView(withId(R.id.buttonCreateFacility)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonCreateFacility)).check(matches(withText("Save Changes")));
+        onView(withId(R.id.buttonCreateFacility)).check(matches(withText("Confirm Changes")));
+        onView(withId(R.id.editTextFacilityName)).check(matches(withText(appUser.getFacility().getName())));
+        onView(withId(R.id.editTextFacilityDetails)).check(matches(withText(appUser.getFacility().getDetails().toString())));
     }
 
-    // Doesn't work for me, problem with firebase
     @Test
     public void testFacilityManage() {
         User appUser = mockUser();
-        appUser.createFacility();
         ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createManageFacilityActivityIntent(appUser));
-        // Check if the facility is changed
-        onView(withId(R.id.editTextFacilityName)).perform(ViewActions.typeText("MockFacilityName"));
 
+        // Perform facility changes
+        onView(withId(R.id.editTextFacilityName)).perform(ViewActions.clearText());
+        onView(withId(R.id.editTextFacilityName)).perform(ViewActions.typeText("New MockFacility"));
+        onView(withId(R.id.editTextFacilityDetails)).perform(ViewActions.clearText());
         onView(withId(R.id.editTextFacilityDetails)).perform(ViewActions.typeText("Read A Certain Magical Index"));
 
+        // Click to confirm facility changes
         onView(withId(R.id.buttonCreateFacility)).perform(click());
-        onView(withId(R.id.facilityNameTextView)).check(matches(withText("MockFacilityName")));
+
+        // Click to view facility changes
+        onView(withId(R.id.btn_go_to_facility)).perform(click());
+
+        //onView(withId(R))
+        onView(withId(R.id.tv_facility_name)).check(matches(withText("New MockFacility")));
+        onView(withId(R.id.tv_facility_details)).check(matches(withText("Read A Certain Magical Index")));
     }
 
 

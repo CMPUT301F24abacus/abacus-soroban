@@ -52,7 +52,6 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
         <activity android:name=".activity.QrCodeScanActivity" />
-        <activity android:name=".activity.ConfirmedEventsActivity" />
         <activity android:name=".activity.InvitationActivity" />
         <activity
             android:name=".activity.OrganizerDashboardActivity"
@@ -78,7 +77,8 @@
         <activity android:name=".activity.EventUsersConfirmedActivity" />
         <activity android:name=".activity.EventUsersCancelledActivity" />
         <activity android:name=".activity.EventUsersInvitedActivity" />
-        <activity android:name=".EventDetailsActivity" />
+        <activity android:name=".activity.EventDetailsActivity" />
+
     </application>
 
 </manifest>

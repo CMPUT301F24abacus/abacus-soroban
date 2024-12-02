@@ -72,19 +72,42 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
             }
         }
         // Assign button variables to views
-        eventTitle = findViewById(R.id.eventEditName);
-        eventDate = findViewById(R.id.eventEditDate);
-        eventDescription = findViewById(R.id.eventEditDescription);
+        //eventTitle = findViewById(R.id.eventEditName);
+        //eventDate = findViewById(R.id.eventEditDate);
+        //eventDescription = findViewById(R.id.eventEditDescription);
         eventPoster = findViewById(R.id.eventPosterImage);
         eventPosterUpload = findViewById(R.id.eventPosterUpload);
         eventPosterDelete = findViewById(R.id.eventPosterDelete);
-        eventSampleSize = findViewById(R.id.eventEditSampleSize);
+        //eventSampleSize = findViewById(R.id.eventEditSampleSize);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
         autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 
         buttonConfirm = findViewById(R.id.buttonConfirm);
         buttonCancel = findViewById(R.id.buttonCancel);
-
+        FireBaseController fireBaseController = new FireBaseController(this);
+        fireBaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Check if the fetched posterUrl is null or empty
+                    if ("no poster".equals(posterUrl)) {
+                        // Set default image if no poster URL is available
+                        eventPoster.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventPoster);
+                    }
+                },
+                error -> {
+                    // Handle errors and set a default image
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventPoster.setImageResource(R.drawable.ic_event_image);
+                });
 
         posterPickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -114,6 +137,12 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
 
         buttonConfirm.setOnClickListener(v -> {
             confirmChanges();
+        });
+
+        buttonCancel.setOnClickListener(v -> {
+
+            finish();
+
         });
 
 

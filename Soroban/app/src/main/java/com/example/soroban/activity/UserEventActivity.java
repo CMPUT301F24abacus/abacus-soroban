@@ -46,7 +46,7 @@ public class UserEventActivity extends AppCompatActivity {
     private Button unregisterButton;
     private ImageView eventPoster;
     private ImageView eventQR;
-    private FireBaseController firebaseController;
+    private FireBaseController fireBaseController;
     String listType;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class UserEventActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        firebaseController = new FireBaseController(this);
+        fireBaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
         // notifyButton = findViewById(R.id.btn_notify_me);
@@ -108,7 +108,7 @@ public class UserEventActivity extends AppCompatActivity {
         eventDateTV.setText("Event Date: " + selectedEvent.getEventDate().toString());
         drawDateTV.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
         // QR Code
-        firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+        fireBaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {
                 // Generate the QR code bitmap using the hash from firebase
                 Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
@@ -127,9 +127,6 @@ public class UserEventActivity extends AppCompatActivity {
         } else {
             eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
         }
-
-        // Initialize controllers to update User
-        FireBaseController fireBaseController = new FireBaseController(this);
 
         // Remove Event from User waitlist
         unregisterButton.setOnClickListener( v -> {

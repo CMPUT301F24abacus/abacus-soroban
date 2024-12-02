@@ -63,32 +63,79 @@ public class TestUserEventActivity {
         return intent;
     }
 
-    // Doesn't work, event is null for some reason
     @Test
-    public void testUserEventActivityDisplayed() {
+    public void testUserRegisteredEventActivityDisplayed() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
+        appUser.addRegisteredEvent(mockEvent);
         ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+
         // Check if the unregister button is displayed
         onView(withId(R.id.btn_register)).check(matches(withText("Unregister")));
     }
 
-    // WHAT IS GOING ON??!!!!
     @Test
-    public void testEventDetailsDisplayed() {
+    public void testRegisteredEventDetailsDisplayed() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
+        appUser.addRegisteredEvent(mockEvent);
         mockEvent.setEventDetails("Read A Certain Magical Index");
         ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+
         // Check if details are correctly displayed
         onView(withId(R.id.event_name)).check(matches(withText(mockEvent.getEventName())));
-        String eventDetails = "Event Date: " + mockEvent.getEventDate().toString() + "\nEvent Details: " + mockEvent.getEventDetails();
+        String eventDetails = "Event Details: " + mockEvent.getEventDetails();
         onView(withId(R.id.event_details)).check(matches(withText(eventDetails)));
+        String eventDate = "Event Date: " + mockEvent.getEventDate();
+        onView(withId(R.id.event_date)).check(matches(withText(eventDate)));
+        String drawDate = "Draw Date: " + mockEvent.getDrawDate();
+        onView(withId(R.id.event_draw_date)).check(matches(withText(drawDate)));
     }
 
-    // Another Firebase Error, my computer doesn't work :(
     @Test
-    public void testUnregisterBtnWaitList() {
+    public void testUnregisterBtn() {
+        User appUser = mockUser();
+        Event mockEvent = mockEvent(appUser);
+        appUser.addRegisteredEvent(mockEvent);
+        mockEvent.setEventDetails("Read A Certain Magical Index");
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "registeredEvents"));
+
+        onView(withId(R.id.btn_register)).perform(click());
+        onView(withText("mockEvent")).check(doesNotExist());
+
+    }
+
+
+    @Test
+    public void testUserWaitlistedEventActivityDisplayed() {
+        User appUser = mockUser();
+        Event mockEvent = mockEvent(appUser);
+        appUser.addToWaitlist(mockEvent);
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "waitList"));
+        // Check if the unregister button is displayed
+        onView(withId(R.id.btn_register)).check(matches(withText("Leave wait list")));
+    }
+
+    @Test
+    public void testWaitlistedEventDetailsDisplayed() {
+        User appUser = mockUser();
+        Event mockEvent = mockEvent(appUser);
+        appUser.addToWaitlist(mockEvent);
+        mockEvent.setEventDetails("Read A Certain Magical Index");
+        ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "waitList"));
+
+        // Check if details are correctly displayed
+        onView(withId(R.id.event_name)).check(matches(withText(mockEvent.getEventName())));
+        String eventDetails = "Event Details: " + mockEvent.getEventDetails();
+        onView(withId(R.id.event_details)).check(matches(withText(eventDetails)));
+        String eventDate = "Event Date: " + mockEvent.getEventDate();
+        onView(withId(R.id.event_date)).check(matches(withText(eventDate)));
+        String drawDate = "Draw Date: " + mockEvent.getDrawDate();
+        onView(withId(R.id.event_draw_date)).check(matches(withText(drawDate)));
+    }
+
+    @Test
+    public void testLeaveWaitListBtn() {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
         appUser.addToWaitlist(mockEvent);
@@ -96,9 +143,10 @@ public class TestUserEventActivity {
         ActivityScenario<UserEventActivity> scenario = ActivityScenario.launch(createUserEventActivityIntent(appUser, mockEvent, "waitList"));
 
         onView(withId(R.id.btn_register)).perform(click());
-        onView(withText("MockEvent")).check(doesNotExist());
+        onView(withText("mockEvent")).check(doesNotExist());
 
     }
 
+    // Currently no means to display QR codes as they are retrieved from Firebase.
 
 }

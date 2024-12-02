@@ -281,7 +281,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 FireBaseController fireBaseController = new FireBaseController(this);
                 fireBaseController.uploadEventPoster(posterUri, newOrganizerEvent.getEventName(), uri -> {
                     String posterUrl = uri.toString();
-                    newOrganizerEvent.setPosterUrl(posterUrl);
+                    //newOrganizerEvent.setPosterUrl(posterUrl);
                     fireBaseController.updateEventPoster(newOrganizerEvent);
 
                     Toast.makeText(this, "Poster uploaded successfully!", Toast.LENGTH_SHORT).show();

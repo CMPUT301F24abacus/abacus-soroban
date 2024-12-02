@@ -77,7 +77,6 @@ public class FacilityDisplayActivity extends AppCompatActivity {
             Intent editIntent = new Intent(FacilityDisplayActivity.this, ManageFacilityActivity.class);
             Bundle newArgs = new Bundle();
             newArgs.putSerializable("appUser",appUser);
-            newArgs.putSerializable("thisFacility",userFacility);
             editIntent.putExtras(newArgs);
             startActivity(editIntent);
         });
