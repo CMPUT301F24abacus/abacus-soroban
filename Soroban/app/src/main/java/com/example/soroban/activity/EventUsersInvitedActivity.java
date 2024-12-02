@@ -167,9 +167,13 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
                         User newUser = new User(deviceId);
                         newUser.setFirstName((String) userData.get("firstName"));
                         newUser.setLastName((String) userData.get("lastName"));
+                        fireBaseController.fetchWaitListDoc(newUser);
 
                         listData.addUser(newUser);
                     }
+                    fireBaseController.fetchEventWaitlistDoc(selectedEvent);
+                    fireBaseController.fetchEventInvitedDoc(selectedEvent);
+                    fireBaseController.fetchEventCancelledDoc(selectedEvent);
                     listAdapter.notifyDataSetChanged();
                 }
             }
