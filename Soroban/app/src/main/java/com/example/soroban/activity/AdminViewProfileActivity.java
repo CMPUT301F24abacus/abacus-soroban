@@ -33,11 +33,13 @@ public class AdminViewProfileActivity extends AppCompatActivity {
     private User selectedUser;
     private User appUser;
     private LinearLayout deviceIdLayout;
+    private LinearLayout facilityNameLayout;
     private TextView userDeviceID;
     private TextView userFirstName;
     private TextView userLastName;
     private TextView userEmail;
     private TextView userPhoneNumber;
+    private TextView facilityName;
     private Button deleteProfile;
     private FloatingActionButton button1;
     private FloatingActionButton button2;
@@ -93,6 +95,13 @@ public class AdminViewProfileActivity extends AppCompatActivity {
         userPhoneNumber = findViewById(R.id.user_phoneNumberField);
         userProfilePic = findViewById(R.id.userProfilePhoto);
         userDeviceID = findViewById(R.id.userDeviceID);
+        facilityNameLayout = findViewById(R.id.adminViewFacilityName);
+        facilityName = findViewById(R.id.facilityNameAdminTV);
+
+        if (selectedUser.getFacility().getName() != null) {
+            facilityNameLayout.setVisibility(View.VISIBLE);
+            facilityName.setText(selectedUser.getFacility().getName());
+        }
 
         // Populate user details
         userDeviceID.setText(selectedUser.getDeviceId());
