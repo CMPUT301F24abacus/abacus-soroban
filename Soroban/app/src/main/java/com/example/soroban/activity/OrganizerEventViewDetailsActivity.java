@@ -121,6 +121,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventDrawDate.setText(formattedEventDrawDate);
         if (selectedEvent.getMaxEntrants() != null) {
             eventMaxEntrants.setText(selectedEvent.getMaxEntrants().toString());
+        } else {
+            eventMaxEntrants.setText("No Limit");
         }
         eventDescription.setText(selectedEvent.getEventDetails());
         geoReq.setChecked(selectedEvent.requiresGeolocation());
