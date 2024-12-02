@@ -124,16 +124,6 @@ public class UserEventActivity extends AppCompatActivity {
                 }
             }
         });
-        // Posters
-        if (selectedEvent.getPosterUrl() != null && !selectedEvent.getPosterUrl().isEmpty()) {
-            Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
-            Glide.with(this)
-                    .load(selectedEvent.getPosterUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(eventPoster);
-        } else {
-            eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
-        }
 
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
