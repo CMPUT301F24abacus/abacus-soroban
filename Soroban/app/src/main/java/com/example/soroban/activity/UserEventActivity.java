@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -86,6 +89,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         // Initialize buttons, etc.
         // notifyButton = findViewById(R.id.btn_notify_me);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy", Locale.getDefault());
         unregisterButton = findViewById(R.id.btn_register);
         eventDetailsTV = findViewById(R.id.event_details);
         eventNameTV = findViewById(R.id.event_name);
@@ -105,8 +109,8 @@ public class UserEventActivity extends AppCompatActivity {
         eventNameTV.setText(selectedEvent.getEventName());
         String eventDetails = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
         eventDetailsTV.setText(eventDetails);
-        eventDateTV.setText("Event Date: " + selectedEvent.getEventDate().toString());
-        drawDateTV.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
+        eventDateTV.setText("Event Date: " + dateFormat.format(selectedEvent.getEventDate()));
+        drawDateTV.setText("Draw Date: " + dateFormat.format(selectedEvent.getDrawDate()));
         // QR Code
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {
@@ -136,6 +140,7 @@ public class UserEventActivity extends AppCompatActivity {
             if (listType.equals("waitList")) {
                 appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                 fireBaseController.removeFromWaitListDoc(selectedEvent,appUser);
+                Toast.makeText(this, "You have left the waitlist.", Toast.LENGTH_SHORT).show();
             } else if (listType.equals("registeredEvents")) {
                 appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                 fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
@@ -155,6 +160,7 @@ public class UserEventActivity extends AppCompatActivity {
                     Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
                     fireBaseController.updateUserNotifications(user, newNotif);
                 }
+                Toast.makeText(this, "You have unregistered from the event.", Toast.LENGTH_SHORT).show();
                 // Else there are no other waiting entrants
             }
             Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
