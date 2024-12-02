@@ -85,8 +85,7 @@ public class AdminViewFacilityActivity extends AppCompatActivity {
         } else {
             facilityDetailsText.setText("No Details Available");
         }
-        // Changed to username if necessary
-        facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId() + "\nName: " + (((selectedFacility.getOwner().getFirstName() != null) ? selectedFacility.getOwner().getFirstName() : "No Name Set")));
+        facilityOwnerText.setText("ID: " + selectedFacility.getOwner().getDeviceId());
 
         // Set up delete facility button functionality
         deleteFacilityBtn.setOnClickListener(v -> {

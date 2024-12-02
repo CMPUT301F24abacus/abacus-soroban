@@ -395,7 +395,7 @@ public class User implements Serializable {
             return false;
         }
         User mockUser = (User) o;
-        return Objects.equals(deviceId, mockUser.getDeviceId()) && Objects.equals(firstName, mockUser.getFirstName()) && Objects.equals(lastName, mockUser.getLastName()) && Objects.equals(email, mockUser.getEmail()) && Objects.equals(phoneNumber, mockUser.getPhoneNumber());
+        return Objects.equals(deviceId, mockUser.getDeviceId());
     }
 
 }

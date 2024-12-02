@@ -188,6 +188,48 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         });
 
 
+        // Add snapshot listener for Firestore
+        db.collection("users").document(appUser.getDeviceId()).collection("hostedEvents").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    events.clear();
+                    for (QueryDocumentSnapshot document : querySnapshots) {
+                        Log.d("Firestore", "Found WaitList Events!");
+                        Map<String, Object> eventData = document.getData();
+                        String eventName = (String) eventData.get("eventName");
+                        Date eventDate = document.getDate("eventDate");
+                        Date drawDate = document.getDate("drawDate");
+                        Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
+                        Event event = new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        fireBaseController.fetchEventInvitedDoc(event);
+                        fireBaseController.fetchEventCancelledDoc(event);
+                        fireBaseController.fetchEventWaitlistDoc(event);
+                        fireBaseController.fetchEventAttendeeDoc(event);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
+                        if (eventData.get("maxEntrants") != null) {
+                            Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
+                            event.setMaxEntrants(maxEntrants);
+                        }
+                        if (eventData.get("eventDetails") != null) {
+                            event.setEventDetails((String) eventData.get("eventDetails"));
+                        }
+                        if (eventData.get("posterUrl") != null) {
+                            event.setPosterUrl((String) eventData.get("posterUrl"));
+                        }
+                        events.addEvent(event);
+                    }
+                    eventAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         setupNavMenu(navigationView, appUser);
         updateNavigationDrawer();
 

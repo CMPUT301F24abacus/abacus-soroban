@@ -137,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
             android:visibility="gone">
 
             <TextView
@@ -154,6 +155,33 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="userDeviceID"
+                android:textAlignment="textEnd"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adminViewFacilityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="wrap_content"
+                android:text="Facility Name"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/facilityNameAdminTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="facility name"
                 android:textAlignment="textEnd"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp" />

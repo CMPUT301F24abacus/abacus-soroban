@@ -26,6 +26,22 @@ import com.example.soroban.activity.CreateAccountActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
 
+/** The MainActivity class serves as the entry point for the application, initializing the user
+ * and navigating to appropriate dashboards based on user actions.
+ *
+ * <p>Features include requesting permissions, initializing a user in Firebase, and enabling
+ * navigation to user, organizer, and admin dashboards.</p>
+ *
+ * @author Ayan Chaudhry
+ * @author Matthieu
+ * @author Kevin Li
+ * @see User
+ * @see FireBaseController
+ * @see UserDashboardActivity
+ * @see OrganizerDashboardActivity
+ * @see AdminDashboardActivity
+ * @see CreateFacilityActivity
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity"; // For logging
     private User appUser;

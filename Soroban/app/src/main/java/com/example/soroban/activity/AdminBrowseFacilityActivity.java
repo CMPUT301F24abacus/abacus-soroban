@@ -123,8 +123,7 @@ public class AdminBrowseFacilityActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document: querySnapshots) {
                         Log.d("Firestore", "Found Facilities!");
                         Map<String, Object> facilityData = document.getData();
-                        User user = new User(((DocumentReference) facilityData.get("owner")).getPath().replace("users/",""));
-                        fireBaseController.fetchUserDoc(user);
+                        User user = new User(document.getId());
                         user.createFacility();
                         String name = (String) facilityData.get("name");
                         String details = (String) facilityData.get("details");

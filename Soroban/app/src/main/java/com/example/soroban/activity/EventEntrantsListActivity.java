@@ -1,5 +1,6 @@
 package com.example.soroban.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -121,31 +122,44 @@ public class EventEntrantsListActivity extends AppCompatActivity {
         });
 
         sampleEntrants.setOnClickListener(v ->{
-            int numberSampled = selectedEvent.sampleEntrants(selectedEvent.getSampleSize()).size();
-            Toast.makeText(this, numberSampled + " entrant(s) sampled successfully.", Toast.LENGTH_SHORT).show();
-            // Schedule a new notification for all relevant users
+            fireBaseController.fetchEventWaitlistDoc(selectedEvent);
+            fireBaseController.fetchEventInvitedDoc(selectedEvent);
 
-            // Update Firebase to recognize invited users
-            for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
-                User user = selectedEvent.getInvitedEntrants().get(i);
-                fireBaseController.updateInvited(selectedEvent, user);
-                fireBaseController.updateUserInvited(user, selectedEvent);
-                fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+            new AlertDialog.Builder(this, R.style.MyDialogTheme)
+                    .setTitle("Sample Entrants")
+                    .setMessage("Would you like to sample entrants?")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Send", (dialog, which) -> {
+                        int numberSampled = selectedEvent.sampleEntrants(selectedEvent.getSampleSize()).size();
+                        Toast.makeText(this, numberSampled + " entrant(s) sampled successfully.", Toast.LENGTH_SHORT).show();
+                        // Schedule a new notification for all relevant users
 
-                // Update model class 
-                selectedEvent.addInvited(user);
-                selectedEvent.removeFromWaitingEntrants(user);
+                        // Update Firebase to recognize invited users
+                        for (int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++) {
+                            User user = selectedEvent.getInvitedEntrants().get(i);
+                            fireBaseController.fetchUserDoc(user);
+                            fireBaseController.fetchInvitedDoc(user);
+                            fireBaseController.fetchWaitListDoc(user);
+                            fireBaseController.updateInvited(selectedEvent, user);
+                            fireBaseController.updateUserInvited(user, selectedEvent);
+                            fireBaseController.removeFromWaitListDoc(selectedEvent, user);
 
-                // Notify those invited entrants that they have been sampled
-                Notification newNotif = new Notification("You won the draw!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
-                fireBaseController.updateUserNotifications(user, newNotif);
-            }
+                            // Update model class
+                            selectedEvent.addInvited(user);
+                            selectedEvent.removeFromWaitingEntrants(user);
 
-            // Notify those still on waiting list that they have not been sampled
-            for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
-                Notification newNotif = new Notification("You were not selected in the draw.", "", Calendar.getInstance().getTime(), selectedEvent,selectedEvent.getNumberOfNotifications());
-                fireBaseController.updateUserNotifications(selectedEvent.getWaitingEntrants().get(i), newNotif);
-            }
+                            // Notify those invited entrants that they have been sampled
+                            Notification newNotif = new Notification("You won the draw!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                            fireBaseController.updateUserNotifications(user, newNotif);
+                        }
+
+                        // Notify those still on waiting list that they have not been sampled
+                        for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
+                            Notification newNotif = new Notification("You were not selected in the draw.", "", Calendar.getInstance().getTime(), selectedEvent,selectedEvent.getNumberOfNotifications());
+                            fireBaseController.updateUserNotifications(selectedEvent.getWaitingEntrants().get(i), newNotif);
+                        }
+                    }).show();
+
 
         });
 

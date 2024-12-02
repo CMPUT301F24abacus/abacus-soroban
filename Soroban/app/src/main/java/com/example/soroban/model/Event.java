@@ -100,6 +100,12 @@ public class Event implements Serializable {
         return owner;
     }
 
+    /**
+     * Setter method for an Event's owner.
+     * @Author: Matthieu Larochelle
+     * @Version: 1.0
+     * @param owner: owner User object.
+     */
     public void setOwner(User owner) {
         this.owner = owner;
     }
@@ -257,10 +263,22 @@ public class Event implements Serializable {
         this.QRCode = QRCode;
     }
 
+    /**
+     * Getter method for an Event's details.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @return: event detail String
+     */
     public String getEventDetails() {
         return eventDetails;
     }
 
+    /**
+     * Setter method for an Event's details.
+     * @Author: Kevin Li
+     * @Version: 1.0
+     * @param eventDetails: eventDetails string
+     */
     public void setEventDetails(String eventDetails) {
         this.eventDetails = eventDetails;
     }

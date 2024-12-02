@@ -56,7 +56,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     private SearchView eventSearch;
     private BrowseEventsAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<Event> browseEventList;
+    private ArrayList<Event> browseEventsList;
     private FireBaseController firebaseController;
 
     /**
@@ -110,7 +110,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
         eventSearch.setBackgroundResource(R.drawable.search_view_background);
 
 
-        browseEventList = new ArrayList<>();
+        browseEventsList = new ArrayList<>();
 
         // Add snapshot listener for Firestore
         eventRf.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -121,7 +121,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                     return;
                 }
                 if (querySnapshots != null) {
-                    browseEventList.clear();
+                    browseEventsList.clear();
                     for (QueryDocumentSnapshot document : querySnapshots) {
                         Log.d("Firestore", "Found Events!");
                         Map<String, Object> eventData = document.getData();
@@ -136,6 +136,9 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                         Facility facility = owner.getFacility();
                         firebaseController.fetchFacilityDoc(owner, facilityRef);
                         Event event = new Event(owner, facility, eventName, eventDate, drawDate, sampleSize);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
@@ -146,17 +149,14 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                         if (eventData.get("posterUrl") != null) {
                             event.setPosterUrl((String) eventData.get("posterUrl"));
                         }
-                        if (eventData.get("geoLocation") != null) {
-                            // do later
-                        }
-                        browseEventList.add(event);
+                        browseEventsList.add(event);
                     }
                     adapter.notifyDataSetChanged();
                 }
             }
         });
 
-        adapter = new BrowseEventsAdapter(browseEventList);
+        adapter = new BrowseEventsAdapter(browseEventsList);
         eventRecycler.setAdapter(adapter);
 
         // On Searching with Search View
@@ -228,7 +228,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
          */
         @Override
         public void onBindViewHolder(BrowseEventsAdapter.ViewHolder holder, int position) {
-            Event selectedEvent = browseEventList.get(position);
+            Event selectedEvent = browseEventsList.get(position);
             String eventName = selectedEvent.getEventName();
             String eventDate = "No Date"; // Temporary, for events without dates
             if (selectedEvent.getEventDate() != null) {
@@ -278,7 +278,7 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
      */
     private void filter(String enteredText) {
         ArrayList<Event> filteredList = new ArrayList<>();
-        for (Event filteredEvent : browseEventList) {
+        for (Event filteredEvent : browseEventsList) {
             if (filteredEvent.getEventName().toLowerCase().contains(enteredText.toLowerCase())) {
                 filteredList.add(filteredEvent);
             }

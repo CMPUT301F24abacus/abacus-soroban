@@ -209,6 +209,13 @@ public class UserDashboardActivity extends AppCompatActivity {
                         User owner = new User((String) document.get("owner"));
                         fireBaseController.fetchUserDoc(owner);
                         Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        fireBaseController.fetchEventInvitedDoc(event);
+                        fireBaseController.fetchEventCancelledDoc(event);
+                        fireBaseController.fetchEventWaitlistDoc(event);
+                        fireBaseController.fetchEventAttendeeDoc(event);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
@@ -244,6 +251,13 @@ public class UserDashboardActivity extends AppCompatActivity {
                         User owner = new User((String) document.get("owner"));
                         fireBaseController.fetchUserDoc(owner);
                         Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        fireBaseController.fetchEventInvitedDoc(event);
+                        fireBaseController.fetchEventCancelledDoc(event);
+                        fireBaseController.fetchEventWaitlistDoc(event);
+                        fireBaseController.fetchEventAttendeeDoc(event);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);

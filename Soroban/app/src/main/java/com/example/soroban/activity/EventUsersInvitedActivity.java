@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -172,6 +173,10 @@ public class EventUsersInvitedActivity extends AppCompatActivity {
                         listData.addUser(newUser);
                     }
                     listAdapter.notifyDataSetChanged();
+                    fireBaseController.fetchEventWaitlistDoc(selectedEvent);
+                    fireBaseController.fetchEventInvitedDoc(selectedEvent);
+                    fireBaseController.fetchEventCancelledDoc(selectedEvent);
+
                 }
             }
         });
