@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Allows organizers to view details of a specific event.
@@ -177,7 +178,10 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
                         Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "QR code not available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "QR code not available, creating a new code... please click again", Toast.LENGTH_SHORT).show();
+                    selectedEvent.setQrCodeHash(generateHash());
+                    fireBaseController.eventUpdateQR(selectedEvent);
+
                 }
             });
         });
@@ -214,7 +218,14 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Generates a unique hash for the event.
+     *
+     * @return a UUID string.
+     */
+    private String generateHash() {
+        return UUID.randomUUID().toString();
+    }
 
 
 }

@@ -667,15 +667,9 @@ public class FireBaseController implements Serializable {
      * @Update: Added posterURL param
      * @param event: Event for which updating is required.
      */
-    public void eventUpdate(Event event) {
+    public void eventUpdateQR(Event event) {
         Map<String, Object> data = new HashMap<>();
-        data.put("eventName", event.getEventName());
-        data.put("eventDate", event.getEventDate());
-        data.put("drawDate", event.getDrawDate());
-        data.put("sampleSize", event.getSampleSize());
-        data.put("maxEntrants", event.getMaxEntrants());
         data.put("QRHash", event.getQrCodeHash());
-        data.put("posterUrl", event.getPosterUrl());
 
         eventRf
                 .document(event.getEventName() + ", " + event.getOwner().getDeviceId())
