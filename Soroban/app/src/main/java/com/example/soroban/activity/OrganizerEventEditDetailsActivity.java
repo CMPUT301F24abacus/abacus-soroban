@@ -79,8 +79,8 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
         eventPosterUpload = findViewById(R.id.eventPosterUpload);
         eventPosterDelete = findViewById(R.id.eventPosterDelete);
         //eventSampleSize = findViewById(R.id.eventEditSampleSize);
-        geoReq = findViewById(R.id.eventGeoReqSwitch);
-        autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
+        //geoReq = findViewById(R.id.eventGeoReqSwitch);
+        //autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 
         buttonConfirm = findViewById(R.id.buttonConfirm);
         buttonCancel = findViewById(R.id.buttonCancel);
