@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.activity.UserDashboardActivity;
+import com.example.soroban.activity.UserEventActivity;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerListener;
@@ -26,7 +27,9 @@ import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Handles the display and management of event details.
@@ -55,6 +58,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private Button unregisterButton;
     private boolean allowLocation;
     private boolean isRegistered; // Store the registration status
+    private long TimeSinceBackPressed;
 
     /**
      * Called when the activity is created. Initializes the UI and sets up event data.
@@ -98,8 +102,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
         eventDetails.setText(selectedEvent.getEventDetails());
-        eventDate.setText(selectedEvent.getEventDate().toString());
-        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+        String strEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
+        String strDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
+        eventDate.setText("Event Date: " + strEventDate);
+        eventDrawDate.setText("Draw Date: " + strDrawDate);
 
         // QR Code
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
@@ -220,12 +226,19 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
      * Handles user unregistration from the event.
      */
     private void handleUnregister() {
-        // Unregistration
-        appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-        firebaseController.removeFromWaitListDoc(selectedEvent,appUser);
-        Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
-        isRegistered = false;
-        updateRegistrationButtons();
+        if (TimeSinceBackPressed + 2000 > System.currentTimeMillis()) {
+            // Unregistration
+            appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+            firebaseController.removeFromWaitListDoc(selectedEvent,appUser);
+            Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
+            isRegistered = false;
+            updateRegistrationButtons();
+        }
+        else {
+            Toast toast = Toast.makeText(EventDetailsActivity.this, "Press back again to confirm!", Toast.LENGTH_SHORT);
+            toast.show();
+            TimeSinceBackPressed = System.currentTimeMillis();
+        }
     }
 
     /**
