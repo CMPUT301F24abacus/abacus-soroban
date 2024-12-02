@@ -136,6 +136,9 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
                         Facility facility = owner.getFacility();
                         firebaseController.fetchFacilityDoc(owner, facilityRef);
                         Event event = new Event(owner, facility, eventName, eventDate, drawDate, sampleSize);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
