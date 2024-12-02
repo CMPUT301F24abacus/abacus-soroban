@@ -21,7 +21,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.soroban.activity.AdminBrowseEventActivity;
-import com.example.soroban.activity.AdminBrowseEventActivity.BrowseEventsAdapter;
+//import com.example.soroban.activity.AdminBrowseEventActivity.BrowseEventsAdapter;
 import com.example.soroban.adapter.UserArrayAdapter;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;

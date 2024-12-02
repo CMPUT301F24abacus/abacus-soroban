@@ -53,7 +53,9 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
     /**
      * Called when this activity is first created. Initializes UI components and sets up listeners.
      * @param savedInstanceState the saved instance state of the activity.
-     * Author: Aaryan Shetty
+     * @author Aaryan Shetty
+     * @author Matthieu Larochelle
+     * @author Kevin Li
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

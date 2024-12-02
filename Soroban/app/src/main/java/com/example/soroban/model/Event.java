@@ -490,29 +490,37 @@ public class Event implements Serializable {
     }
 
     /**
-     * Getter and Setter for the QR code hash
+     * Getter for the QR code hash
      * @Author: Edwin M
      * @Version: 1.0
      */
-    //
     public String getQrCodeHash() {
         return qrCodeHash;
     }
 
+    /**
+     * Setter for the QR code hash
+     * @Author: Edwin M
+     * @Version: 1.0
+     */
     public void setQrCodeHash(String qrCodeHash) {
         this.qrCodeHash = qrCodeHash;
     }
 
     /**
-     * Getter and Setter for posterUrl
-     * @Author: Jerry
+     * Getter for the poster URL
+     * @Author: Jerry P
      * @Version: 1.0
      */
-    // Getter and setter for posterUrl
     public String getPosterUrl() {
         return posterUrl;
     }
 
+    /**
+     * Setter for the poster URL
+     * @Author: Jerry P
+     * @Version: 1.0
+     */
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
     }

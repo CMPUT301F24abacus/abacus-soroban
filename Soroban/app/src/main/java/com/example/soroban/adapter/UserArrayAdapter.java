@@ -18,7 +18,7 @@ import com.example.soroban.model.UserList;
  * Custom ArrayAdapter for displaying a list of {@link User} objects.
  * This adapter inflates a custom layout to display user information.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see User
  * @see UserList
  */

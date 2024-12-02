@@ -30,7 +30,7 @@ import java.util.Objects;
  * Dialog fragment for sending messages to selected event participants.
  * Includes Firebase updates for notifications and user messaging.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see Event
  */
 public class SendMessageFragment extends DialogFragment {

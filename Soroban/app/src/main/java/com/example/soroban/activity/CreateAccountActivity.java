@@ -19,6 +19,11 @@ import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+/**
+ * Makes user create their account if it is their first time opening the app
+ * @author Aaryan Shetty
+ * @author Ayan Chaudry
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String TAG = "CreateAccountActivity"; // For logging

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.soroban"},{"l":"com.example.soroban.activity"},{"l":"com.example.soroban.adapter"},{"l":"com.example.soroban.controller"},{"l":"com.example.soroban.fragment"},{"l":"com.example.soroban.model"}];updateSearchResults();

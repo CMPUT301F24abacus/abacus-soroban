@@ -19,7 +19,8 @@ import java.util.List;
  * RecyclerView Adapter for displaying a list of {@link Notification} objects.
  * This adapter binds each notification to a custom layout and handles user interactions.
  *
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
  * @see Notification
  */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {

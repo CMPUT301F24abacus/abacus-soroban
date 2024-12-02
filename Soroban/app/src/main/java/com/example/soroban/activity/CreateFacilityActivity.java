@@ -19,7 +19,8 @@ import com.example.soroban.model.User;
  * Allows users to create and set up their facility profiles.
  * A facility profile is required for organizing events. This provides Firebase integration
  * for saving facility data
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
  * @see Facility
  * @see User
  * @see FireBaseController

@@ -29,6 +29,7 @@ import java.util.Map;
  * Displays the list of users who have confirmed their participation
  * in a selected event. The organizer can send messages to these attendees through the interface provided.
  * @author Aaryan Shetty
+ * @author Matthieu Larochelle
  * @see Event
  * @see User
  * @see FireBaseController
@@ -49,7 +50,8 @@ public class EventUsersConfirmedActivity extends AppCompatActivity {
      * Called when this activity is first created.
      * @param savedInstanceState the saved state of the activity
      * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
-     * Author: Aaryan Shetty
+     * @author Aaryan Shetty
+     * @author Matthieu Larochelle
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

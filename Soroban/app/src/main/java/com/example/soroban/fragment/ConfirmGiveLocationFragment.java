@@ -31,7 +31,7 @@ import java.util.List;
  * Displays a confirmation dialog for users to allow location access for joining an event's waitlist.
  * Integrates location permissions and services to retrieve the user's geolocation.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see User
  * @see GeolocationListener
  * @see FireBaseController

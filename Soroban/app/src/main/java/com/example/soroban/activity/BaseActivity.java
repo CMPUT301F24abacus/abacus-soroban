@@ -8,9 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
+import com.example.soroban.model.User;
 import com.google.android.material.navigation.NavigationView;
 
+/**
+ * Handles setting up side navigation bar
+ * @author Aaryan Shetty
+ * @author Ayan Chaudry
+ */
 public class BaseActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
 
@@ -29,6 +36,12 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets content view given a layout resource id.
+     * @author Aaryan Shetty
+     * @author Ayan Chaudry
+     * @param layoutResID Id of the resource layout
+     */
     @Override
     public void setContentView(int layoutResID) {
         DrawerLayout fullLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
