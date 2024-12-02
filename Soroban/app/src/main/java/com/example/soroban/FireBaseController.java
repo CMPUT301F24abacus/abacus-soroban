@@ -1174,7 +1174,7 @@ public class FireBaseController implements Serializable {
      * @param user: User to be removed.
      */
     public void removeThoseNotGoingDoc(Event event, User user) {
-        eventRf.document(event.getEventName() + ", " + user.getDeviceId()).collection("notGoing").document(user.getDeviceId())
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("notGoing").document(user.getDeviceId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -1301,8 +1301,9 @@ public class FireBaseController implements Serializable {
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        user.createFacility();
-                        Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        User owner = new User(((DocumentReference) document.get("owner")).getPath().replace("users/", ""));
+                        owner.createFacility();
+                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                         removeThoseNotGoingDoc(event, user);
                     }
                 } else {
@@ -1382,6 +1383,25 @@ public class FireBaseController implements Serializable {
                                 Map<String, Object> userData = document.getData();
                                 User user = new User((String) userData.get("deviceId"));
                                 removeInvitedDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find events!");
+                        }
+                    }
+                });
+
+        // remove event's not going list
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("notGoing")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started remove user from invited process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                removeThoseNotGoingDoc(event, user);
                             }
                         } else {
                             Log.e("Firestore", "Didn't find events!");
