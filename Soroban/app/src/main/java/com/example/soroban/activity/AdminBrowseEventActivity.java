@@ -191,10 +191,10 @@ public class AdminBrowseEventActivity extends AppCompatActivity {
     /**
      * This is a sample adapter to display the events.
      */
-    public class BrowseEventsAdapter extends RecyclerView.Adapter<BrowseEventsAdapter.ViewHolder> {
+    private class BrowseEventsAdapter extends RecyclerView.Adapter<BrowseEventsAdapter.ViewHolder> {
         private ArrayList<Event> browseEventsList;
 
-        public BrowseEventsAdapter(@NonNull ArrayList<Event> browseEventsList) {
+        public BrowseEventsAdapter(ArrayList<Event> browseEventsList) {
             this.browseEventsList = browseEventsList;
         }
 
