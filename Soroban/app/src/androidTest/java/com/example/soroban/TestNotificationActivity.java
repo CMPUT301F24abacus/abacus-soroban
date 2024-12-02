@@ -33,7 +33,7 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class TestNotificationActivity {
 
-    private Notification mockNotification() { return new Notification("mockNotification", new Date(System.currentTimeMillis()), "mockEvent", Notification.NotificationType.BAD_NEWS); }
+    private Notification mockNotification() { return new Notification("mockNotification", new Date(System.currentTimeMillis()), "mockEvent", Notificatio.NotificationType.BAD_NEWS); }
 
     @Rule
     public ActivityScenarioRule<InvitationActivity> activityScenarioRule =
