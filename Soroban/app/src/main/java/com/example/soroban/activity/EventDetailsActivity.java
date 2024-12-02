@@ -113,11 +113,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
 
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
-        eventDetails.setText(selectedEvent.getEventDetails());
-        String strEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
-        String strDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
-        eventDate.setText("Event Date: " + strEventDate);
-        eventDrawDate.setText("Draw Date: " + strDrawDate);
+        String eventDescription = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
+        eventDetails.setText(eventDescription);
+        eventDate.setText("Event Date: " + dateFormat.format(selectedEvent.getEventDate()));
+        eventDrawDate.setText("Draw Date: " + dateFormat.format(selectedEvent.getDrawDate()));
 
         // QR Code
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
