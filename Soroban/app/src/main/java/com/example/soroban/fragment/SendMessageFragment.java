@@ -110,7 +110,7 @@ public class SendMessageFragment extends DialogFragment {
                 Toast.makeText(getContext(), "You must first write a message!", Toast.LENGTH_SHORT).show();
             }else{
                 for(int i = 0; i < currentList.size(); i++){
-                    firebaseController.updateUserNotifications(currentList.get(i),new Notification("Message from " + appUser.getFirstName() , message, Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications()));
+                    firebaseController.updateUserNotifications(currentList.get(i),new Notification("Message from " + appUser.getFirstName(), message, Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications()));
                 }
             }
         });
