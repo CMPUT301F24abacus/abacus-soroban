@@ -205,10 +205,14 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        User owner = new User((String) document.get("owner"));
-                        fireBaseController.fetchUserDoc(owner);
-                        owner.createFacility();
-                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        Event event = new Event(appUser, appUser.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        fireBaseController.fetchEventInvitedDoc(event);
+                        fireBaseController.fetchEventCancelledDoc(event);
+                        fireBaseController.fetchEventWaitlistDoc(event);
+                        fireBaseController.fetchEventAttendeeDoc(event);
+                        if (eventData.get("geoLocation") != null) {
+                            event.setRequiresGeolocation((Boolean) eventData.get("geoLocation"));
+                        }
                         if (eventData.get("maxEntrants") != null) {
                             Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                             event.setMaxEntrants(maxEntrants);
