@@ -471,7 +471,7 @@ public class FireBaseController implements Serializable {
                                 // Notify user if current time is after notification date
                                 if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0 && notifManager.areNotificationsEnabled()){
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
-                                    notificationSystem.setNotification(notifCounter,notificationEventName + " : " + notificationTitle, notificationMessage);
+                                    notificationSystem.setNotification(notifCounter,notificationEventName + ": " + notificationTitle, notificationMessage);
                                     removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
                                     notifCounter++;
                                 }
