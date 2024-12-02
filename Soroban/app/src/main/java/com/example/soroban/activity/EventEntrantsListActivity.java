@@ -137,6 +137,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
                         // Update Firebase to recognize invited users
                         for (int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++) {
                             User user = selectedEvent.getInvitedEntrants().get(i);
+                            fireBaseController.fetchUserDoc(user);
                             fireBaseController.fetchInvitedDoc(user);
                             fireBaseController.fetchWaitListDoc(user);
                             fireBaseController.updateInvited(selectedEvent, user);
