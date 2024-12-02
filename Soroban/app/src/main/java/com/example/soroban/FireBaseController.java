@@ -1456,10 +1456,16 @@ public class FireBaseController implements Serializable {
      */
     public void updateEventPoster(Event event) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String eventId = event.getQrCodeHash();
-        if (eventId == null || eventId.isEmpty()) {
+        String eventId = event.getEventName() + ", " + event.getOwner().getDeviceId();
+        if (eventId.equals(", ")) {
             Log.e("FireBaseController", "Event ID is null or empty. Cannot update poster.");
             return;
+        }
+
+        String posterUrl = event.getPosterUrl();
+        if (posterUrl == null || posterUrl.equals("no poster")) {
+            posterUrl = "no poster";
+            event.setPosterUrl("no poster"); // Use "no poster" as the default value
         }
 
         Map<String, Object> updates = new HashMap<>();
@@ -1475,5 +1481,24 @@ public class FireBaseController implements Serializable {
                     Log.e("FireBaseController", "Failed to update poster URL for event: " + eventId, e);
                 });
     }
+
+    /**
+     * Gets an event's poster url (posterUrl field) from the Firebase.
+     * @param event: the event who's posterUrl is being fetched.
+     */
+    public void fetchEventPosterUrl(Event event, OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        String posterUrl = document.getString("posterUrl"); // Fetch the "posterUrl" field
+                        onSuccessListener.onSuccess(posterUrl); // Pass the poster URL to the success listener
+                    } else {
+                        onFailureListener.onFailure(task.getException()); // Pass the exception to the failure listener
+                    }
+                });
+    }
+
 
 }

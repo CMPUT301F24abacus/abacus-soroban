@@ -22,6 +22,9 @@ import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
+import com.example.soroban.fragment.ConfirmRequireLocationFragment;
+import com.example.soroban.fragment.DatePickerListener;
+import com.example.soroban.fragment.DialogFragmentListener;
 import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
@@ -117,6 +120,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
             });
         });
 
+        // Set button click listeners
+        notifyMeButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Notification feature coming soon!", Toast.LENGTH_SHORT).show();
+        });
 
         // Set up registration status
         isRegistered = getIntent().getBooleanExtra("isRegistered", false);

@@ -63,7 +63,7 @@ public class TestCreateFacilityActivity {
 
         // Click to view facility changes
         onView(withId(R.id.btn_go_to_facility)).perform(click());
-        onView(withId(R.id.activity_facility_display)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_facility_name_label)).check(matches(isDisplayed()));
 
         onView(withId(R.id.tv_facility_name)).check(matches(withText("New MockFacility")));
         onView(withId(R.id.tv_facility_details)).check(matches(withText("Read A Certain Magical Index")));

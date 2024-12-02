@@ -58,8 +58,8 @@ public class TestFacilityDisplayActivity {
         ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createFacilityDisplayActivityIntent(appUser));
 
         // Check if
-        onView(withId(R.id.tv_edit_facility)).perform(click());
-        onView(withId(R.id.activity_manage_facility)).check(matches(isDisplayed()));
+        onView(withId(R.id.edit_facility_button)).perform(click());
+        onView(withId(R.id.edit_facility)).check(matches(isDisplayed()));
     }
 
 }
