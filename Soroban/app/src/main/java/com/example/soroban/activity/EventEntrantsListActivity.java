@@ -121,6 +121,10 @@ public class EventEntrantsListActivity extends AppCompatActivity {
         });
 
         sampleEntrants.setOnClickListener(v ->{
+
+            fireBaseController.fetchEventWaitlistDoc(selectedEvent);
+            fireBaseController.fetchEventInvitedDoc(selectedEvent);
+
             int numberSampled = selectedEvent.sampleEntrants(selectedEvent.getSampleSize()).size();
             Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
             // Schedule a new notification for all relevant users
@@ -128,11 +132,13 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             // Update Firebase to recognize invited users
             for(int i = 0; i < selectedEvent.getInvitedEntrants().size(); i++){
                 User user = selectedEvent.getInvitedEntrants().get(i);
+                fireBaseController.fetchInvitedDoc(user);
+                fireBaseController.fetchWaitListDoc(user);
                 fireBaseController.updateInvited(selectedEvent, user);
                 fireBaseController.updateUserInvited(user, selectedEvent);
                 fireBaseController.removeFromWaitListDoc(selectedEvent, user);
 
-                // Update model class 
+                // Update model class
                 selectedEvent.addInvited(user);
                 selectedEvent.removeFromWaitingEntrants(user);
 

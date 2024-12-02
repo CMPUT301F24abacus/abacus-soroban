@@ -1210,10 +1210,11 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                                user.createFacility();
-                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                User owner = new User((String) eventData.get("owner"));
+                                owner.createFacility();
+                                Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                                 removeFromWaitListDoc(event, user);
-                            }
+                                }
                         } else {
                             Log.e("Firestore", "Didn't find waitlist!");
                         }
@@ -1235,8 +1236,9 @@ public class FireBaseController implements Serializable {
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                                user.createFacility();
-                                Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                                User owner = new User((String) eventData.get("owner"));
+                                owner.createFacility();
+                                Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                                 removeAttendeeDoc(event, user);
                             }
                         } else {
@@ -1276,8 +1278,9 @@ public class FireBaseController implements Serializable {
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
                         Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
-                        user.createFacility();
-                        Event event = new Event(user, user.getFacility(), eventName, eventDate, drawDate, sampleSize);
+                        User owner = new User(((DocumentReference) document.get("owner")).getPath().replace("users/", ""));
+                        owner.createFacility();
+                        Event event = new Event(owner, owner.getFacility(), eventName, eventDate, drawDate, sampleSize);
                         removeInvitedDoc(event, user);
                     }
                 } else {
@@ -1360,6 +1363,25 @@ public class FireBaseController implements Serializable {
                                 Map<String, Object> userData = document.getData();
                                 User user = new User((String) userData.get("deviceId"));
                                 removeAttendeeDoc(event, user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find events!");
+                        }
+                    }
+                });
+
+        // remove event from user's invited list
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("invitedEntrants")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started remove user from invited process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> userData = document.getData();
+                                User user = new User((String) userData.get("deviceId"));
+                                removeInvitedDoc(event, user);
                             }
                         } else {
                             Log.e("Firestore", "Didn't find events!");
