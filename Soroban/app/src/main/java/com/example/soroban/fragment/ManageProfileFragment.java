@@ -178,9 +178,13 @@ public class ManageProfileFragment extends DialogFragment {
                     // Validate Input
 
                     // If the user has chosen to enter a phone number
-                    if(!phoneNumber.isEmpty()){
-                        if (phoneNumber.replaceAll("\\D", "").length() < 10) {
-                            Toast.makeText(getContext(), "Please enter a 10 digit phone number.", Toast.LENGTH_SHORT).show();
+                    if (phoneNumber.isEmpty()) {
+                        phoneNumber = "0"; //
+                    } else {
+                        // Remove all non-digit characters and check if it contains at least 10 digits
+                        String cleanedPhoneNumber = phoneNumber.replaceAll("\\D", "");
+                        if (cleanedPhoneNumber.length() < 10) {
+                            Toast.makeText(getContext(), "Please enter a valid phone number with at least 10 digits.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
