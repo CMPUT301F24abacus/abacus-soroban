@@ -3,12 +3,20 @@ package com.example.soroban;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +29,6 @@ import com.example.soroban.model.User;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity"; // For logging
     private User appUser;
-    private FireBaseController firebaseController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Firebase and UI initialization
-        firebaseController = new FireBaseController(this);
+        FireBaseController firebaseController = new FireBaseController(this);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         Button button = findViewById(R.id.buttonContinue);
+        button.setClickable(false);
 
         appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         firebaseController.initialize(progressBar, appUser, button);
