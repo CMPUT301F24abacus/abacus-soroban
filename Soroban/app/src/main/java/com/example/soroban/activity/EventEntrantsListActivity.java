@@ -45,7 +45,8 @@ public class EventEntrantsListActivity extends AppCompatActivity {
     /**
      * Called when this activity is first created.
      * @param savedInstanceState
-     * Author: Matthieu Larochelle, Aaryan Shetty
+     * @author Matthieu Larochelle
+     * @author Aaryan Shetty
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

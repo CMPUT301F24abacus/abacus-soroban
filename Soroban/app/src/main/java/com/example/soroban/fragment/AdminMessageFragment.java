@@ -33,6 +33,7 @@ import java.util.Objects;
  * Provides a dialog for sending administrative messages to facility owners
  * regarding violations or other important notifications.
  *
+ * @author Kevin Li
  * @see FireBaseController
  * @see Facility
  * @see Notification

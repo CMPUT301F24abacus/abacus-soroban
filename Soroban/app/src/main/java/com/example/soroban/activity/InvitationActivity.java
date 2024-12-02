@@ -28,7 +28,7 @@ import com.example.soroban.model.User;
  * References: ChatGPT, Stack Overflow, Geeks for Geeks
  *
  * @author Ayan Chaudhry
- * @author Matthieu
+ * @author Matthieu Larochelle
  * @see Event
  * @see AcceptInviteFragment
  * @see EventArrayAdapter

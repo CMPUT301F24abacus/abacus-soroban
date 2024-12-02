@@ -18,6 +18,8 @@ import com.example.soroban.model.User;
 /**
  * Allows the user to view and edit the details of an existing facility.
  * The user can update the facility's name and details, and save these changes.
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
  * @see Facility
  * @see User
  * @see FacilityController

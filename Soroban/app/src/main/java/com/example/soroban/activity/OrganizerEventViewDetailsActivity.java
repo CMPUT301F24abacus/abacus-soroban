@@ -34,7 +34,8 @@ import java.util.Locale;
  * Allows organizers to view details of a specific event.
  * Provides functionality to view event details, entrants, and QR codes.
  *
- * Author: Aaryan Shetty
+ * @author Matthieu Larochelle
+ * @author Aaryan Shetty
  * @see Event
  * @see User
  * @see FireBaseController
@@ -66,7 +67,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     /**
      * Called when this activity is first created. Initializes UI components and populates event details.
      * @param savedInstanceState the saved instance state of the activity.
-     * Author: Aaryan Shetty
+     * @author Matthieu Larochelle
+     * @author Aaryan Shetty
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -81,7 +81,9 @@ public class UserDashboardActivity extends AppCompatActivity {
      * Called when the activity is first created.
      * @param savedInstanceState the saved state of the activity
      * @throws IllegalArgumentException if the required User object is not passed.
-     * Author: Ayan Chaudhry, Matthieu Larochelle, Kevin Li
+     * @author Ayan Chaudhry
+     * @author Matthieu Larochelle
+     * @author Kevin Li
      *
      */
     @Override

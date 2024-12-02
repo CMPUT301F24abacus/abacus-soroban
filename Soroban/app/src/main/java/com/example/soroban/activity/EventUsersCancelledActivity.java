@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * EventUsersCancelledActivity displays the list of users who have cancelled their participation
  * in a selected event. The organizer can send messages to these users through the interface provided.
+ * @author Matthieu Larochelle
  * @author Aaryan Shetty
  * @see Event
  * @see User
@@ -50,7 +51,8 @@ public class EventUsersCancelledActivity extends AppCompatActivity {
      * Called when this activity is first created.
      * @param savedInstanceState
      * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
-     * Author: Aaryan Shetty
+     * @author Matthieu Larochelle
+     * @author Aaryan Shetty
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

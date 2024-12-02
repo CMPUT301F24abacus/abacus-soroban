@@ -32,7 +32,7 @@ import org.osmdroid.util.GeoPoint;
  * Displays a confirmation dialog for users to allow location access for joining an event's waitlist.
  * Integrates location permissions and services to retrieve the user's geolocation.
  *
- * @author
+ * @author Matthieu
  * @see User
  * @see GeolocationListener
  * @see FireBaseController

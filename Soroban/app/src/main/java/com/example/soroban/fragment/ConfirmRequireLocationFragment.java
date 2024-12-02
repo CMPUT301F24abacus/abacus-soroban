@@ -24,7 +24,7 @@ import java.util.Calendar;
 /**
  * Provides a dialog for organizers to confirm whether an event should require location access.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see DialogFragmentListener
  */
 public class ConfirmRequireLocationFragment extends DialogFragment {

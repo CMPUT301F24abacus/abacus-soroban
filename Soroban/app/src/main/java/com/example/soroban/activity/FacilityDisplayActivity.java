@@ -16,7 +16,8 @@ import com.example.soroban.model.User;
 /**
  * Displays the details of a facility associated with the user.
  * The user can view and edit facility information through this activity.
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
  * @see ManageFacilityActivity
  * @see Facility
  * @see User

@@ -32,7 +32,9 @@ import java.util.Objects;
 /**
  * Handles the display and management of an event the user is either
  * registered for or waitlisted for, allowing the user to unregister or leave the waitlist.
- * @author
+ * @author Ayan Chaudhry
+ * @author Matthieu Larochelle
+ * @author Kevin Li
  * @see Event
  * @see User
  * @see FireBaseController
@@ -53,6 +55,12 @@ public class UserEventActivity extends AppCompatActivity {
     private FireBaseController fireBaseController;
     String listType;
 
+    /**
+     * Called when this activity is first created. Initializes UI components and populates event details.
+     * @param savedInstanceState the saved instance state of the activity.
+     * @author Matthieu Larochelle
+     * @author Aaryan Shetty
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);

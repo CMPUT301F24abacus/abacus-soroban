@@ -7,7 +7,7 @@ import java.util.Date;
  * Stores notification title, message, and associated metadata.
  * References: ChatGPT, StackOverflow, GeeksForGeeks
  *
- * @author Ayan Chaudhry
+ * @author Matthieu Larochelle, Ayan Chaudhry
  * @Version: 1.0
  * @see Event
  */
