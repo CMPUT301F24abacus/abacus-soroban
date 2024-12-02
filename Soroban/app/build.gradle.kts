@@ -49,7 +49,7 @@ dependencies {
     
     // Uncomment when Generating JavaDoc and then comment after
     // implementation(files("/Users/edwin/Library/Android/sdk/platforms/android-35/android.jar"))
-    implementation(files("C:\\Users\\matra\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
+    //implementation(files("C:\\Users\\matra\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
 
     // Zebra dependencies
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
