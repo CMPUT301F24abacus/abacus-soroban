@@ -8,7 +8,7 @@ import java.util.Objects;
  * Stores any relevant information that is associated to a facility.
  * Manages facility-specific details and hosted events.
  * @Author: Matthieu Larochelle
- * @Version: 1.0
+ * @Version: 2.0
  * @see Event
  * @see EventList
  */
@@ -22,11 +22,52 @@ public class Facility implements Serializable {
      * Constructor method for Facility.
      *
      * @Author: Matthieu Larochelle
-     * @Version: 1.0
+     * @Version: 2.0
      * @param owner the owner of the facility.
      */
     public Facility(User owner) {
-        this.owner = owner;
+        User mockUser = new User(owner.getDeviceId());
+
+        // Create mock version of Owner to avoid Serialization cycles
+
+        if(!(mockUser.getUsername() == null)){
+            mockUser.setUsername(mockUser.getUsername());
+        }
+        if(!(mockUser.getFirstName() == null)){
+            mockUser.setFirstName(mockUser.getFirstName());
+        }
+        if(!(mockUser.getLastName() == null)){
+            mockUser.setFirstName(mockUser.getLastName());
+        }
+        if(!(mockUser.getEmail() == null)){
+            mockUser.setFirstName(mockUser.getEmail());
+        }
+        if(!(Long.valueOf(mockUser.getPhoneNumber()) == null)){
+            mockUser.setPhoneNumber(mockUser.getPhoneNumber());
+        }
+        if(!(mockUser.getLocation() == null)){
+            mockUser.setLocation(mockUser.getLocation().getLatitude(),mockUser.getLocation().getLongitude());
+        }
+
+        mockUser.setAdminCheck(owner.getAdminCheck());
+
+        for(int i = 0; i < owner.getWaitList().size(); i++ ){
+            mockUser.addToWaitlist(owner.getWaitList().get(i));
+        }
+
+        for(int i = 0; i < owner.getRegisteredEvents().size(); i++ ){
+            mockUser.addRegisteredEvent(owner.getRegisteredEvents().get(i));
+        }
+
+        for(int i = 0; i < owner.getInvitedEvents().size(); i++ ){
+            mockUser.addInvitedEvent(owner.getInvitedEvents().get(i));
+        }
+
+        for(int i = 0; i < owner.getHostedEvents().size(); i++ ){
+            mockUser.addHostedEvent(owner.getHostedEvents().get(i));
+        }
+
+        this.owner = mockUser;
         this.hostedEvents = new EventList();
     }
 
@@ -34,7 +75,6 @@ public class Facility implements Serializable {
         this.name = updatedFacilityName;
         this.owner = owner;
         this.hostedEvents = new EventList();
-
     }
 
 

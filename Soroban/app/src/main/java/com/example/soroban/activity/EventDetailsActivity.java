@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.activity.UserDashboardActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerListener;
@@ -52,6 +57,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private ImageView eventQRCode;
     private TextView eventDrawDate;
     private TextView eventDate;
+    private ImageView eventPoster;
     // private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
@@ -92,6 +98,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
+        eventPoster = findViewById(R.id.event_image);
         //eventQRCode.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN); // make image fill white
         // notifyMeButton = findViewById(R.id.btn_notify_me);
         registerButton = findViewById(R.id.btn_register);
@@ -99,9 +106,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
 
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
-        eventDetails.setText(selectedEvent.getEventDetails());
-        eventDate.setText(selectedEvent.getEventDate().toString());
-        eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+        eventDetails.setText("Event Details: " + selectedEvent.getEventDetails());
+        eventDate.setText("Event Date: " + selectedEvent.getEventDate().toString());
+        eventDrawDate.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
 
         // QR Code
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {

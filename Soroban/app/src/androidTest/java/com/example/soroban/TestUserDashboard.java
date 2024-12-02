@@ -1,5 +1,6 @@
 package com.example.soroban;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -29,8 +30,7 @@ import com.example.soroban.model.User;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
-public class UserDashboardTest {
-
+public class TestUserDashboard {
     private User mockUser(){
         return new User("testId");
     }
@@ -41,7 +41,7 @@ public class UserDashboardTest {
 
     //@Rule
     //public ActivityScenarioRule<UserDashboardActivity> activityScenarioRule =
-            //new ActivityScenarioRule<>(UserDashboardActivity.class);
+    //new ActivityScenarioRule<>(UserDashboardActivity.class);
 
     private static Intent createUserDashboardIntent(User appUser) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -68,6 +68,7 @@ public class UserDashboardTest {
         onView(withId(R.id.btn_scan_qr_code)).perform(click());
         onView(withId(R.id.layout_result)).check(matches(isDisplayed()));
         // Add more checks based on what happens after clicking
+
     }
 
     @Test
@@ -95,6 +96,7 @@ public class UserDashboardTest {
         User appUser = mockUser();
         Event mockEvent = mockEvent(appUser);
         appUser.addToWaitlist(mockEvent);
+
         ActivityScenario<UserDashboardActivity> scenario = ActivityScenario.launch(createUserDashboardIntent(appUser));
 
         EventList mockWaitList = appUser.getWaitList();
@@ -132,6 +134,53 @@ public class UserDashboardTest {
                 .check(matches((withText(mockEvent.getEventName()))));
     }
 
-    // Tried testing with listview itemclicks, however ran into firebase problems.
 
+    // These test do not pass when the entire test clas is run, however they do pass when ran individually
+
+    @Test
+    public void testWaitingEventClick(){
+        User appUser = mockUser();
+        Event mockEvent = mockEvent(appUser);
+        appUser.addToWaitlist(mockEvent);
+        ActivityScenario<UserDashboardActivity> scenario = ActivityScenario.launch(createUserDashboardIntent(appUser));
+
+        EventList mockWaitList = appUser.getWaitList();
+        scenario.onActivity( activity -> {
+            EventArrayAdapter mockEventAdapter = new EventArrayAdapter(activity, mockWaitList);
+            ListView listView = activity.findViewById(R.id.list_waitlisted_events);
+            listView.setAdapter(mockEventAdapter);
+
+            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
+        });
+
+        onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_waitlisted_events))
+                .atPosition(0)
+                .onChildView(withId(R.id.tv_event_name))
+                .perform(click());
+        onView(withId(R.id.activity_event_details)).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void testRegisteredEventClick(){
+        User appUser = mockUser();
+        Event mockEvent = mockEvent(appUser);
+        appUser.addRegisteredEvent(mockEvent);
+        ActivityScenario<UserDashboardActivity> scenario = ActivityScenario.launch(createUserDashboardIntent(appUser));
+
+        EventList mockRegisteredList = appUser.getRegisteredEvents();
+        scenario.onActivity( activity -> {
+            EventArrayAdapter mockEventAdapter = new EventArrayAdapter(activity, mockRegisteredList);
+            ListView listView = activity.findViewById(R.id.list_confirmed_events);
+            listView.setAdapter(mockEventAdapter);
+
+            listView.performItemClick(mockEventAdapter.getView(0,null,null), 0, mockEventAdapter.getItemId(0));
+        });
+
+        onData(is(instanceOf(Event.class))).inAdapterView(withId(R.id.list_confirmed_events))
+                .atPosition(0)
+                .onChildView(withId(R.id.tv_event_name))
+                .perform(click());
+        onView(withId(R.id.activity_event_details)).check(matches(isDisplayed()));
+    }
 }
