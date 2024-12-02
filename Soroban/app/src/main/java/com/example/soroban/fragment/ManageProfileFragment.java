@@ -187,7 +187,8 @@ public class ManageProfileFragment extends DialogFragment {
 
                     // If the user has chosen to enter an email
                     if(!email.isEmpty()){
-                        if (!(email.contains("@")) || !(email.endsWith(".com"))) {
+                        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+                        if (!email.matches(emailPattern)) {
                             Toast.makeText(getContext(), "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
                             return;
                         }
