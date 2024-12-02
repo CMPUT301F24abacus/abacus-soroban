@@ -23,7 +23,9 @@ import com.example.soroban.model.User;
  * @see FacilityController
  * @see FireBaseController
  * @see OrganizerDashboardActivity
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
+ * @author Kevin Li
  */
 public class ManageFacilityActivity extends AppCompatActivity {
     private User appUser;
