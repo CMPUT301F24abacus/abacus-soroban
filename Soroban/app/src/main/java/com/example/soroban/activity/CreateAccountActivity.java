@@ -134,7 +134,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             newUser.setAdminCheck(false);
 
             // Save user to Firebase using FireBaseController
-            progressBar.setVisibility(View.VISIBLE);
             firebaseController.createUserDb(newUser);
             firebaseController.initialize(progressBar, newUser, btnCreateAccount);
             btnCreateAccount.setVisibility(View.GONE);
