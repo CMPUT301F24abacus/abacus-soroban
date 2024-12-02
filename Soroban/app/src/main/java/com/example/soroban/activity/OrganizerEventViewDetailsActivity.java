@@ -55,6 +55,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private TextView eventDescription;
     private ImageView eventPoster;
     private TextView eventSampleSize;
+    private TextView eventMaxEntrants;
     private TextView eventDrawDate;
     private Button geoReq;
     private Button autoReplace;
@@ -101,6 +102,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventDescription = findViewById(R.id.eventDescriptionText);
         eventPoster = findViewById(R.id.eventPosterImage);
         eventSampleSize = findViewById(R.id.eventSampleSizeText);
+        eventMaxEntrants = findViewById(R.id.eventEntrantLimitText);
         eventDrawDate = findViewById(R.id.eventDrawDateText);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
         autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
@@ -116,6 +118,9 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventSampleSize.setText(selectedEvent.getSampleSize().toString());
         String formattedEventDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
         eventDrawDate.setText(formattedEventDrawDate);
+        if (selectedEvent.getMaxEntrants() != null) {
+            eventMaxEntrants.setText(selectedEvent.getMaxEntrants().toString());
+        }
         // geoReq.setActivated();
         // autoReplace.setActivated();
 
