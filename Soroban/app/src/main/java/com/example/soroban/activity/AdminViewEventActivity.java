@@ -92,6 +92,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
         TextView entrantLimitTV = findViewById(R.id.eventEntrantLimitTextAdmin);
         ImageView eventPoster = findViewById(R.id.eventPosterImageAdmin);
         eventQR = findViewById(R.id.admin_qr_code);
+        geoSwitch = findViewById(R.id.eventGeoReqSwitchAdmin);
 
         eventNameTV.setText(selectedEvent.getEventName());
         eventOwnerTV.setText(selectedEvent.getOwner().getDeviceId());
@@ -104,6 +105,7 @@ public class AdminViewEventActivity extends AppCompatActivity {
         if (entrantLimit != null) {
             entrantLimitTV.setText(entrantLimit.toString());
         }
+        geoSwitch.setChecked(selectedEvent.requiresGeolocation());
 
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {

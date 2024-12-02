@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Allows organizers to view details of a specific event.
@@ -58,6 +59,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private TextView eventDescription;
     private ImageView eventPoster;
     private TextView eventSampleSize;
+    private TextView eventMaxEntrants;
     private TextView eventDrawDate;
     private Switch geoReq;
 
@@ -103,6 +105,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventDescription = findViewById(R.id.eventDescriptionText);
         eventPoster = findViewById(R.id.eventPosterImage);
         eventSampleSize = findViewById(R.id.eventSampleSizeText);
+        eventMaxEntrants = findViewById(R.id.eventEntrantLimitText);
         eventDrawDate = findViewById(R.id.eventDrawDateText);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
 
@@ -120,6 +123,12 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventDrawDate.setText(formattedEventDrawDate);
         eventDescription.setText(selectedEvent.getEventDetails());
         geoReq.setChecked(selectedEvent.requiresGeolocation());
+
+        if (selectedEvent.getMaxEntrants() != null) {
+            eventMaxEntrants.setText(selectedEvent.getMaxEntrants().toString());
+        } else {
+            eventMaxEntrants.setText("No Limit");
+        }
 
 
         //Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
@@ -173,7 +182,10 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
                         Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "QR code not available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "QR code not available, creating a new code... please click again", Toast.LENGTH_SHORT).show();
+                    selectedEvent.setQrCodeHash(generateHash());
+                    fireBaseController.eventUpdateQR(selectedEvent);
+
                 }
             });
         });
@@ -208,6 +220,15 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    /**
+     * Generates a unique hash for the event.
+     *
+     * @return a UUID string.
+     */
+    private String generateHash() {
+        return UUID.randomUUID().toString();
     }
 
 

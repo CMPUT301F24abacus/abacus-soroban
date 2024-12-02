@@ -38,6 +38,7 @@
                     android:layout_height="48dp"
                     android:adjustViewBounds="false"
                     android:scaleType="centerCrop"
+                    android:visibility="invisible"
                     app:srcCompat="@android:drawable/ic_menu_mylocation" />
             </LinearLayout>
 

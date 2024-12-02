@@ -220,7 +220,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         }
 
         if (!entrantLimitEditText.getText().toString().isEmpty()) {
-            eventEntrantLimit = Integer.parseInt(sampleSizeEditText.getText().toString().trim());
+            eventEntrantLimit = Integer.parseInt(entrantLimitEditText.getText().toString().trim());
             if(eventEntrantLimit <= 0){
                 Toast.makeText(this, "Please enter a max entrant capacity that is greater than 0 for your event.", Toast.LENGTH_SHORT).show();
                 return;

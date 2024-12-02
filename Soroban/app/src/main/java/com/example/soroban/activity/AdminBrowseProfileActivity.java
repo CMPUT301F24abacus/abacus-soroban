@@ -27,6 +27,7 @@ import com.example.soroban.R;
 import com.example.soroban.model.User;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -51,6 +52,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
     private Switch searchSwitch;
     private AdminBrowseProfileActivity.BrowseProfilesAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FireBaseController fireBaseController;
     private ArrayList<User> browseProfilesList;
 
     /**
@@ -85,6 +87,7 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
         }
 
         CollectionReference userRf = db.collection("users");
+        fireBaseController = new FireBaseController(this);
         searchSwitch = findViewById(R.id.searchSwitch);
         searchSwitch.setChecked(false);
         searchSwitch.setOnCheckedChangeListener((view, isChecked) -> {
@@ -133,6 +136,9 @@ public class AdminBrowseProfileActivity extends AppCompatActivity {
                         user.setFirstName((String) userData.get("firstName"));
                         user.setLastName((String) userData.get("lastName"));
                         if (userData.get("phoneNumber") != null) { user.setPhoneNumber((long) userData.get("phoneNumber")); }
+                        if (userData.get("facility") != null) {
+                            fireBaseController.fetchFacilityDoc(user, (DocumentReference) userData.get("facility"));
+                        }
                         user.createFacility();
                         browseProfilesList.add(user);
                     }

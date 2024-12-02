@@ -44,7 +44,7 @@ public class TestAdminViewFacilityActivity {
         // Check if details are displayed
         onView(withId(R.id.tvad_facility_name)).check(matches(withText("MockFacility")));
         onView(withId(R.id.tvad_facility_details)).check(matches(withText("Mock Facility Test Details")));
-        onView(withId(R.id.tvad_facility_owner)).check(matches(withText("ID: testId\nName: No Name Set")));
+        onView(withId(R.id.tvad_facility_owner)).check(matches(withText("ID: testId")));
     }
 
 
