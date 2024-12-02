@@ -92,7 +92,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
-        eventQRCode.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN); // make image fill white
+        //eventQRCode.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN); // make image fill white
         // notifyMeButton = findViewById(R.id.btn_notify_me);
         registerButton = findViewById(R.id.btn_register);
         unregisterButton = findViewById(R.id.btn_unregister);
@@ -102,6 +102,17 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDetails.setText(selectedEvent.getEventDetails());
         eventDate.setText(selectedEvent.getEventDate().toString());
         eventDrawDate.setText(selectedEvent.getDrawDate().toString());
+
+        // QR Code
+        firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+            if (qrCodeHash != null) {
+                // Generate the QR code bitmap using the hash from firebase
+                Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
+                if (qrCodeBitmap != null) {
+                    eventQRCode.setImageBitmap(qrCodeBitmap); // Set the QR code bitmap
+                }
+            }
+        });
 
         // Set up QR code image
         eventQRCode.setOnClickListener(v -> {
