@@ -1,4 +1,4 @@
-package com.example.soroban;
+package com.example.soroban.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
