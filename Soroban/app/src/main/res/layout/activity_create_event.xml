@@ -31,8 +31,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Event Poster:"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/buttonUploadPoster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/background_light"
+                android:contentDescription="Upload event poster"
+                app:srcCompat="@android:drawable/ic_menu_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Event Name:"
-                android:textColor="@color/color_registration_open"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -50,8 +67,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Event Description:"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/eventDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="Enter event description"
+                android:inputType="textMultiLine"
+                android:textColor="@color/background_light"
+                android:textColorHint="@color/text_secondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Event Date:"
-                android:textColor="@color/color_registration_open"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -74,45 +109,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Event Description:"
-                android:textColor="@color/color_registration_open"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/eventDescriptionEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter event description"
-                android:inputType="textMultiLine"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/background_light"
-                android:textColorHint="@color/text_secondary" />
-
-            <!-- Event Poster -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Event Poster:"
-                android:textColor="@color/color_registration_open"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/buttonUploadPoster"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/background_light"
-                android:contentDescription="Upload event poster"
-                app:srcCompat="@android:drawable/ic_menu_upload" />
-
-            <!-- Draw Date -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Draw Date:"
-                android:textColor="@color/color_registration_open"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -131,12 +129,16 @@
                 android:text="Select Draw Date"
                 app:cornerRadius="8dp" />
 
+            <!-- Event Poster -->
+
+            <!-- Draw Date -->
+
             <!-- Sample Size -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sample Size:"
-                android:textColor="@color/color_registration_open"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -155,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Entrant Limit:"
-                android:textColor="@color/color_registration_open"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -181,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Geological Requirement:"
-                    android:textColor="@color/color_registration_open"
+                    android:textColor="@color/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -194,28 +196,6 @@
             </LinearLayout>
 
             <!-- Auto Replace -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Automatic Replacement:"
-                    android:textColor="@color/color_registration_open"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Switch
-                    android:id="@+id/eventAutoReplaceSwitch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp" />
-            </LinearLayout>
 
             <!-- Save Event Button -->
             <Button
