@@ -241,7 +241,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         // Create a new Event object
         newOrganizerEvent = new Event(appUser, userFacility, eventName, eventDate, drawDate, eventSampleSize);
-        newOrganizerEvent.setRequiresGeolocation(requiresLocation);
+        newOrganizerEvent.setRequiresGeolocation(geoRequirement);
         if(eventEntrantLimit != null){
             newOrganizerEvent.setMaxEntrants(eventEntrantLimit);
         }

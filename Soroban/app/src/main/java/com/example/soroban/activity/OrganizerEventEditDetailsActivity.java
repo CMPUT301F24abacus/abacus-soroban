@@ -89,7 +89,7 @@ public class OrganizerEventEditDetailsActivity extends AppCompatActivity {
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
                     // Check if the fetched posterUrl is null or empty
-                    if ("no poster".equals(posterUrl)) {
+                    if ("no poster".equals(posterUrl)  || posterUrl == null) {
                         // Set default image if no poster URL is available
                         eventPoster.setImageResource(R.drawable.ic_event_image);
                     } else {

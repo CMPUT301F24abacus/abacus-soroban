@@ -127,7 +127,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
             fireBaseController.fetchEventInvitedDoc(selectedEvent);
 
             int numberSampled = selectedEvent.sampleEntrants(selectedEvent.getSampleSize()).size();
-            Toast.makeText(this, numberSampled + " entrants were sampled.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, numberSampled + " entrant(s) sampled successfully.", Toast.LENGTH_SHORT).show();
             // Schedule a new notification for all relevant users
 
             // Update Firebase to recognize invited users
@@ -150,7 +150,7 @@ public class EventEntrantsListActivity extends AppCompatActivity {
 
             // Notify those still on waiting list that they have not been sampled
             for(int i = 0; i < selectedEvent.getWaitingEntrants().size(); i++){
-                Notification newNotif = new Notification("You have not been chosen.", "", Calendar.getInstance().getTime(), selectedEvent,selectedEvent.getNumberOfNotifications());
+                Notification newNotif = new Notification("You were not selected in the draw.", "", Calendar.getInstance().getTime(), selectedEvent,selectedEvent.getNumberOfNotifications());
                 fireBaseController.updateUserNotifications(selectedEvent.getWaitingEntrants().get(i), newNotif);
             }
 

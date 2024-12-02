@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/userProfilePhoto"
@@ -51,15 +52,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/usernameText"
-            android:textColor="@color/text_secondary"
-            android:textSize="20sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,9 +61,8 @@
 
             <TextView
                 android:id="@+id/user_firstname"
-                android:layout_width="wrap_content"
+                android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/firstNameText"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
@@ -95,9 +86,8 @@
 
             <TextView
                 android:id="@+id/user_lastname"
-                android:layout_width="wrap_content"
+                android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/lastNameText"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
@@ -121,9 +111,8 @@
 
             <TextView
                 android:id="@+id/user_emailAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/emailAddressText"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp" />
@@ -147,9 +136,8 @@
 
             <TextView
                 android:id="@+id/user_phoneNumber"
-                android:layout_width="wrap_content"
+                android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/phoneNumberText"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp" />

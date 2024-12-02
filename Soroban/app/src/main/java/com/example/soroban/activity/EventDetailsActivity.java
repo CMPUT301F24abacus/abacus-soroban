@@ -27,6 +27,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.QRCodeGenerator;
 import com.example.soroban.R;
+import com.example.soroban.activity.UserEventActivity;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
 import com.example.soroban.fragment.DatePickerListener;
@@ -35,7 +36,9 @@ import com.example.soroban.fragment.GeolocationListener;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Handles the display and management of event details.
@@ -65,6 +68,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private Button unregisterButton;
     private boolean allowLocation;
     private boolean isRegistered; // Store the registration status
+    private long TimeSinceBackPressed;
 
     /**
      * Called when the activity is created. Initializes the UI and sets up event data.
@@ -109,9 +113,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
 
         // Populate Event Details
         eventName.setText(selectedEvent.getEventName());
-        eventDetails.setText("Event Details: " + selectedEvent.getEventDetails());
-        eventDate.setText("Event Date: " + selectedEvent.getEventDate().toString());
-        eventDrawDate.setText("Draw Date: " + selectedEvent.getDrawDate().toString());
+        String eventDescription = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
+        eventDetails.setText(eventDescription);
+        eventDate.setText("Event Date: " + dateFormat.format(selectedEvent.getEventDate()));
+        eventDrawDate.setText("Draw Date: " + dateFormat.format(selectedEvent.getDrawDate()));
 
         // QR Code
         firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
@@ -143,7 +148,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         firebaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
                     // Check if the fetched posterUrl is null or empty
-                    if ("no poster".equals(posterUrl)) {
+                    if ("no poster".equals(posterUrl)  || posterUrl == null) {
                         // Set default image if no poster URL is available
                         eventImage.setImageResource(R.drawable.ic_event_image);
                     } else {
@@ -255,12 +260,19 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
      * Handles user unregistration from the event.
      */
     private void handleUnregister() {
-        // Unregistration
-        appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-        firebaseController.removeFromWaitListDoc(selectedEvent,appUser);
-        Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
-        isRegistered = false;
-        updateRegistrationButtons();
+        if (TimeSinceBackPressed + 2000 > System.currentTimeMillis()) {
+            // Unregistration
+            appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+            firebaseController.removeFromWaitListDoc(selectedEvent,appUser);
+            Toast.makeText(this, "Unregistered from the event!", Toast.LENGTH_SHORT).show();
+            isRegistered = false;
+            updateRegistrationButtons();
+        }
+        else {
+            Toast toast = Toast.makeText(EventDetailsActivity.this, "Press back again to confirm!", Toast.LENGTH_SHORT);
+            toast.show();
+            TimeSinceBackPressed = System.currentTimeMillis();
+        }
     }
 
     /**

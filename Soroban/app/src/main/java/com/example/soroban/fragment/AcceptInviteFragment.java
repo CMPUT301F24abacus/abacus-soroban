@@ -68,7 +68,6 @@ public class AcceptInviteFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        View view = getLayoutInflater().inflate(R.layout.user_accept_invitation, null);
 
         fireBaseController = new FireBaseController(getContext());
 
@@ -94,15 +93,8 @@ public class AcceptInviteFragment extends DialogFragment {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        ImageButton cancel = view.findViewById(R.id.closeInvitation);
-
-        cancel.setOnClickListener(v -> {
-            this.dismiss();
-        });
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Accept Invitation?");
-        builder.setView(view);
         builder.setNegativeButton("Reject", (dialog, which) -> {
             //User rejects invitation
             User thisUser = selectedEvent.getInvitedEntrants().find(appUser);
@@ -130,7 +122,7 @@ public class AcceptInviteFragment extends DialogFragment {
                 selectedEvent.removeFromWaitingEntrants(user);
 
                 // Notify invited entrant that they have been re-sampled
-                Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                Notification newNotif = new Notification("You have been re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
                 fireBaseController.updateUserNotifications(user, newNotif);
             }
             // Else there are no other waiting entrants

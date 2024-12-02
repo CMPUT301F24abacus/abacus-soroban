@@ -43,6 +43,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -67,12 +69,12 @@ public class UserDashboardActivity extends AppCompatActivity {
     private User appUser;
     private FireBaseController fireBaseController;
     private FirebaseFirestore db;
-    private ListView waitlistedEventsListView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-    private EventList waitlistedEventsListData;
     private EventArrayAdapter waitlistedAdapter;
+    private ListView waitlistedEventsListView;
     private ListView confirmedEventsListView;
+    private EventList waitlistedEventsListData;
     private EventList confirmedEventsListData;
     private EventArrayAdapter confirmedAdapter;
     private long TimeSinceBackPressed;
@@ -127,6 +129,24 @@ public class UserDashboardActivity extends AppCompatActivity {
         }else{
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
+
+        // Programmatically set header based on time of day
+        // References:
+        // StackOverflow - https://stackoverflow.com/questions/24806183/get-date-in-current-timezone-in-java
+        // Oracle/ZonedDateTime Object - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html
+        TextView header = findViewById(R.id.tv_header);
+        String headerText = "";
+        int currentHour = ZonedDateTime.now(ZoneId.systemDefault()).getHour();
+        if (currentHour >= 0 && currentHour <= 4) {
+            headerText = String.format("Good evening, %s!", appUser.getFirstName());
+        } else if (currentHour >= 5 && currentHour <= 11) {
+            headerText = String.format("Good morning, %s!", appUser.getFirstName());
+        } else if (currentHour >= 12 && currentHour <= 17) {
+            headerText = String.format("Good afternoon, %s!", appUser.getFirstName());
+        } else if (currentHour >= 18 && currentHour <= 23) {
+            headerText = String.format("Good evening, %s!", appUser.getFirstName());
+        }
+        header.setText(headerText);
 
         // Grab event data from appUser
         waitlistedEventsListData = appUser.getWaitList();

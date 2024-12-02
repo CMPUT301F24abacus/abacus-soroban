@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -32,6 +33,8 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+
+import java.util.List;
 
 /*References:
 / https://help.famoco.com/developers/media/display-map/
@@ -55,7 +58,7 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
     private User appUser;
     private ActivityResultLauncher<String> requestPersmissionLauncher;
     private LocationManager locationManager;
-    private Location userLocation;
+    private Location userLocation = null;
 
 
     @Override
@@ -106,13 +109,19 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
             User entrant = selectedEvent.getWaitingEntrants().get(i);
             GeoPoint userPoint = entrant.getLocation();
 
-            Marker newMarker = new Marker(map);
-            newMarker.setPosition(userPoint);
-            newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
-            newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            newMarker.setTitle(entrant.getFirstName() + " " + entrant.getLastName());
+            if(userPoint == null){
+                Toast.makeText(this, "Error retrieving entrant geolocation. Some entrants may not be displayed.", Toast.LENGTH_SHORT).show();
+            }
 
-            map.getOverlays().add(newMarker);
+            if (userPoint != null){
+                Marker newMarker = new Marker(map);
+                newMarker.setPosition(userPoint);
+                newMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(),org.osmdroid.library.R.drawable.ic_menu_mylocation));
+                newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                newMarker.setTitle(entrant.getFirstName() + " " + entrant.getLastName());
+
+                map.getOverlays().add(newMarker);
+            }
         }
 
         // Check if location permissions are on
@@ -125,42 +134,24 @@ public class EventEntrantsGeolocationActivity extends AppCompatActivity{
                 // App cant access geo location
             }
         });
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 // App can use location
-                // Check if GPS is available
-                boolean hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-                LocationListener gpsListener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(@NonNull Location location) {
-                        if(userLocation == null){
-                            userLocation = location;
-                            GeoPoint startGeo = new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
-                            IGeoPoint start = startGeo;
-                            mapController.setCenter(start);
-
-                        }
+                List<String> providers = locationManager.getProviders(true);
+                for(String provider : providers){
+                    userLocation = locationManager.getLastKnownLocation(provider);
+                    if(userLocation != null){
+                        GeoPoint startGeo = new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
+                        IGeoPoint start = startGeo;
+                        mapController.setCenter(start);
                     }
-                };
-
-                if(hasGPS){
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            5000,
-                            0F,
-                            gpsListener
-                    );
                 }
 
-            }else if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+        }else if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
                 // Prompt user to accept or decline location permissions
-            }else{
+        }else {
                 // Directly ask for permission
                 requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
                 requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
         }
 
     }

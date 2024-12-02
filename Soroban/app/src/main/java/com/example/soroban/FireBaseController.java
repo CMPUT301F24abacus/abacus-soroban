@@ -1,6 +1,8 @@
 package com.example.soroban;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -70,13 +72,16 @@ public class FireBaseController implements Serializable {
      * @Author: Matthieu Larochelle, Kevin Li
      * @Version: 1.0
      * @param progressBar: Progress bar which will be made invisible upon data retrieval.
-     * @param userBtn: Button to user dashboard which will be made visible upon data retrieval.
-     * @param organizerBtn: Button to organizer dashboard which will be made visible upon data retrieval.
      * @param user: User for which creating is required.
-     * @param adminDashboard: Button to admin dashboard which will be made visible if user's an admin.
+     * @param button: Button that user will select to continue to load into the app,
+     *              made visible after data collection
      */
-    public void initialize(ProgressBar progressBar, Button userBtn, Button organizerBtn, User user, Button adminDashboard){
+    public void initialize(ProgressBar progressBar, User user, Button button){
         DocumentReference docRef = userRf.document(user.getDeviceId());
+        String lastButtonText = button.getText().toString();
+        ColorStateList lastButtonColor = button.getBackgroundTintList();
+        button.setText("Loading...");
+        button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#808080")));
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
@@ -92,13 +97,13 @@ public class FireBaseController implements Serializable {
                         user.setLastName((String) userData.get("lastName"));
                         user.setPhoneNumber((long) userData.get("phoneNumber"));
                         user.setUsername((String) userData.get("username"));
-                        // remove the if statement later, this is just so preexisting accounts without adminCheck will run
+
                         if (userData.get("adminCheck") != null) {
                             user.setAdminCheck((Boolean) userData.get("adminCheck"));
-                            if (user.getAdminCheck()) {
-                                adminDashboard.setVisibility(View.VISIBLE);
-                            }
+                        } else {
+                            user.setAdminCheck(false);
                         }
+
                         DocumentReference facilityDocRef = (DocumentReference) userData.get("facility");
                         if (facilityDocRef != null) {
                             fetchFacilityDoc(user, facilityDocRef);
@@ -113,8 +118,9 @@ public class FireBaseController implements Serializable {
                         createUserDb(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    userBtn.setVisibility(View.VISIBLE);
-                    organizerBtn.setVisibility(View.VISIBLE);
+                    button.setText(lastButtonText);
+                    button.setBackgroundTintList(lastButtonColor);
+                    button.setClickable(true);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
@@ -303,6 +309,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -314,6 +324,7 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                event.setEventDetails(eventDetails);
                                 user.addToWaitlist(event);
                             }
                         } else {
@@ -342,6 +353,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -353,6 +368,7 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                event.setEventDetails(eventDetails);
                                 fetchEventWaitlistDoc(event);
                                 fetchEventCancelledDoc(event);
                                 fetchEventInvitedDoc(event);
@@ -383,6 +399,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -394,6 +414,7 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                event.setEventDetails(eventDetails);
                                 fetchEventWaitlistDoc(event);
                                 fetchEventCancelledDoc(event);
                                 fetchEventAttendeeDoc(event);
@@ -425,6 +446,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 Facility facility = user.getFacility();
@@ -434,6 +459,7 @@ public class FireBaseController implements Serializable {
                                     Integer maxEntrants = ((Long) eventData.get("maxEntrants")).intValue();
                                     event.setMaxEntrants(maxEntrants);
                                 }
+                                event.setEventDetails(eventDetails);
                                 fetchEventWaitlistDoc(event);
                                 fetchEventCancelledDoc(event);
                                 fetchEventInvitedDoc(event);
@@ -474,7 +500,7 @@ public class FireBaseController implements Serializable {
                                 // Notify user if current time is after notification date
                                 if(notificationDate.compareTo(Calendar.getInstance().getTime()) <= 0 && notifManager.areNotificationsEnabled()){
                                     NotificationSystem notificationSystem = new NotificationSystem(context);
-                                    notificationSystem.setNotification(notifCounter,notificationEventName + " : " + notificationTitle, notificationMessage);
+                                    notificationSystem.setNotification(notifCounter,notificationEventName + ": " + notificationTitle, notificationMessage);
                                     removeNotificationDoc(document.getId(), user); // Remove notification so it is not displayed again
                                     notifCounter++;
                                 }
@@ -681,6 +707,7 @@ public class FireBaseController implements Serializable {
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
+        data.put("eventDetails", event.getEventDetails());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
@@ -702,6 +729,7 @@ public class FireBaseController implements Serializable {
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
+        data.put("eventDetails", event.getEventDetails());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
@@ -722,6 +750,7 @@ public class FireBaseController implements Serializable {
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
+        data.put("eventDetails", event.getEventDetails());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
@@ -743,6 +772,7 @@ public class FireBaseController implements Serializable {
         data.put("eventName", event.getEventName());
         data.put("eventDate", event.getEventDate());
         data.put("drawDate", event.getDrawDate());
+        data.put("eventDetails", event.getEventDetails());
         data.put("maxEntrants", event.getMaxEntrants());
         data.put("sampleSize", event.getSampleSize());
         data.put("owner", event.getOwner().getDeviceId());
@@ -807,7 +837,7 @@ public class FireBaseController implements Serializable {
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
-                        String eventDetails = document.getString("eventDetails");
+                        String eventDetails = document.getString("eventDetails") != null ? document.getString("eventDetails") : null;
                         Integer maxEntrants = document.getLong("maxEntrants") != null ? document.getLong("maxEntrants").intValue() : null;
                         Integer sampleSize = document.getLong("sampleSize") != null ? document.getLong("sampleSize").intValue() : null;
                         Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
