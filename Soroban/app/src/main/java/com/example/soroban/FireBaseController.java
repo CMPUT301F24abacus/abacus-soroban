@@ -1,6 +1,8 @@
 package com.example.soroban;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -75,6 +77,10 @@ public class FireBaseController implements Serializable {
      */
     public void initialize(ProgressBar progressBar, User user, Button button){
         DocumentReference docRef = userRf.document(user.getDeviceId());
+        String lastButtonText = button.getText().toString();
+        ColorStateList lastButtonColor = button.getBackgroundTintList();
+        button.setText("Loading...");
+        button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#808080")));
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
@@ -111,7 +117,9 @@ public class FireBaseController implements Serializable {
                         createUserDb(user);
                     }
                     progressBar.setVisibility(View.GONE);
-                    button.setVisibility(View.VISIBLE);
+                    button.setText(lastButtonText);
+                    button.setBackgroundTintList(lastButtonColor);
+                    button.setClickable(true);
                 }else{
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
