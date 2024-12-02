@@ -103,7 +103,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:padding="12dp"
                 android:text="Create Account"
-                android:textColor="#fff"
+                android:textColor="#ffffff"
                 app:cornerRadius="8dp" />
         </LinearLayout>
     </ScrollView>
@@ -121,18 +121,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Title -->
-
-        <!-- First Name -->
-
-        <!-- Last Name -->
-
-        <!-- Email Address -->
-
-        <!-- Phone Number -->
-
-        <!-- Create Account Button -->
 
         <ProgressBar
             android:id="@+id/progressBar"
