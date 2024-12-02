@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +57,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
     private ImageView eventPoster;
     private TextView eventSampleSize;
     private TextView eventDrawDate;
-    private Button geoReq;
-    private Button autoReplace;
+    private Switch geoReq;
 
     private Button viewEntrants;
     private Button editEvent;
@@ -103,7 +103,6 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventSampleSize = findViewById(R.id.eventSampleSizeText);
         eventDrawDate = findViewById(R.id.eventDrawDateText);
         geoReq = findViewById(R.id.eventGeoReqSwitch);
-        autoReplace = findViewById(R.id.eventAutoReplaceSwitch);
 
         viewEntrants = findViewById(R.id.buttonViewEntrants);
         editEvent = findViewById(R.id.buttonEditEventDetails);
@@ -116,8 +115,8 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         eventSampleSize.setText(selectedEvent.getSampleSize().toString());
         String formattedEventDrawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
         eventDrawDate.setText(formattedEventDrawDate);
-        // geoReq.setActivated();
-        // autoReplace.setActivated();
+        eventDescription.setText(selectedEvent.getEventDetails());
+        geoReq.setChecked(selectedEvent.requiresGeolocation());
 
 
         //Log.d("EventPosterURL", "Poster URL: " + selectedEvent.getPosterUrl());
@@ -125,7 +124,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
                     // Check if the fetched posterUrl is null or empty
-                    if ("no poster".equals(posterUrl)) {
+                    if ("no poster".equals(posterUrl) || posterUrl == null) {
                         // Set default image if no poster URL is available
                         eventPoster.setImageResource(R.drawable.ic_event_image);
                     } else {
