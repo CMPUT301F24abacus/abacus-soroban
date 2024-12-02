@@ -113,6 +113,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
 
         // Populate Event Details
         eventTitle.setText(selectedEvent.getEventName());
+        eventDescription.setText(selectedEvent.getEventDetails());
         String formattedEventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
         eventDate.setText(formattedEventDate);
         eventSampleSize.setText(selectedEvent.getSampleSize().toString());
