@@ -302,7 +302,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
-                                String eventDetails = (String) eventData.get("eventDetails");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -343,7 +346,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
-                                String eventDetails = (String) eventData.get("eventDetails");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -386,7 +392,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
-                                String eventDetails = (String) eventData.get("eventDetails");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 User owner = new User((String) eventData.get("owner"));
@@ -430,7 +439,10 @@ public class FireBaseController implements Serializable {
                                 String eventName = (String) eventData.get("eventName");
                                 Date eventDate = document.getDate("eventDate");
                                 Date drawDate = document.getDate("drawDate");
-                                String eventDetails = (String) eventData.get("eventDetails");
+                                String eventDetails = null;
+                                if( eventData.get("eventDetails") != null) {
+                                    eventDetails = (String) eventData.get("eventDetails");
+                                }
                                 Integer sampleSize = ((Long) eventData.get("sampleSize")).intValue();
                                 Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
                                 Facility facility = user.getFacility();
@@ -818,7 +830,7 @@ public class FireBaseController implements Serializable {
                         String qrHash = document.getString("QRHash");
                         Date eventDate = document.getDate("eventDate");
                         Date drawDate = document.getDate("drawDate");
-                        String eventDetails = document.getString("eventDetails");
+                        String eventDetails = document.getString("eventDetails") != null ? document.getString("eventDetails") : null;
                         Integer maxEntrants = document.getLong("maxEntrants") != null ? document.getLong("maxEntrants").intValue() : null;
                         Integer sampleSize = document.getLong("sampleSize") != null ? document.getLong("sampleSize").intValue() : null;
                         Boolean requireLocation = document.getBoolean("geoLocation") != null ? document.getBoolean("geoLocation") : false;
