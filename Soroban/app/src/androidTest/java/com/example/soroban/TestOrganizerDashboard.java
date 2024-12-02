@@ -31,8 +31,7 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
-public class OrganizerDashboardTest {
-
+public class TestOrganizerDashboard {
     private User mockUser(){
         return new User("testId");
     }
@@ -58,7 +57,7 @@ public class OrganizerDashboardTest {
         ActivityScenario<OrganizerDashboardActivity> scenario = ActivityScenario.launch(createOrganizerDashboardIntent(appUser));
         // Check if the dashboard title "Organizer Dashboard" is displayed
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.organizer_dashboard_tv)).check(matches(withText("Organizer Dashboard")));
+        onView(withId(R.id.facilityNameTextView)).check(matches(withText("My Facility")));
     }
 
     @Test
@@ -118,5 +117,4 @@ public class OrganizerDashboardTest {
                 .onChildView(withId(R.id.tv_event_name))
                 .check(matches((withText(mockEvent.getEventName()))));
     }
-
 }
