@@ -145,6 +145,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/eventPosterDelete"
                         app:layout_constraintStart_toEndOf="@+id/eventPosterImage"
                         app:layout_constraintTop_toTopOf="@+id/eventPosterImage"
                         app:srcCompat="@android:drawable/ic_menu_upload" />

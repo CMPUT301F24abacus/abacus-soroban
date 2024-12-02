@@ -9,104 +9,56 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.soroban.activity.AdminDashboardActivity;
-import com.example.soroban.activity.CreateFacilityActivity;
-import com.example.soroban.activity.OrganizerDashboardActivity;
+import com.example.soroban.activity.CreateAccountActivity;
 import com.example.soroban.activity.UserDashboardActivity;
 import com.example.soroban.model.User;
-import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity"; // For logging
     private User appUser;
     private FireBaseController firebaseController;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar setup
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Drawer setup
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
         // Firebase and UI initialization
         firebaseController = new FireBaseController(this);
-        Button btnOpenAdminDashboard = findViewById(R.id.btn_open_admin_dashboard);
         ProgressBar progressBar = findViewById(R.id.progressBar);
-        Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
-        Button btnOpenOrganizerDashboard = findViewById(R.id.btn_open_organizer_dashboard);
+        Button button = findViewById(R.id.buttonContinue);
 
-        // Handle passed arguments
-        Bundle args = getIntent().getExtras();
-        if (args != null) {
-            appUser = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    ? args.getSerializable("appUser", User.class)
-                    : (User) args.getSerializable("appUser");
-        }
-
-        if (appUser == null) {
-            appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-            appUser.setAdminCheck(false);
-            firebaseController.initialize(progressBar, btnOpenDashboard, btnOpenOrganizerDashboard, appUser, btnOpenAdminDashboard);
-        }
+        appUser = new User(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        firebaseController.initialize(progressBar, appUser, button);
 
         // Notification permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askNotificationPermission();
         }
 
-        // Adjust layout for system bars
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        button.setOnClickListener(v -> {
+            String firstName = appUser.getFirstName();
+            String lastName = appUser.getLastName();
+            String email = appUser.getEmail();
 
-        // Navigation drawer item selection
-        navigationView.setNavigationItemSelectedListener(this::handleNavigation);
+            if (firstName != null && lastName != null && email != null) {
+                // Profile is complete, redirect to UserDashboardActivity
+                Log.d(TAG, "User profile is complete. Redirecting to UserDashboardActivity.");
+                openActivity(UserDashboardActivity.class);
+            } else {
+                // Profile is incomplete, redirect to CreateAccountActivity
+                Log.d(TAG, "User profile is incomplete. Redirecting to CreateAccountActivity.");
+                openActivity(CreateAccountActivity.class);
+            }
+        });
 
-        // Button click listeners
-        btnOpenDashboard.setOnClickListener(v -> openActivity(UserDashboardActivity.class));
-        btnOpenOrganizerDashboard.setOnClickListener(v -> openActivity(OrganizerDashboardActivity.class));
-        btnOpenAdminDashboard.setOnClickListener(v -> openActivity(AdminDashboardActivity.class));
-    }
-
-    /**
-     * Handle navigation drawer item clicks.
-     *
-     * @param item the selected menu item
-     */
-    private boolean handleNavigation(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_user_dashboard) {
-            openActivity(UserDashboardActivity.class);
-        } else if (id == R.id.nav_organizer_dashboard) {
-            openActivity(OrganizerDashboardActivity.class);
-        } else if (id == R.id.nav_admin_dashboard) {
-            openActivity(AdminDashboardActivity.class);
-        }
-        drawerLayout.closeDrawers();
-        return true;
     }
 
     /**
