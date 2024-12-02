@@ -33,7 +33,9 @@ import java.util.Objects;
 /**
  * Handles the display and management of an event the user is either
  * registered for or waitlisted for, allowing the user to unregister or leave the waitlist.
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
+ * @author Kevin Li
  * @see Event
  * @see User
  * @see FireBaseController

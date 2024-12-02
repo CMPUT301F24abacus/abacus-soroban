@@ -27,7 +27,7 @@ import java.io.Serializable;
  * Dialog fragment for viewing a user's profile.
  * Displays user details and profile image with options for editing the profile.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see User
  */
 public class ViewProfileFragment extends DialogFragment {

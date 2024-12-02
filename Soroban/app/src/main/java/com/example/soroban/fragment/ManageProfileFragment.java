@@ -41,7 +41,7 @@ import java.io.Serializable;
  * Dialog fragment for managing and updating user profiles.
  * Supports updating user details and uploading profile images to Firebase.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see User
  */
 public class ManageProfileFragment extends DialogFragment {

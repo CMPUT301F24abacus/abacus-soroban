@@ -25,7 +25,7 @@ import java.util.Calendar;
  * Dialog fragment for handling invitation acceptance or rejection for an event.
  * Provides options for users to accept or reject an event invitation with Firebase integration.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see Event
  * @see User
  * @see FireBaseController

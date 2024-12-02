@@ -49,6 +49,8 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
      *
      * @param savedInstanceState The saved state of the activity.
      * @throws IllegalArgumentException if appUser is not provided in the intent extras.
+     * @author Matthieu Larochelle
+     * @author Ayan Chaudry
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class InvitationActivity extends AppCompatActivity implements DialogFragm
     /**
      * Updates the adapter for the ListView.
      * Called to refresh the displayed data.
+     * @author Matthieu Larochelle
      */
     @Override
     public void update() {

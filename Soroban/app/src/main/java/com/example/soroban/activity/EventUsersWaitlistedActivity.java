@@ -58,7 +58,8 @@ public class EventUsersWaitlistedActivity extends AppCompatActivity {
      *
      * @param savedInstanceState the saved state of the activity
      * @throws IllegalArgumentException if required arguments (e.g., appUser or selectedEvent) are missing.
-     * Author: Aaryan Shetty, Matthieu Larochelle
+     * @author Aaryan Shetty
+     * @author Matthieu Larochelle
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

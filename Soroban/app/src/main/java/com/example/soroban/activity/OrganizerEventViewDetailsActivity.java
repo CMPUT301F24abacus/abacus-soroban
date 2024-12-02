@@ -35,7 +35,9 @@ import java.util.Locale;
  * Allows organizers to view details of a specific event.
  * Provides functionality to view event details, entrants, and QR codes.
  *
- * Author: Aaryan Shetty
+ * @author Matthieu Larochelle
+ * @author Aryan Shetty
+ * @author Kevin Li
  * @see Event
  * @see User
  * @see FireBaseController

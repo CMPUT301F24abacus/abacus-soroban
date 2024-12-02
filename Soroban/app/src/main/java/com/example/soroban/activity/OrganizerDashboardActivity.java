@@ -48,7 +48,9 @@ import java.util.Map;
 /**
  * Serves as the main dashboard for organizers.
  * This activity allows the user to view hosted events, create new events, or manage their facility profile.
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
+ * @author Kevin Li
  * @see CreateEventActivity
  * @see FacilityDisplayActivity
  * @see EventArrayAdapter

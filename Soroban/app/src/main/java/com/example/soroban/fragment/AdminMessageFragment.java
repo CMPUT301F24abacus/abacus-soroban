@@ -33,6 +33,7 @@ import java.util.Objects;
  * Provides a dialog for sending administrative messages to facility owners
  * regarding violations or other important notifications.
  *
+ * @author Kevin Li
  * @see FireBaseController
  * @see Facility
  * @see Notification
@@ -44,6 +45,13 @@ public class AdminMessageFragment extends DialogFragment {
     private FireBaseController firebaseController;
     private DialogFragmentListener listener;
 
+    /**
+     * Creates a new instance of {@code AdminMessageFragment}.
+     *
+     * @param selectedFacility the selected facility for which the invitation is being handled.
+     * @param appUser the user interacting with the fragment.
+     * @return a new {@code  AdminMessageFragment} instance.
+     */
     public static AdminMessageFragment newInstance(Facility selectedFacility, User appUser) {
 
         Bundle args = new Bundle();

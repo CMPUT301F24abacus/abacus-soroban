@@ -21,7 +21,7 @@ import java.util.Locale;
  * Custom ArrayAdapter for displaying a list of {@link Event} objects.
  * This adapter is responsible for inflating a custom layout for each event in the list.
  *
- * @author
+ * @author Matthieu Larochelle
  * @see Event
  * @see EventList
  */

@@ -41,7 +41,8 @@ import java.util.UUID;
 /**
  * Allows organizers to create new events by providing details such as
  * event name, description, dates, and sample size. Users can also upload a poster for the event.
- * @author
+ * @author Matthieu Larochelle
+ * @author Ayan Chaudry
  * @see Event
  * @see Facility
  * @see User

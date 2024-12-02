@@ -44,7 +44,9 @@ import java.util.Map;
 /**
  * This class handles interactions with Firebase Firestore and Storage.
  * It manages users, events, facilities, and notifications by performing CRUD operations.
- * @Author: Matthieu Larochelle, Kevin Li, Edwin M
+ * @Author: Matthieu Larochelle
+ * @author Kevin Li
+ * @author Edwin M
  * @Version: 1.2
  */
 public class FireBaseController implements Serializable {

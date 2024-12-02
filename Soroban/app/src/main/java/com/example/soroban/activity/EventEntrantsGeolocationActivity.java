@@ -41,10 +41,12 @@ import java.util.List;
 / https://mrappbuilder.medium.com/how-to-integrate-and-work-with-open-street-map-osm-in-an-android-app-kotlin-564b38590bfe
 / https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
 / https://sachankapil.medium.com/latest-method-how-to-get-current-location-latitude-and-longitude-in-android-give-support-for-c5132474c864
+/ https://stackoverflow.com/questions/6694391/get-current-location-of-user-in-android-without-using-gps-or-internet
 */
 /**
  * Displays the geolocation of entrants for a selected event
  * Allows organizers to view and interact with user locations on a map.
+ * @Author Matthieu Larochelle
  * @see Event
  * @see User
  * @see FireBaseController
