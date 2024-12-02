@@ -24,7 +24,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.soroban.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;

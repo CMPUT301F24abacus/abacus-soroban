@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Intent;
-import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
