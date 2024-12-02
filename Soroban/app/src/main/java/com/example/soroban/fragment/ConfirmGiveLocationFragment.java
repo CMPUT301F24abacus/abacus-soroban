@@ -78,7 +78,6 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
             // Check if location permissions are on
             locationManager = (LocationManager) getSystemService(getContext(), LocationManager.class);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     // App can use location
                     // Check if GPS is available
@@ -108,7 +107,6 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
                     requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
                     requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
                 }
-            }
 
             listener.returnResult(true);
         });

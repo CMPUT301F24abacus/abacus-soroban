@@ -139,10 +139,8 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
             facilityNameTextView.setText("My Facility");
         }
 
-        // Initialize events list
-        events = new EventList();
-
         // Set up RecyclerView
+        events = appUser.getHostedEvents();
         eventAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventAdapter);
 
