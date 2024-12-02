@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -131,6 +132,32 @@ public class UserEventActivity extends AppCompatActivity {
         } else {
             eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
         }
+
+        fireBaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Check if the fetched posterUrl is null or empty
+                    if ("no poster".equals(posterUrl)) {
+                        // Set default image if no poster URL is available
+                        eventPoster.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventPoster);
+                    }
+                },
+                error -> {
+                    // Handle errors and set a default image
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventPoster.setImageResource(R.drawable.ic_event_image);
+                });
+        // Initialize controllers to update User
+        FireBaseController fireBaseController = new FireBaseController(this);
 
         // Remove Event from User waitlist
         unregisterButton.setOnClickListener( v -> {
