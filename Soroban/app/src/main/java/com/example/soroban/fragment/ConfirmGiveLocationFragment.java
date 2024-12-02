@@ -26,7 +26,10 @@ import com.example.soroban.R;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+
+import java.util.List;
 
 /**
  * Displays a confirmation dialog for users to allow location access for joining an event's waitlist.
@@ -43,6 +46,7 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
     private GeolocationListener listener;
     private ActivityResultLauncher<String> requestPersmissionLauncher;
     private LocationManager locationManager;
+    private Location location = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,37 +80,25 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
         });
         builder.setPositiveButton("Yes", (dialog, which) -> {
             // Check if location permissions are on
-            locationManager = (LocationManager) getSystemService(getContext(), LocationManager.class);
+            locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    // App can use location
-                    // Check if GPS is available
-                    boolean hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-                    LocationListener gpsListener = new LocationListener() {
-                        @Override
-                        public void onLocationChanged(@NonNull Location location) {
-                            // Return User's location
-                            listener.setLocation(location.getLatitude(), location.getLongitude());
-                        }
-                    };
-
-                    if (hasGPS) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                5000,
-                                0F,
-                                gpsListener
-                        );
+            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                // App can use location
+                List<String> providers = locationManager.getProviders(true);
+                for(String provider : providers){
+                    location = locationManager.getLastKnownLocation(provider);
+                    if(location != null){
+                        listener.setLocation(location.getLatitude(), location.getLongitude());
                     }
-
-                } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    // Prompt user to accept or decline location permissions
-                } else {
-                    // Directly ask for permission
-                    requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
-                    requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
                 }
+
+            }else if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                // Prompt user to accept or decline location permissions
+            }else {
+                // Directly ask for permission
+                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
 
             listener.returnResult(true);
         });
