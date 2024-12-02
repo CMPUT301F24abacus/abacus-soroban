@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -25,8 +24,10 @@ import com.example.soroban.model.Event;
 import com.example.soroban.model.Notification;
 import com.example.soroban.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -51,6 +52,7 @@ public class UserEventActivity extends AppCompatActivity {
     private ImageView eventPoster;
     private ImageView eventQR;
     private FireBaseController fireBaseController;
+    private long TimeSinceBackPressed;
     String listType;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,7 @@ public class UserEventActivity extends AppCompatActivity {
         fireBaseController.fetchEventPosterUrl(selectedEvent,
                 posterUrl -> {
                     // Check if the fetched posterUrl is null or empty
-                    if ("no poster".equals(posterUrl)) {
+                    if ("no poster".equals(posterUrl) || posterUrl == null) {
                         // Set default image if no poster URL is available
                         eventPoster.setImageResource(R.drawable.ic_event_image);
                     } else {
@@ -161,39 +163,44 @@ public class UserEventActivity extends AppCompatActivity {
 
         // Remove Event from User waitlist
         unregisterButton.setOnClickListener( v -> {
-            if (listType.equals("waitList")) {
-                appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-                fireBaseController.removeFromWaitListDoc(selectedEvent,appUser);
-                Toast.makeText(this, "You have left the waitlist.", Toast.LENGTH_SHORT).show();
-            } else if (listType.equals("registeredEvents")) {
-                appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
-                fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
-                fireBaseController.updateThoseNotGoing(selectedEvent,appUser);
+            if (TimeSinceBackPressed + 3000 > System.currentTimeMillis()) {
+                if (listType.equals("waitList")) {
+                    appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+                    fireBaseController.removeFromWaitListDoc(selectedEvent,appUser);
+                Toast.makeText(this, "You have left the waitlist.", Toast.LENGTH_SHORT).show();}
+                else if (listType.equals("registeredEvents")) {
+                    appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
+                    fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
+                    fireBaseController.updateThoseNotGoing(selectedEvent,appUser);
 
-                // Re-sample a new user
-                ArrayList<Integer> reSampledIndices = selectedEvent.sampleEntrants(1); // Re-sample one user
+                    // Re-sample a new user
+                    ArrayList<Integer> reSampledIndices = selectedEvent.sampleEntrants(1); // Re-sample one user
 
-                // If a User was re-sampled
-                if(reSampledIndices.size() == 1){
-                    User user = selectedEvent.getInvitedEntrants().get(reSampledIndices.get(0));
-                    fireBaseController.updateInvited(selectedEvent, user);
-                    fireBaseController.updateUserInvited(user, selectedEvent);
-                    fireBaseController.removeFromWaitListDoc(selectedEvent, user);
+                    // If a User was re-sampled
+                    if(reSampledIndices.size() == 1){
+                        User user = selectedEvent.getInvitedEntrants().get(reSampledIndices.get(0));
+                        fireBaseController.updateInvited(selectedEvent, user);
+                        fireBaseController.updateUserInvited(user, selectedEvent);
+                        fireBaseController.removeFromWaitListDoc(selectedEvent, user);
 
-                    // Notify invited entrant that they have been re-sampled
-                    Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
-                    fireBaseController.updateUserNotifications(user, newNotif);
+                        // Notify invited entrant that they have been re-sampled
+                        Notification newNotif = new Notification("You have been re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                        fireBaseController.updateUserNotifications(user, newNotif);
+                    }
+                    Toast.makeText(this, "You have unregistered from the event.", Toast.LENGTH_SHORT).show();// Else there are no other waiting entrants
                 }
-                Toast.makeText(this, "You have unregistered from the event.", Toast.LENGTH_SHORT).show();
-                // Else there are no other waiting entrants
+                Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
+                Bundle newArgs = new Bundle();
+                newArgs.putSerializable("appUser",appUser);
+                intent.putExtras(newArgs);
+                startActivity(intent);
+                finish();
             }
-            Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
-            Bundle newArgs = new Bundle();
-            newArgs.putSerializable("appUser",appUser);
-            intent.putExtras(newArgs);
-            startActivity(intent);
-            finish();
-
+            else {
+                Toast toast = Toast.makeText(UserEventActivity.this, "Press back again to confirm!", Toast.LENGTH_SHORT);
+                toast.show();
+                TimeSinceBackPressed = System.currentTimeMillis();
+            }
         });
     }
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AdminViewProfileActivity extends AppCompatActivity {
     private User selectedUser;
     private User appUser;
-    private TextView idName;
+    private LinearLayout deviceIdLayout;
+    private TextView userDeviceID;
     private TextView userFirstName;
     private TextView userLastName;
     private TextView userEmail;
@@ -83,15 +85,17 @@ public class AdminViewProfileActivity extends AppCompatActivity {
         button2.setVisibility(View.INVISIBLE);
         deleteProfile = findViewById(R.id.delete_profile_btn);
         deleteProfile.setVisibility(View.VISIBLE);
+        deviceIdLayout = findViewById(R.id.adminViewDeviceId);
+        deviceIdLayout.setVisibility(View.VISIBLE);
         userFirstName = findViewById(R.id.user_FirstNameField);
         userLastName = findViewById(R.id.user_LastNameField);
         userEmail = findViewById(R.id.user_emailAddressField);
         userPhoneNumber = findViewById(R.id.user_phoneNumberField);
         userProfilePic = findViewById(R.id.userProfilePhoto);
-        idName = findViewById(R.id.userName);
+        userDeviceID = findViewById(R.id.userDeviceID);
 
         // Populate user details
-        idName.setText(selectedUser.getDeviceId());
+        userDeviceID.setText(selectedUser.getDeviceId());
         userFirstName.setText(selectedUser.getFirstName());
         userLastName.setText(selectedUser.getLastName());
         userEmail.setText(selectedUser.getEmail());

@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="My Facility"
-                android:textAlignment="viewStart"
-                android:textColor="@color/color_registration_open"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

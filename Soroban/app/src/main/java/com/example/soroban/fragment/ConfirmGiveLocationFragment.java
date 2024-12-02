@@ -10,9 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,8 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.soroban.FireBaseController;
-import com.example.soroban.R;
-import com.example.soroban.model.Event;
 import com.example.soroban.model.User;
 
 import org.osmdroid.api.IGeoPoint;
@@ -44,7 +40,7 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
     private User appUser;
     private FireBaseController fireBaseController;
     private GeolocationListener listener;
-    private ActivityResultLauncher<String> requestPersmissionLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
     private LocationManager locationManager;
     private Location location = null;
 
@@ -58,7 +54,7 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
             throw new RuntimeException(context + "must implement GeolocationListener");
         }
 
-        requestPersmissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
             if(isGranted){
                 // App can access geo location
             }else{
@@ -70,11 +66,8 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = getLayoutInflater().inflate(R.layout.user_accept_invitation, null);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("This event requires your location to join the waitlist. Give location?");
-        builder.setView(view);
         builder.setNegativeButton("No", (dialog, which) -> {
             listener.returnResult(false);
         });
@@ -96,8 +89,8 @@ public class ConfirmGiveLocationFragment  extends DialogFragment {
                 // Prompt user to accept or decline location permissions
             }else {
                 // Directly ask for permission
-                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
-                requestPersmissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
 
             listener.returnResult(true);
