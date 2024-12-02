@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -1191,6 +1192,10 @@ public class FireBaseController implements Serializable {
      * @param user: Guy to be killed
      */
     public void removeUserDoc(User user) {
+        // remove user's profile picture
+        FirebaseDatabase.getInstance().getReference("users").child(user.getDeviceId())
+                .removeValue();
+
         // remove user from event's waitList and remove the user's waitlist
         userRf.document(user.getDeviceId()).collection("waitList")
                 .get()
@@ -1240,6 +1245,24 @@ public class FireBaseController implements Serializable {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting registered events.", e));
+
+        // remove user's notifications
+        userRf.document(user.getDeviceId()).collection("notifications")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firestore", "Started waitList deletion process!!!");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                removeNotificationDoc(document.getId(), user);
+                            }
+                        } else {
+                            Log.e("Firestore", "Didn't find waitlist!");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting waitlist events.", e));
 
         // remove user from all event's invited userlist
         eventRf.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -1326,7 +1349,7 @@ public class FireBaseController implements Serializable {
                 });
 
         // remove event from user's waitlist/registered list
-        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("registeredEvents")
+        eventRf.document(event.getEventName() + ", " + event.getOwner().getDeviceId()).collection("attendees")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
