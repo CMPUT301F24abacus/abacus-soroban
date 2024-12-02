@@ -18,6 +18,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.soroban.activity.UserDashboardActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.soroban.FireBaseController;
+import com.example.soroban.QRCodeGenerator;
+import com.example.soroban.R;
 import com.example.soroban.activity.UserEventActivity;
 import com.example.soroban.fragment.ConfirmGiveLocationFragment;
 import com.example.soroban.fragment.ConfirmRequireLocationFragment;
@@ -53,6 +58,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
     private ImageView eventQRCode;
     private TextView eventDrawDate;
     private TextView eventDate;
+    private ImageView eventPoster;
     // private Button notifyMeButton;
     private Button registerButton;
     private Button unregisterButton;
@@ -94,6 +100,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Geolocati
         eventDrawDate = findViewById(R.id.event_draw_date);
         eventDetails = findViewById(R.id.event_details);
         eventQRCode = findViewById(R.id.event_qr_code);
+        eventPoster = findViewById(R.id.event_image);
         //eventQRCode.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN); // make image fill white
         // notifyMeButton = findViewById(R.id.btn_notify_me);
         registerButton = findViewById(R.id.btn_register);

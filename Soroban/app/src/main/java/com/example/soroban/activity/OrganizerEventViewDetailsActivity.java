@@ -203,6 +203,7 @@ public class OrganizerEventViewDetailsActivity extends AppCompatActivity {
             intent.putExtra("selectedEvent", selectedEvent);
             intent.putExtra("appUser", appUser);
             startActivity(intent);
+            finish();
         });
     }
 

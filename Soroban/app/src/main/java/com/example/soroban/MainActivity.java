@@ -1,5 +1,3 @@
-///**
-
 package com.example.soroban;
 
 import android.Manifest;

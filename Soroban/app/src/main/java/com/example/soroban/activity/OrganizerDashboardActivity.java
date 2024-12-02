@@ -24,13 +24,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.soroban.EventDetailsActivity;
+import com.example.soroban.activity.EventDetailsActivity;
 import com.example.soroban.FireBaseController;
 import com.example.soroban.R;
 import com.example.soroban.adapter.EventArrayAdapter;
 import com.example.soroban.fragment.ViewProfileFragment;
 import com.example.soroban.model.Event;
 import com.example.soroban.model.EventList;
+import com.example.soroban.model.Facility;
 import com.example.soroban.model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.FirebaseDatabase;
@@ -131,8 +132,12 @@ public class OrganizerDashboardActivity extends AppCompatActivity {
         goToFacilityButton = findViewById(R.id.btn_go_to_facility);
 
         // Set facility name dynamically
-        String facilityName = getIntent().getStringExtra("facilityName");
-        facilityNameTextView.setText(facilityName != null ? facilityName : "My Facility");
+        Facility facility =  appUser.getFacility();
+        if(facility != null){
+            facilityNameTextView.setText(facility.getName());
+        }else{
+            facilityNameTextView.setText("My Facility");
+        }
 
         // Set up RecyclerView
         events = appUser.getHostedEvents();

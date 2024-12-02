@@ -97,9 +97,10 @@ public class AcceptInviteFragment extends DialogFragment {
         builder.setTitle("Accept Invitation?");
         builder.setNegativeButton("Reject", (dialog, which) -> {
             //User rejects invitation
+            User thisUser = selectedEvent.getInvitedEntrants().find(appUser);
 
             // Perform local changes
-            selectedEvent.removeFromInvited(selectedEvent.getInvitedEntrants().find(appUser));
+            selectedEvent.removeFromInvited(thisUser);
             listener.update();
 
             // Perform Firebase changes
