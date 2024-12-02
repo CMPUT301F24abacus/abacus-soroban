@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -49,7 +51,7 @@ public class UserEventActivity extends AppCompatActivity {
     private Button unregisterButton;
     private ImageView eventPoster;
     private ImageView eventQR;
-    private FireBaseController firebaseController;
+    private FireBaseController fireBaseController;
     private long TimeSinceBackPressed;
     String listType;
 
@@ -86,10 +88,11 @@ public class UserEventActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass arguments to initialize this activity.");
         }
 
-        firebaseController = new FireBaseController(this);
+        fireBaseController = new FireBaseController(this);
 
         // Initialize buttons, etc.
         // notifyButton = findViewById(R.id.btn_notify_me);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy", Locale.getDefault());
         unregisterButton = findViewById(R.id.btn_register);
         eventDetailsTV = findViewById(R.id.event_details);
         eventNameTV = findViewById(R.id.event_name);
@@ -108,13 +111,11 @@ public class UserEventActivity extends AppCompatActivity {
         }
         eventNameTV.setText(selectedEvent.getEventName());
         String eventDetails = "Event Details: " + ((selectedEvent.getEventDetails() != null) ? selectedEvent.getEventDetails() : "No Event Details");
-        eventDetailsTV.setText(selectedEvent.getEventDetails());
-        String eventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getEventDate());
-        String drawDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedEvent.getDrawDate());
-        eventDateTV.setText("Event Date: " + eventDate);
-        drawDateTV.setText("Draw Date: " + drawDate);
+        eventDetailsTV.setText(eventDetails);
+        eventDateTV.setText("Event Date: " + dateFormat.format(selectedEvent.getEventDate()));
+        drawDateTV.setText("Draw Date: " + dateFormat.format(selectedEvent.getDrawDate()));
         // QR Code
-        firebaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
+        fireBaseController.fetchQRCodeHash(selectedEvent.getEventName(), qrCodeHash -> {
             if (qrCodeHash != null) {
                 // Generate the QR code bitmap using the hash from firebase
                 Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(qrCodeHash);
@@ -134,6 +135,29 @@ public class UserEventActivity extends AppCompatActivity {
             eventPoster.setImageResource(R.drawable.ic_event_image); // Set a default image if no poster is available
         }
 
+        fireBaseController.fetchEventPosterUrl(selectedEvent,
+                posterUrl -> {
+                    // Check if the fetched posterUrl is null or empty
+                    if ("no poster".equals(posterUrl)) {
+                        // Set default image if no poster URL is available
+                        eventPoster.setImageResource(R.drawable.ic_event_image);
+                    } else {
+                        // Success: Update the poster URL in the UI
+                        selectedEvent.setPosterUrl(posterUrl);
+                        // Load the poster image with Glide
+                        Glide.with(this)
+                                .load(selectedEvent.getPosterUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable Glide's disk cache
+                                .skipMemoryCache(true) // Disable in-memory cache
+                                .into(eventPoster);
+                    }
+                },
+                error -> {
+                    // Handle errors and set a default image
+                    Log.e("OrganizerEventView", "Failed to fetch posterUrl", error);
+                    Toast.makeText(this, "Failed to load event poster.", Toast.LENGTH_SHORT).show();
+                    eventPoster.setImageResource(R.drawable.ic_event_image);
+                });
         // Initialize controllers to update User
         FireBaseController fireBaseController = new FireBaseController(this);
 
@@ -143,7 +167,8 @@ public class UserEventActivity extends AppCompatActivity {
                 if (listType.equals("waitList")) {
                     appUser.removeFromWaitlist(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                     fireBaseController.removeFromWaitListDoc(selectedEvent,appUser);
-                } else if (listType.equals("registeredEvents")) {
+                Toast.makeText(this, "You have left the waitlist.", Toast.LENGTH_SHORT).show();}
+                else if (listType.equals("registeredEvents")) {
                     appUser.removeRegisteredEvent(selectedEvent); // Technically this should be done via UserController; this can be amended later as in this cas it is a formality
                     fireBaseController.removeAttendeeDoc(selectedEvent,appUser);
                     fireBaseController.updateThoseNotGoing(selectedEvent,appUser);
@@ -159,10 +184,10 @@ public class UserEventActivity extends AppCompatActivity {
                         fireBaseController.removeFromWaitListDoc(selectedEvent, user);
 
                         // Notify invited entrant that they have been re-sampled
-                        Notification newNotif = new Notification("You have be re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
+                        Notification newNotif = new Notification("You have been re-sampled!", "", Calendar.getInstance().getTime(), selectedEvent, selectedEvent.getNumberOfNotifications());
                         fireBaseController.updateUserNotifications(user, newNotif);
                     }
-                    // Else there are no other waiting entrants
+                    Toast.makeText(this, "You have unregistered from the event.", Toast.LENGTH_SHORT).show();// Else there are no other waiting entrants
                 }
                 Intent intent = new Intent(UserEventActivity.this, UserDashboardActivity.class);
                 Bundle newArgs = new Bundle();
