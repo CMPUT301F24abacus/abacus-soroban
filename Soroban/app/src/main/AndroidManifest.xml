@@ -41,11 +41,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- User Dashboard Activity -->
+        </activity>
         <activity
-            android:name=".activity.UserDashboardActivity"
+            android:name=".activity.CreateAccountActivity"
             android:exported="false"
             android:label="@string/user_dashboard" />
+        <!-- User Dashboard Activity -->
+        <activity android:name=".activity.UserDashboardActivity"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

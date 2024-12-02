@@ -18,7 +18,7 @@ public class NotificationSystem{
     private Context context;
     private final String channelID = "Soroban";
     private final String channelName = "Soroban";
-    private final int notificationIcon = R.drawable.ic_notifications;
+    private final int notificationIcon = R.drawable.baseline_notifications_active_24;
     private NotificationChannel channel;
     private NotificationManager manager;
 
